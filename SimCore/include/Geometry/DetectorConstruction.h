@@ -18,6 +18,8 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
+#include "Geometry/MatrixPlacement.h"
+
 #include <vector>
 
 
@@ -49,9 +51,9 @@ private:
 
     void DefineRearTracker();
 
-    void DefineScintillator();
+    //void DefineTrk(const G4String& det_name);
 
-    void DefineTelescope();
+    void DefineDet(const G4String& det_name, PlaceType type);
 
     G4LogicalVolume *World_LV{}; // Logical Volume of World.
     G4PVPlacement *World_PV{}; // Placement (Phyisical Volume) of the World.

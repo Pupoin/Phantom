@@ -35,8 +35,6 @@ public:
 private:
     PlaceType det_type = PlaceType::NotDefined;
     G4String det_name;
-
-    G4ThreeVector Arrangement;
 };
 
 

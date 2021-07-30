@@ -12,6 +12,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4OpticalSurface.hh"
+#include "G4UImanager.hh"
 
 // yaml-cpp
 #include "yaml-cpp/yaml.h"
@@ -21,7 +22,8 @@
 #include <map>
 
 using std::vector, std::map, std::tuple;
-typedef map<G4String, tuple<G4ThreeVector, G4ThreeVector>> geo_info_map;
+typedef map<G4String, tuple<G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector>> calo_info_map;
+typedef map<G4String, tuple<G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, size_t>> trk_info_map;
 
 typedef map<int, tuple<double, double, double>> copy_dictionary;
 typedef map<G4String, copy_dictionary> det_copy_dictionary;
@@ -42,12 +44,21 @@ public:
     // Read data from yaml
     bool ReadYAML(const G4String& file_in);
 
+    void ReadAndSetVerbosity();
+
+    void ReadAndSetGPS();
+
+    void ReadAndSetRandomSeed();
+
 public:
     /*************************************/
     /*  Define all the variables needed  */
     /*************************************/
 
     G4String PSim_version = "0.1.0"; // PSim version
+    int BeamOnNumber = 0;
+    long random_seed = 0;
+    double eps = 1 * um;
     //========================================
     /* Global Variables */
     //----------------------------------------
@@ -55,7 +66,7 @@ public:
     bool save_geometry{}; // save the geometry in root
     bool check_overlaps{}; // check the geometry overlap, may be very slow and verbose
     G4String material_file{}; // file for material table
-
+    bool optical_simulation{};
     //----------------------------------------
     // Root Manager Options
     G4String outfile_Name = "p_out.root";
@@ -78,8 +89,13 @@ public:
     bool build_target{};
     bool build_ftrk{};
     bool build_rtrk{};
-    bool build_scintillator;
-    bool build_telescope;
+    bool build_scintillator{};
+    bool build_telescope{};
+
+    G4String ftrk_name;
+    G4String rtrk_name;
+    G4String scintillator_name;
+    G4String telescope_name;
 
     G4Material *world_material{};
 
@@ -134,8 +150,29 @@ public:
     G4ThreeVector world_region_size;
     G4ThreeVector world_region_position;
 
+    //------
+    // Optics
 
-    //geo_info_map det_info;
+    // Wrapper
+    G4MaterialPropertiesTable *wrapper_surface_material;
+    G4OpticalSurface *wrapper_surface;
+    vector<double> wrapper_energy; // photon energy [eV]
+    vector<double> wrapper_reflectivity;
+    vector<double> wrapper_efficiency;
+    vector<double> wrapper_transmittance;
+
+    // Crystal
+    double crystal_ScintillationYield;
+    double crystal_FastTimeConstant;
+    vector<double> crystal_energy; // photon energy [eV]
+    vector<double> crystal_RefractionIdx;
+    vector<double> crystal_AbsorptionLength;
+    vector<double> crystal_ScintEnergy;
+    vector<double> crystal_ScintFast;
+
+    // Misalliance
+    calo_info_map calo_info;
+    trk_info_map trk_info;
     det_copy_dictionary det_dict; // map recoding the map between copy number and cell position
 
 private:
@@ -143,6 +180,11 @@ private:
 
     static G4ThreeVector readV3(const YAML::Node &n, bool unit=false);
     static double readV2(const YAML::Node &n);
+
+    YAML::Node Node;
+
+    // For geant4 internal settings
+    G4UImanager* UIManager;
 
     // For Material
     G4NistManager *nistManager;

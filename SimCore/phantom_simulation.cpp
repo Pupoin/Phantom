@@ -10,6 +10,10 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
+/* Optical Physics */
+#include "G4OpticalPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
+
 #include "Randomize.hh"
 
 #include "Control/Control.h"
@@ -71,6 +75,11 @@ int main(int argc, char **argv) {
     // Rebuild all dependent variables
     // All the parameters are locked for now
     pControl->RebuildVariables();
+    pControl->ReadAndSetRandomSeed();
+
+    // set random number for G4
+    G4Random::setTheEngine(new CLHEP::RanecuEngine());
+    G4Random::setTheSeed(pControl->random_seed);
 
     // Initiate RootManager Class
     RootManager::CreateInstance();
@@ -80,7 +89,13 @@ int main(int argc, char **argv) {
 
     // Set mandatory initialization classes
     runManager->SetUserInitialization(new DetectorConstruction());
-    runManager->SetUserInitialization(new FTFP_BERT);
+
+    G4VModularPhysicsList *physicsList = new FTFP_BERT;
+    if (pControl->optical_simulation) {
+        physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+        physicsList->RegisterPhysics(new G4OpticalPhysics());
+    }
+    runManager->SetUserInitialization(physicsList);
 
     // Set user action classes
     runManager->SetUserAction(new RunAction());
@@ -92,6 +107,10 @@ int main(int argc, char **argv) {
     // Initialize G4 kernel
     runManager->Initialize();
 
+    // Apply Geant4 internal settings
+    pControl->ReadAndSetVerbosity();
+    pControl->ReadAndSetGPS();
+
     G4VisManager *visManager = new G4VisExecutive;
     visManager->Initialize();
 
@@ -102,7 +121,10 @@ int main(int argc, char **argv) {
             UImanager->ApplyCommand("/control/execute gui.mac");
         ui->SessionStart();
         delete ui;
+    } else {
+        runManager->BeamOn(pControl->BeamOnNumber);
     }
+
 
     delete visManager;
     delete runManager;

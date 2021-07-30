@@ -5,7 +5,6 @@
 #include "Geometry/DetectorConstruction.h"
 #include "Control/Control.h"
 #include "RootManager/RootManager.h"
-#include "Geometry/MatrixPlacement.h"
 
 #include "G4GDMLParser.hh"
 #include "G4SolidStore.hh"
@@ -14,6 +13,7 @@
 #include "G4GeometryTolerance.hh"
 #include "G4PVParameterised.hh"
 #include "G4VisAttributes.hh"
+#include "G4LogicalSkinSurface.hh"
 
 #include <iterator>
 #include <filesystem>
@@ -50,13 +50,13 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     DefineWorld();      // Build World
 
-    if (pControl->build_ftrk) DefineFrontTracker();
+    if (pControl->build_ftrk) DefineDet(pControl->ftrk_name, PlaceType::Tracker);
 
-    if (pControl->build_rtrk) DefineRearTracker();
+    if (pControl->build_rtrk) DefineDet(pControl->rtrk_name, PlaceType::Tracker);
 
-    if (pControl->build_scintillator) DefineScintillator(); // Build Scintillator
+    if (pControl->build_scintillator) DefineDet(pControl->scintillator_name, PlaceType::ECAL); // Build Scintillator
 
-    if (pControl->build_telescope) DefineTelescope(); // Build Range Telescope
+    if (pControl->build_telescope) DefineDet(pControl->telescope_name, PlaceType::ECAL); // Build Range Telescope
 
     if (pControl->build_target) DefineTarget(); // Define Target
 
@@ -97,158 +97,85 @@ void DetectorConstruction::DefineTarget() {
     // Build Target Region
     G4VSolid *Target_Region_Box = new G4Box("Target_Region_Box", 8 * cm, 8 * cm, 8 * cm);
     auto *Target_Region_LV = new G4LogicalVolume(Target_Region_Box,
-                                                 G4NistManager::Instance()->FindOrBuildMaterial("G4_Water"),
+                                                 G4NistManager::Instance()->FindMaterial("Water"),
                                                  "Target_Region_LV");
     new G4PVPlacement(nullptr, G4ThreeVector(), Target_Region_LV,
                       "Target_Region", World_LV, false, 0, fCheckOverlaps);
 
-    auto vis_attr_r = new G4VisAttributes(G4Color(0, 0.3, 1));
+    auto vis_attr_r = new G4VisAttributes(G4Color(0, 0.3, 1, 0.25));
     vis_attr_r->SetVisibility(true);
+    vis_attr_r->SetForceSolid();
     Target_Region_LV->SetVisAttributes(vis_attr_r);
 }
 
-void DetectorConstruction::DefineFrontTracker() {
+void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type) {
 
-    // Build FrontTracker Region
-    G4VSolid *FrontTracker_Region_Box = new G4Box("FrontTracker_Region_Box",
-                                                  pControl->ftrk_region_size.x() / 2.,
-                                                  pControl->ftrk_region_size.y() / 2.,
-                                                  pControl->ftrk_region_size.z() / 2.
+    // Some parameters
+    auto box_size = std::get<0>(pControl->calo_info.at(det_name));
+    auto box_arr = std::get<1>(pControl->calo_info.at(det_name));
+    auto region_size = std::get<2>(pControl->calo_info.at(det_name));
+    auto region_position = std::get<3>(pControl->calo_info.at(det_name));
+    auto wrapper_size = pControl->wrapper_size;
+    if (type == PlaceType::Tracker) wrapper_size = G4ThreeVector();
+
+    auto extra_layer_no = 1;
+    if (det_name == pControl->ftrk_name) extra_layer_no = static_cast<int> (pControl->ftrk_position.size());
+    else if (det_name == pControl->rtrk_name) extra_layer_no = static_cast<int> (pControl->rtrk_position.size());
+
+    G4Material *box_mat = nullptr;
+    if (det_name == pControl->scintillator_name) box_mat = pControl->scintillator_material;
+    else if (det_name == pControl->telescope_name) box_mat = pControl->telescope_material;
+    else if (type == PlaceType::Tracker) box_mat = pControl->ftrk_material;
+
+    G4Color color(0, 0, 0);
+    if (det_name == pControl->scintillator_name) color = G4Color(0, 1, 0, 0.25);
+    if (det_name == pControl->telescope_name) color = G4Color(1, 1, 0, 0.25);
+    if (det_name == pControl->ftrk_name) color = G4Color(1, 0.5, 1, 0.5);
+    if (det_name == pControl->rtrk_name) color = G4Color(1, 0.5, 1, 0.5);
+
+    auto vis_attr = new G4VisAttributes(color);
+    auto vis_attr_out = new G4VisAttributes(color);
+    vis_attr_out->SetVisibility(false);
+
+    // Build Calorimeter Region
+    G4VSolid *Region_Box = new G4Box(det_name + "_Region_Box",
+                                     region_size.x() / 2., region_size.y() / 2., region_size.z() / 2.
     );
-    auto *FrontTracker_Region_LV = new G4LogicalVolume(FrontTracker_Region_Box, pControl->world_material,
-                                                       "FrontTracker_Region_LV");
-    new G4PVPlacement(nullptr, pControl->ftrk_region_position, FrontTracker_Region_LV,
-                      "FrontTracker_Region", World_LV, false, 0, fCheckOverlaps);
+    auto *Region_LV = new G4LogicalVolume(Region_Box, pControl->world_material,
+                                          det_name + "_Region_LV");
+    new G4PVPlacement(nullptr, region_position, Region_LV, det_name + "_Region", World_LV, false, 0, fCheckOverlaps);
+    Region_LV->SetVisAttributes(vis_attr_out);
 
-    auto vis_attr_r = new G4VisAttributes(G4Color(1, 1, 0));
-    vis_attr_r->SetVisibility(true);
-    FrontTracker_Region_LV->SetVisAttributes(vis_attr_r);
-
-    // Build FrontTracker Cell
-    int total_No = static_cast<int>(pControl->ftrk_strip_arrangement.x() *
-                                    pControl->ftrk_strip_arrangement.y() *
-                                    pControl->ftrk_strip_arrangement.z())
-                   * static_cast<int> (pControl->ftrk_position.size());
-    G4VSolid *FrontTracker_Box = new G4Box("FrontTracker_Box",
-                                           pControl->ftrk_strip_size.x() / 2.,
-                                           pControl->ftrk_strip_size.y() / 2.,
-                                           pControl->ftrk_strip_size.z() / 2.
+    // Build detailed structure
+    // Out box containing wrapper and scintillator
+    int total_No = static_cast<int>(box_arr.x() * box_arr.y() * box_arr.z() * extra_layer_no);
+    G4VSolid *OUT_Box = new G4Box(det_name + "_Out_Box",
+                                  box_size.x() / 2. + wrapper_size.x(),
+                                  box_size.y() / 2. + wrapper_size.y(),
+                                  box_size.z() / 2. + wrapper_size.z()
     );
-    auto *FrontTracker_LV = new G4LogicalVolume(FrontTracker_Box, pControl->ftrk_material, "FrontTracker_LV");
-    auto *FrontTracker_MP = new MatrixPlacement("FrontTracker", PlaceType::Tracker);
-    new G4PVParameterised("FrontTracker", FrontTracker_LV, FrontTracker_Region_LV, kZAxis, total_No, FrontTracker_MP);
+    auto *OUT_LV = new G4LogicalVolume(OUT_Box, pControl->wrapper_material, det_name + "_Out_LV");
+    OUT_LV->SetVisAttributes(vis_attr_out);
+    // Then build scintillator inside box
+    G4VSolid *Box = new G4Box(det_name + "_Box",
+                              box_size.x() / 2., box_size.y() / 2., box_size.z() / 2.);
 
-    auto vis_attr = new G4VisAttributes(G4Color(1, 1, 0));
-    vis_attr->SetVisibility(true);
-    FrontTracker_LV->SetVisAttributes(vis_attr);
-}
+    auto *LV = new G4LogicalVolume(Box, box_mat, det_name + "_LV");
+    if (type == PlaceType::ECAL) {
+        new G4PVPlacement(nullptr, G4ThreeVector(), LV, det_name, OUT_LV, false, 0, fCheckOverlaps);
+        new G4LogicalSkinSurface(det_name + "_WrapSkinSurface", LV, pControl->wrapper_surface);
+    } else {
+        delete OUT_Box;
+        delete OUT_LV;
+    }
 
-void DetectorConstruction::DefineRearTracker() {
-
-    // Build RearTracker Region
-    G4VSolid *RearTracker_Region_Box = new G4Box("RearTracker_Region_Box",
-                                                 pControl->rtrk_region_size.x() / 2.,
-                                                 pControl->rtrk_region_size.y() / 2.,
-                                                 pControl->rtrk_region_size.z() / 2.
-    );
-    auto *RearTracker_Region_LV = new G4LogicalVolume(RearTracker_Region_Box, pControl->world_material,
-                                                      "RearTracker_Region_LV");
-    new G4PVPlacement(nullptr, pControl->rtrk_region_position, RearTracker_Region_LV,
-                      "RearTracker_Region", World_LV, false, 0, fCheckOverlaps);
-
-    auto vis_attr_r = new G4VisAttributes(G4Color(1, 1, 0));
-    vis_attr_r->SetVisibility(true);
-    RearTracker_Region_LV->SetVisAttributes(vis_attr_r);
-
-    // Build RearTracker Cell
-    int total_No = static_cast<int>(pControl->rtrk_strip_arrangement.x() *
-                                    pControl->rtrk_strip_arrangement.y() *
-                                    pControl->rtrk_strip_arrangement.z())
-                   * static_cast<int> (pControl->rtrk_position.size());
-    G4VSolid *RearTracker_Box = new G4Box("RearTracker_Box",
-                                          pControl->rtrk_strip_size.x() / 2.,
-                                          pControl->rtrk_strip_size.y() / 2.,
-                                          pControl->rtrk_strip_size.z() / 2.
-    );
-    auto *RearTracker_LV = new G4LogicalVolume(RearTracker_Box, pControl->rtrk_material, "RearTracker_LV");
-    auto *RearTracker_MP = new MatrixPlacement("RearTracker", PlaceType::Tracker);
-    new G4PVParameterised("RearTracker", RearTracker_LV, RearTracker_Region_LV, kZAxis, total_No, RearTracker_MP);
-
-    auto vis_attr = new G4VisAttributes(G4Color(1, 1, 0));
-    vis_attr->SetVisibility(true);
-    RearTracker_LV->SetVisAttributes(vis_attr);
-}
-
-void DetectorConstruction::DefineScintillator() {
-
-    auto vis_attr = new G4VisAttributes(G4Color(0, 1, 0));
-
-    // Build Scintillator Region
-    G4VSolid *Scintillator_Region_Box = new G4Box("Scintillator_Region_Box",
-                                                  pControl->scintillator_region_size.x() / 2.,
-                                                  pControl->scintillator_region_size.y() / 2.,
-                                                  pControl->scintillator_region_size.z() / 2.
-    );
-    auto *Scintillator_Region_LV = new G4LogicalVolume(Scintillator_Region_Box, pControl->world_material,
-                                                       "Scintillator_Region_LV");
-    new G4PVPlacement(nullptr, pControl->scintillator_region_position, Scintillator_Region_LV,
-                      "Scintillator_Region", World_LV, false, 0, fCheckOverlaps);
-
-    //vis_attr->SetVisibility(true);
-    //Scintillator_Region_LV->SetVisAttributes(vis_attr);
-
-
-    // Build Scintillator Cell
-    int total_No = static_cast<int>(pControl->scintillator_arrangement.x() *
-                                    pControl->scintillator_arrangement.y() *
-                                    pControl->scintillator_arrangement.z());
-    G4VSolid *Scintillator_Box = new G4Box("Scintillator_Box",
-                                           pControl->scintillator_size.x() / 2.,
-                                           pControl->scintillator_size.y() / 2.,
-                                           pControl->scintillator_size.z() / 2.
-    );
-    auto *Scintillator_LV = new G4LogicalVolume(Scintillator_Box, pControl->scintillator_material, "Scintillator_LV");
-    auto *Scintillator_MP = new MatrixPlacement("Scintillator", PlaceType::ECAL);
-    new G4PVParameterised("Scintillator", Scintillator_LV, Scintillator_Region_LV, kZAxis, total_No, Scintillator_MP);
+    // Then do matrix placement to replicate
+    auto Target_LV = (type == PlaceType::Tracker) ? LV : OUT_LV;
+    auto *MP = new MatrixPlacement(det_name, type);
+    new G4PVParameterised(det_name + "Out", Target_LV, Region_LV, kZAxis, total_No, MP, fCheckOverlaps);
 
     vis_attr->SetVisibility(true);
-    Scintillator_LV->SetVisAttributes(vis_attr);
-}
-
-
-void DetectorConstruction::DefineTelescope() {
-
-    auto vis_attr = new G4VisAttributes(G4Color(1, 0, 0.5));
-
-    // Build Range Telescope Region
-    G4VSolid *Telescope_Region_Box = new G4Box("Telescope_Region_Box",
-                                               pControl->telescope_region_size.x() / 2.,
-                                               pControl->telescope_region_size.y() / 2.,
-                                               pControl->telescope_region_size.z() / 2.
-    );
-    auto *Telescope_Region_LV = new G4LogicalVolume(Telescope_Region_Box, pControl->world_material,
-                                                    "Telescope_Region_LV");
-    new G4PVPlacement(nullptr, pControl->telescope_region_position, Telescope_Region_LV,
-                      "Telescope_Region", World_LV, false, 0, fCheckOverlaps);
-
-//    vis_attr->SetVisibility(true);
-//    Telescope_Region_LV->SetVisAttributes(vis_attr);
-
-    // Build Range Telescope Cell
-    int total_No = static_cast<int>(pControl->telescope_arrangement.x() *
-                                    pControl->telescope_arrangement.y() *
-                                    pControl->telescope_arrangement.z());
-    G4VSolid *Telescope_Box = new G4Box("Telescope_Box",
-                                        pControl->telescope_size.x() / 2.,
-                                        pControl->telescope_size.y() / 2.,
-                                        pControl->telescope_size.z() / 2.
-    );
-    auto *Telescope_LV = new G4LogicalVolume(Telescope_Box, pControl->telescope_material, "Telescope_LV");
-    auto *Telescope_MP = new MatrixPlacement("Telescope", PlaceType::ECAL);
-    new G4PVParameterised("Telescope", Telescope_LV, Telescope_Region_LV, kZAxis, total_No, Telescope_MP);
-
-    vis_attr->SetVisibility(true);
-    Telescope_LV->SetVisAttributes(vis_attr);
+    LV->SetVisAttributes(vis_attr);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -277,5 +204,6 @@ void DetectorConstruction::SaveGeometry() {
     pRootMng->FillGeometry(filename);
 
 }
+
 
 

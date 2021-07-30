@@ -30,21 +30,21 @@ void MatrixPlacement::BuildCopyNoTable() {
     G4ThreeVector arrangement;
     G4ThreeVector cell_size;
     if (det_type == PlaceType::ECAL) {
-        if (det_name == "Scintillator") {
+        if (det_name == pControl->scintillator_name) {
             arrangement = pControl->scintillator_arrangement;
             cell_size = pControl->scintillator_size;
-        } else if (det_name == "Telescope") {
+        } else if (det_name == pControl->telescope_name) {
             arrangement = pControl->telescope_arrangement;
             cell_size = pControl->telescope_size;
         }
         pControl->det_dict.insert(std::make_pair(det_name, BuildCaloTable(arrangement, cell_size)));
     } else if (det_type == PlaceType::Tracker) {
         vector<G4ThreeVector> center_position;
-        if (det_name == "FrontTracker") {
+        if (det_name == pControl->ftrk_name) {
             arrangement = pControl->ftrk_strip_arrangement;
             cell_size = pControl->ftrk_strip_size;
             center_position = pControl->ftrk_position;
-        } else if (det_name == "RearTracker") {
+        } else if (det_name == pControl->rtrk_name) {
             arrangement = pControl->rtrk_strip_arrangement;
             cell_size = pControl->rtrk_strip_size;
             center_position = pControl->rtrk_position;
@@ -63,9 +63,9 @@ copy_dictionary MatrixPlacement::BuildCaloTable(const G4ThreeVector &arr, const 
     auto yNo = arr.y();
     auto zNo = arr.z();
 
-    auto UnitXHalfLength = size.x() / 2;
-    auto UnitYHalfLength = size.y() / 2;
-    auto UnitZHalfLength = size.z() / 2;
+    auto UnitXHalfLength = (size.x() + pControl->eps) / 2 + pControl->wrapper_size.x();
+    auto UnitYHalfLength = (size.y() + pControl->eps) / 2 + pControl->wrapper_size.y();
+    auto UnitZHalfLength = (size.z() + pControl->eps) / 2 + pControl->wrapper_size.z();
 
     auto TotalHalfSize = G4ThreeVector(xNo * UnitXHalfLength,
                                        yNo * UnitYHalfLength,
@@ -97,9 +97,9 @@ copy_dictionary MatrixPlacement::BuildTrkTable(const G4ThreeVector &arr, const G
     auto yNo = arr.y();
     auto zNo = arr.z();
 
-    auto UnitXHalfLength = size.x() / 2;
-    auto UnitYHalfLength = size.y() / 2;
-    auto UnitZHalfLength = size.z() / 2;
+    auto UnitXHalfLength = (size.x() + pControl->eps) / 2;
+    auto UnitYHalfLength = (size.y() + pControl->eps) / 2;
+    auto UnitZHalfLength = (size.z() + pControl->eps) / 2;
 
     auto TotalHalfSize = G4ThreeVector(xNo * UnitXHalfLength,
                                        yNo * UnitYHalfLength,

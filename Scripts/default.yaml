@@ -6,7 +6,31 @@
 # IMPORTANT: For yaml, indentation matters!
 
 # material table
-material_file: material.yaml
+material_file: "material.yaml"
+
+###########################################
+# Geant4 General Settings
+###########################################
+verbosity:
+  run:        2
+  event:      0
+  tracking:   0
+
+random_seed:
+  mode: "time"
+  seed: 10
+
+general_particle_source:
+  # Details for Geant4 general particle source settings
+  settings:
+    source/multiplevertex: true
+    source/intensity: 5
+    particle: "proton"
+    ene/mono: "250 MeV"
+    direction: "0 0 1"
+    position: "0 0 -50 cm"
+  # Number of particles emitted
+  beam_on: 1
 
 ###########################################
 # Global Variables
@@ -17,6 +41,8 @@ save_geometry: false
 check_overlaps: false
 # memory check
 memory_check: true
+# if to allow optical process
+optical_simulation: false
 
 ###########################################
 # Root Manager Settings
@@ -44,6 +70,11 @@ OutCollection:
 # Detector Geometry
 ###########################################
 Geometry:
+  ftrk_name: "FrontTracker"
+  rtrk_name: "RearTracker"
+  scintillator_name: "Scintillator"
+  telescope_name: "Telescope"
+
   # The offset from target for detectors (the radius of target circle)
   target_offset: [ 20, "cm" ]
 
@@ -83,14 +114,14 @@ Geometry:
   # --------
   # Scintillator
   scintillator_material: "G4_PLASTIC_SC_VINYLTOLUENE"
-  scintillator_size: [ 60 , "cm", 101 , "cm", 7.5 , "cm" ] # size of cell
-  scintillator_arrangement: [ 2, 1, 2 ]
+  scintillator_size: [ 60 , "cm", 101 , "cm", 3 , "mm" ] # size of cell
+  scintillator_arrangement: [ 1, 1, 3 ]
   scintillator_offset: [ 5, "cm" ]
   # --------
   # Range Telescope
   telescope_material: "G4_PLASTIC_SC_VINYLTOLUENE"
   telescope_size: [ 63 , "cm", 101 , "cm", 3 , "mm" ] # size of cell
-  telescope_arrangement: [ 2, 1, 42 ]
+  telescope_arrangement: [ 1, 1, 42 ]
   telescope_offset: [ 5, "cm" ]
 
 
