@@ -1,0 +1,49 @@
+---
+# Begin of File
+# For Dark SHINE Software
+# Default Configuration by Yulei Zhang
+
+# IMPORTANT: For yaml, indentation matters!
+
+###########################################
+# Global Variables
+###########################################
+# save geometry in the output root file
+save_geometry: false
+# check geometry overlap, maybe very slow
+check_overlaps: false
+# memory check
+memory_check: true
+
+###########################################
+# Root Manager Settings
+###########################################
+RootManager:
+  outfile_Name: "dp_out.root"
+  tree_Name: "Dark_Photon"
+
+  # job run number
+  Run_Number: 0
+  # how many events in this run
+  Total_Event_Number: 10000
+
+###########################################
+# Output Collection Settings
+###########################################
+OutCollection:
+  # save all kinds of mc particles
+  save_all_mcp: false
+  # output collection name
+  MCParticle_Name: "MCParticle"
+  ParticleStep_Name: "Init_Particle_Step"
+
+###########################################
+# Detector Geometry
+###########################################
+Geometry:
+  # The offset from target for detectors (the radius of target circle)
+  target_offset: [20, "cm"]
+
+# End of File
+---
+
