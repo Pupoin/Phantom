@@ -5,6 +5,9 @@
 
 # IMPORTANT: For yaml, indentation matters!
 
+# material table
+material_file: material.yaml
+
 ###########################################
 # Global Variables
 ###########################################
@@ -19,8 +22,8 @@ memory_check: true
 # Root Manager Settings
 ###########################################
 RootManager:
-  outfile_Name: "dp_out.root"
-  tree_Name: "Dark_Photon"
+  outfile_Name: "p_out.root"
+  tree_Name: "phantom"
 
   # job run number
   Run_Number: 0
@@ -42,7 +45,54 @@ OutCollection:
 ###########################################
 Geometry:
   # The offset from target for detectors (the radius of target circle)
-  target_offset: [20, "cm"]
+  target_offset: [ 20, "cm" ]
+
+  # Material Building
+  world_material: "vacuum"
+
+  # Tracker
+  # --------
+  # Front Tracker
+  ftrk_material: "G4_Si"
+  ftrk_strip_size: [ 2.5 , "mm", 10 , "cm", 0.1 , "mm" ] # size of one silicon strip
+  ftrk_strip_arrangement: [ 60, 3, 1 ] # arrangement of one silicon strip
+  ftrk_position:
+    - [ 0 , "cm", 0 , "cm", -10 , "cm" ] # Layer 1
+    - [ 0 , "cm", 0 , "cm",   0 , "cm" ] # Layer 2
+    - [ 0 , "cm", 0 , "cm",  10 , "cm" ] # Layer 3
+  # --------
+  # Rear Tracker
+  rtrk_material: "G4_Si"
+  rtrk_strip_size: [ 2.5 , "mm", 10 , "cm", 0.1 , "mm" ] # size of one silicon strip
+  rtrk_strip_arrangement: [ 60, 3, 1 ] # arrangement of one silicon strip
+  rtrk_position:
+    - [ 0 , "cm", 0 , "cm", -10 , "cm" ] # Layer 1
+    - [ 0 , "cm", 0 , "cm",   0 , "cm" ] # Layer 2
+    - [ 0 , "cm", 0 , "cm",  10 , "cm" ] # Layer 3
+
+  # Calorimeter
+  # material reference: https://www.crystals.saint-gobain.com/products/bc-408-bc-412-bc-416
+  # --------
+  # holder
+  holder_material: "CarbonFiber"
+  holder_gap: [ 1, "mm" ]
+  # --------
+  # wrapper
+  wrapper_material: "G4_Al"
+  wrapper_size: [ 0.1 , "mm", 0.1 , "mm", 0.1 , "mm" ]
+  # --------
+  # Scintillator
+  scintillator_material: "G4_PLASTIC_SC_VINYLTOLUENE"
+  scintillator_size: [ 60 , "cm", 101 , "cm", 7.5 , "cm" ] # size of cell
+  scintillator_arrangement: [ 2, 1, 2 ]
+  scintillator_offset: [ 5, "cm" ]
+  # --------
+  # Range Telescope
+  telescope_material: "G4_PLASTIC_SC_VINYLTOLUENE"
+  telescope_size: [ 63 , "cm", 101 , "cm", 3 , "mm" ] # size of cell
+  telescope_arrangement: [ 2, 1, 42 ]
+  telescope_offset: [ 5, "cm" ]
+
 
 # End of File
 ---

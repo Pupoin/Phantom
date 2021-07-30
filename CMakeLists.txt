@@ -88,6 +88,7 @@ add_subdirectory(SimCore)
 #
 set(RUN_SCRIPTS
         Scripts/default.yaml
+        Scripts/material.yaml
         Scripts/init_vis.mac
         Scripts/vis.mac
         Scripts/gui.mac

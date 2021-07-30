@@ -45,6 +45,14 @@ private:
 
     void DefineWorld();
 
+    void DefineFrontTracker();
+
+    void DefineRearTracker();
+
+    void DefineScintillator();
+
+    void DefineTelescope();
+
     G4LogicalVolume *World_LV{}; // Logical Volume of World.
     G4PVPlacement *World_PV{}; // Placement (Phyisical Volume) of the World.
 
