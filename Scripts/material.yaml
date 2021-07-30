@@ -21,8 +21,7 @@ internal_material:
   - name: "G4_PLASTIC_SC_VINYLTOLUENE"
   - name: "G4_Al"
   - name: "G4_Si"
-
-
+  - name: "G4_Water"
 
 # End of File
 ---
