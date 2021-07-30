@@ -53,5 +53,5 @@ Now in your install directory, everything should be there. Now it's the time to 
     - ```material.yaml```: all the materials needed by geometry are registered here, including optical properties.  
 - One can ignore ```-y default.yaml``` if there is a file called ```default.yaml``` under the running directory.
 
-**Batch Mode**: ```PSim -v```
+**Graphic Mode**: ```PSim -v```
 
