@@ -72,7 +72,11 @@ void RootManager::bookCollection(const G4String &cIn) {  //run level initialize 
 
     G4cout << "[Root Manager] ==> Booking tree for " << cIn << " ..." << G4endl;
 
+    // for raw hit (truth)
     evt->RegisterCollection(cIn, Phantom_DataType::DetectorHit);
+
+    // for digitization
+    // evt->RegisterCollection(cIn + "_Digitized", Phantom_DataType::DetectorHit);
 }
 
 /// \brief Save ROOT file of Simulation tree.

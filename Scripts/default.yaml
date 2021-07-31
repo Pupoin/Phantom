@@ -17,7 +17,7 @@ verbosity:
   tracking:   0
 
 random_seed:
-  mode: "time"
+  mode: "time" # "time" for current time seed, others for seed defined below
   seed: 10
 
 general_particle_source:
@@ -49,7 +49,7 @@ optical_simulation: false
 ###########################################
 RootManager:
   outfile_Name: "p_out.root"
-  tree_Name: "phantom"
+  tree_Name: "p"
 
   # job run number
   Run_Number: 0
@@ -70,6 +70,7 @@ OutCollection:
 # Detector Geometry
 ###########################################
 Geometry:
+  # Sensitive Detector Name
   ftrk_name: "FrontTracker"
   rtrk_name: "RearTracker"
   scintillator_name: "Scintillator"
