@@ -106,7 +106,8 @@ void DetectorSD::EndOfEvent(G4HCofThisEvent *) {
         for (auto sim_hit : fSimHitVec) {
             if (sim_hit->getE() >= 1e-10)
                 pRootMng->FillSimHit(sd_name, sim_hit);
-            //delete sim_hit;
+            else
+                delete sim_hit;
         }
     }
 }
