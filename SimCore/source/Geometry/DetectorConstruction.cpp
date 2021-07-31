@@ -5,6 +5,7 @@
 #include "Geometry/DetectorConstruction.h"
 #include "Control/Control.h"
 #include "RootManager/RootManager.h"
+#include "Digitization/DetectorSD.h"
 
 #include "G4GDMLParser.hh"
 #include "G4SolidStore.hh"
@@ -14,6 +15,7 @@
 #include "G4PVParameterised.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalSkinSurface.hh"
+#include "G4SDManager.hh"
 
 #include <iterator>
 #include <filesystem>
@@ -174,17 +176,36 @@ void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type) {
     auto *MP = new MatrixPlacement(det_name, type);
     new G4PVParameterised(det_name + "Out", Target_LV, Region_LV, kZAxis, total_No, MP, fCheckOverlaps);
 
+    LV_Storage.insert(make_pair(det_name, LV));
+
     vis_attr->SetVisibility(true);
     LV->SetVisAttributes(vis_attr);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+
+void DetectorConstruction::DefineSD(const G4String &det_name, PlaceType type) {
+    SDType sdt = (type == PlaceType::ECAL) ? SDType::Calorimeter : SDType::Tracker;
+
+    auto *SD = new DetectorSD(det_name, sdt);
+    G4SDManager::GetSDMpointer()->AddNewDetector(SD);
+    LV_Storage.at(det_name)->SetSensitiveDetector(SD);
+}
+
 void DetectorConstruction::ConstructSDandField() {
 
     /*                              */
     /* Construct Sensitive Detector */
     /*                              */
+
+    if (pControl->build_ftrk) DefineSD(pControl->ftrk_name, PlaceType::Tracker);
+
+    if (pControl->build_rtrk) DefineSD(pControl->rtrk_name, PlaceType::Tracker);
+
+    if (pControl->build_scintillator) DefineSD(pControl->scintillator_name, PlaceType::ECAL);
+
+    if (pControl->build_telescope) DefineSD(pControl->telescope_name, PlaceType::ECAL);
 
 }
 
@@ -204,6 +225,7 @@ void DetectorConstruction::SaveGeometry() {
     pRootMng->FillGeometry(filename);
 
 }
+
 
 
 

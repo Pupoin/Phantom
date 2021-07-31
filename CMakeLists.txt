@@ -73,6 +73,8 @@ endif ()
 # Add sub-directory for this project
 #
 
+add_subdirectory(DataIO)
+
 add_subdirectory(SimCore)
 
 #----------------------------------------------------------------------------

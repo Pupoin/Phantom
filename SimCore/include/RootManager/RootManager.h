@@ -25,6 +25,7 @@
 
 /* Phantom */
 #include "Control/Control.h"
+#include "DataIO/PEvent.h"
 
 class RootManager {
 public:
@@ -43,7 +44,13 @@ public:
 
     void initialize();
 
+    /* Fill Methods */
     void FillGeometry(const G4String &filename);
+
+    void FillSimHit(const TString& name, PHit* sim_hit);
+
+
+    void FillTree(int eventID, const double *Rnd);
 
 private:
 
@@ -60,6 +67,8 @@ private:
     int CurrentEventNumber{};
 
     double Rndm[4]{}; //Random double array, size=4
+
+    PEvent* evt{};
 
 private:
     RootManager();

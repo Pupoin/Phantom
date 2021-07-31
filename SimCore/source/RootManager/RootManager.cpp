@@ -21,6 +21,8 @@ RootManager *RootManager::CreateInstance() {
 RootManager::RootManager()
         : rootFile(nullptr), tr(nullptr) {
 
+    evt = new PEvent();
+
 #ifdef MEMCK
     if (pControl->memory_check) {
         Printf("============================================================");
@@ -37,7 +39,7 @@ RootManager::RootManager()
 
 /// \brief Clean Optical stuff.
 void RootManager::initialize() {
-
+    evt->Initialization(CleanType::nVector);
 }
 
 
@@ -58,6 +60,7 @@ void RootManager::book() { //run level init for all
     tr->Branch("RunNumber", &RunNumber, "RunNumber/I");
     tr->Branch("EventNumber", &CurrentEventNumber, "EventNumber/I");
     tr->Branch("Rndm", &Rndm, "Rndm[4]/D");
+    tr->Branch("EventData", &evt, 320000000, 0);
 
     cout << "==> ROOT file is opened in " << fileName << endl;
 }
@@ -65,15 +68,13 @@ void RootManager::book() { //run level init for all
 //....ooooo0ooooo........ooooo0ooooo........ooooo0ooooo........ooooo0ooooo......
 /// \brief 
 /// \param[in] cIn
-void RootManager::bookCollection(const G4String &cIn) {  //run level initilize based on det name
+void RootManager::bookCollection(const G4String &cIn) {  //run level initialize based on det name
 
     G4cout << "[Root Manager] ==> Booking tree for " << cIn << " ..." << G4endl;
 
-    //Evt->RegisterSimulatedHitCollection(cIn);
-
+    evt->RegisterCollection(cIn, Phantom_DataType::DetectorHit);
 }
 
-//....ooooo0ooooo........ooooo0ooooo........ooooo0ooooo........ooooo0ooooo......
 /// \brief Save ROOT file of Simulation tree.
 void RootManager::save() {
     if (rootFile) {
@@ -93,6 +94,29 @@ void RootManager::FillGeometry(const G4String &filename) {
     geoM->Write("DetGeoManager");
 
     std::remove(filename);
+
+}
+
+void RootManager::FillSimHit(const TString &name, PHit *sim_hit) {
+    evt->GetData(name, DetectorHit_DataType::COL)->emplace_back(sim_hit);
+}
+
+void RootManager::FillTree(int eventID, const double *Rnd) {
+    CurrentEventNumber = eventID;
+    for (int i = 0; i < 4; i++) {
+        Rndm[i] = *(Rnd + i);
+    }
+
+    evt->setEventId(CurrentEventNumber);
+    evt->setRndm(Rnd);
+
+    tr->Fill();
+
+#ifdef MEMCK
+    if (pControl->memory_check) PEvent::PrintObjectStatistics("Waiting for Filling the tree");
+#endif
+
+    initialize();
 
 }
 
