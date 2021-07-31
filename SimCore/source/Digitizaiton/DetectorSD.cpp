@@ -85,12 +85,12 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
     else E_Had = edep;
 
     // Add values
-    hit->setE(E_EM + E_Had);
-    hit->setT(step->GetPostStepPoint()->GetGlobalTime());
     hit->setCellId(copyNo + 1); // replica start from 0 in DetectorConstruction
-    hit->setX(CellPosition.x());
-    hit->setY(CellPosition.y());
-    hit->setZ(CellPosition.z());
+    hit->setE((E_EM + E_Had) / MeV); // MeV
+    hit->setT(step->GetPostStepPoint()->GetGlobalTime() / ns); // ns
+    hit->setX(CellPosition.x() / mm); // mm
+    hit->setY(CellPosition.y() / mm); // mm
+    hit->setZ(CellPosition.z() / mm); // mm
 
     if (fType == SDType::Tracker) {
         pRootMng->FillSimHit(sd_name, hit);
