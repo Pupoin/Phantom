@@ -6,6 +6,7 @@
 #define PSIM_DSTEP_H
 
 #include <string>
+#include <ostream>
 
 #include "TObject.h"
 
@@ -51,6 +52,16 @@ public:
         ProcessName = rhs.ProcessName;
 
         return *this;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const PStep &step) {
+        TString str(
+                Form("|  %-5d  |  %8.3f, %8.3f, %8.3f  |  %10.5f, %10.5f, %10.5f, %10.5f  |   %-21s   %-15s  |",
+                     step.id, step.X, step.Y, step.Z, step.Px, step.Py,
+                     step.Pz, step.E, step.PVName.data(), step.ProcessName.data())
+        );
+        os << str;
+        return os;
     }
 
     // Get Methods
