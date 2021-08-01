@@ -7,6 +7,7 @@ The simulation package for proton CT.
 ## Get Started
 
 - **PSim** is the simulation program based on Geant4 and ROOT, characterized by proton CT.
+- **PDump** is a quick print program to read output from **PSim**.
 
 ## Installation
 
@@ -42,6 +43,8 @@ Now in your install directory, everything should be there. Now it's the time to 
 
 ### PSim
 
+necessary configuration files: ```default.yaml```, ```material.yaml```
+
 **Batch Mode**: ```PSim [ -y default.yaml]```
 
 - (**IMPORTANT**)The config file after '-y' is the yaml file, which will control the whole configuration of the program.
@@ -53,6 +56,17 @@ Now in your install directory, everything should be there. Now it's the time to 
 - One can ignore ```-y default.yaml``` if there is a file called ```default.yaml``` under the running directory.
 
 **Graphic Mode**: ```PSim -v```
+
+### PDump
+
+Since the data are encapsulated in ```PEvent``` class, it's hard to direct read them from root (libraries and scripts are needed). 
+One can simply dump all the detailed information in ```PEvent``` class by **PDump**. 
+
+**Simplified Mode**: ```PDump [target file] [target tree name]```
+
+- Only show the simplified information of all collections.
+
+**Full Mode**: ```PDump [target file] [target tree name] [entry number to be printed]```
 
 # PEvent Wiki
 
@@ -143,5 +157,4 @@ enum class Phantom_DataType {
     MCParticle, ParticleStep, DetectorHit
 };
 ```
-
 </details>
