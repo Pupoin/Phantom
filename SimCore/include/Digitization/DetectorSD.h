@@ -43,6 +43,7 @@ private:
     SDType fType;
     G4String sd_name;
     G4int copyNo{}; // replical number of PV
+    G4int hit_no;
 
     vector<PHit *> fSimHitVec;
 

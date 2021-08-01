@@ -9,12 +9,13 @@
 #include <ostream>
 
 #include "TObject.h"
+#include "TString.h"
 
 class PStep : public TObject {
 public:
     PStep() = default;
 
-    PStep(const PStep &rhs)  : TObject(rhs) {
+    PStep(const PStep &rhs) : TObject(rhs) {
         *this = rhs;
     }
 

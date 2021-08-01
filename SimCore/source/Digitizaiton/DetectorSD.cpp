@@ -93,6 +93,7 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
     hit->setZ(CellPosition.z() / mm); // mm
 
     if (fType == SDType::Tracker) {
+        hit->setCellId(touchable->GetReplicaNumber(0)+1);
         pRootMng->FillSimHit(sd_name, hit);
     }
 

@@ -11,6 +11,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction() : G4UserTrackingAction() {
+    mcp = nullptr;
 }
 
 TrackingAction::~TrackingAction() = default;
@@ -18,39 +19,42 @@ TrackingAction::~TrackingAction() = default;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track *aTrack) {
-    /* Initialize Filter */
 
-    auto pdg = aTrack->GetParticleDefinition()->GetPDGEncoding();
-    auto energy = aTrack->GetTotalEnergy();
-    auto kin_energy = aTrack->GetKineticEnergy();
+    if (aTrack->GetParticleDefinition()->GetParticleName() != "opticalphoton") {
+        auto fMC = new MCParticle();
 
+        fMC->setName(aTrack->GetParticleDefinition()->GetParticleName());
+        fMC->setPdg(aTrack->GetParticleDefinition()->GetPDGEncoding());
+        fMC->setId(aTrack->GetTrackID());
+        fMC->setMass(aTrack->GetParticleDefinition()->GetPDGMass());
+        fMC->setEnergy(aTrack->GetTotalEnergy());
+        fMC->setPx(aTrack->GetMomentum()[0]);
+        fMC->setPy(aTrack->GetMomentum()[1]);
+        fMC->setPz(aTrack->GetMomentum()[2]);
+        fMC->setVertexX(aTrack->GetPosition()[0]);
+        fMC->setVertexY(aTrack->GetPosition()[1]);
+        fMC->setVertexZ(aTrack->GetPosition()[2]);
 
-    G4double pm = sqrt(aTrack->GetMomentum()[0] * aTrack->GetMomentum()[0] +
-                       aTrack->GetMomentum()[1] * aTrack->GetMomentum()[1] +
-                       aTrack->GetMomentum()[2] * aTrack->GetMomentum()[2]);
+        if (aTrack->GetCreatorProcess())
+            fMC->setCreateProcess(aTrack->GetCreatorProcess()->GetProcessName());
 
-    if (pControl->save_all_mcp || (aTrack->GetTrackID() == 1
-                                   || pm >= 1. * GeV
-                                   || (kin_energy >= 1. * GeV && kin_energy <= 10. * GeV)
-                                   || abs(pdg) == 13   // Muon
-                                   || abs(pdg) == 111  // Pion0
-                                   || abs(pdg) == 211  // Pion+-
-                                   || abs(pdg) == 321  // Kaon+-
-                                   || abs(pdg) == 2212 // proton
-                                   || abs(pdg) == 2112 // neutron
-                                   || abs(pdg) == 14   // muon neutrino
-                                   || abs(pdg) == 12   // electron neutrino
-                                   || (abs(pdg) >= 100 &&  abs(pdg) <= 10000) // inclusive hadrons
+        pRootMng->FillSimTrack(pControl->MCParticle_Name,fMC, aTrack->GetParentID());
 
-    )) {
-
+        mcp = fMC;
     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track *aTrack) {
+    if (mcp) {
+        mcp->setERemain(aTrack->GetKineticEnergy());
+        mcp->setEndPointX(aTrack->GetStep()->GetPreStepPoint()->GetPosition()[0]);
+        mcp->setEndPointY(aTrack->GetStep()->GetPreStepPoint()->GetPosition()[1]);
+        mcp->setEndPointZ(aTrack->GetStep()->GetPreStepPoint()->GetPosition()[2]);
+    }
 
+    mcp = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

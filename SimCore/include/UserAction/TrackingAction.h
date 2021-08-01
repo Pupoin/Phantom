@@ -25,6 +25,7 @@ public:
 
 private:
 
+    MCParticle* mcp;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -118,9 +118,9 @@ public:
 
     // List all collections
     template<class T>
-    void ListCollection(T *);
+    void ListCollection(T *, const TString &pre_str = "");
 
-    void ListAllCollections(const TString &str);
+    void ListAllCollections(const TString &str = "");
 
     // Fetch Collection
     vector<MCParticle *> *GetData(const TString &col_name, MCParticle_DataType);
@@ -131,6 +131,19 @@ public:
 
     template<class BT, class T>
     vector<BT *> *GetDataVec(const TString &col_name, T *cmap);
+
+    /* Print Information */
+    void PrintHeader(const TString &col_name, const TString &class_type);
+    void PrintDetails();
+
+    /* Search for certain MCParticle */
+    static MCParticle *SearchID(vector<MCParticle *> *mv, int ID) {
+        for (auto itr : *mv) {
+            if (itr->getId() == ID) return itr;
+        }
+        return nullptr;
+    }
+
 
 #ifdef MEMCK
 
@@ -161,9 +174,9 @@ ClassDefOverride(PEvent, 1);
 
 // Some inline
 template<class T>
-void PEvent::ListCollection(T *in) {
+void PEvent::ListCollection(T *in, const TString &pre_str) {
     for (auto m_in : *in) {
-        printf("%-20s %lu", m_in.first.Data(), m_in.second.size());
+        printf("%s%-23s %10lu\n", pre_str.Data(), m_in.first.Data(), m_in.second.size());
     }
 }
 

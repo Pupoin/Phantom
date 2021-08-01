@@ -8,6 +8,11 @@
 #include "G4SystemOfUnits.hh"
 #include "G4OpticalPhoton.hh"
 
+/*
+ * data recorded in root manager:
+ * 1. initial proton step
+ */
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -21,8 +26,11 @@ SteppingAction::~SteppingAction() = default;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step *aStep) {
-    G4StepPoint *prev = aStep->GetPreStepPoint();
-    G4StepPoint *post = aStep->GetPostStepPoint();
+
+    // Only select initial track
+    if (aStep->GetTrack()->GetTrackID() == 1) {
+        pRootMng->FillSimStep(pControl->ParticleStep_Name, aStep);
+    }
 
 }
 

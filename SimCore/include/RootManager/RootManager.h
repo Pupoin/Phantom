@@ -49,6 +49,9 @@ public:
 
     void FillSimHit(const TString& name, PHit* sim_hit);
 
+    void FillSimStep(const TString& name, const G4Step *aStep);
+
+    void FillSimTrack(const TString& name, MCParticle* mcp, int ParentID);
 
     void FillTree(int eventID, const double *Rnd);
 

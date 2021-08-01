@@ -28,6 +28,7 @@ public:
                PDG == rhs.PDG &&
                Mass == rhs.Mass &&
                Energy == rhs.Energy &&
+               ERemain == rhs.ERemain &&
                Px == rhs.Px &&
                Py == rhs.Py &&
                Pz == rhs.Pz &&
@@ -52,6 +53,7 @@ public:
         PDG = rhs.PDG;
         Mass = rhs.Mass;
         Energy = rhs.Energy;
+        ERemain = rhs.ERemain;
         Px = rhs.Px;
         Py = rhs.Py;
         Pz = rhs.Pz;
@@ -64,6 +66,18 @@ public:
         EndPointZ = rhs.EndPointZ;
 
         return *this;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const MCParticle &mcp) {
+        TString str(
+                Form("| %-5d | %-8s  %-8d | %10.5f, %10.5f, %10.5f, %10.5f, %10.5f, %10.5f | %8.3f, %8.3f, %8.3f | %8.3f, %8.3f, %8.3f | %-15s %-8d |",
+                     mcp.id, mcp.Name.data(), mcp.PDG, mcp.Px, mcp.Py, mcp.Pz, mcp.Energy, mcp.Mass, mcp.ERemain,
+                     mcp.VertexX, mcp.VertexY, mcp.VertexZ, mcp.EndPointX, mcp.EndPointY, mcp.EndPointZ,
+                     mcp.CreateProcess.data(), (mcp.getParent()) ? mcp.getParent()->getId() : 0
+                )
+        );
+        os << str;
+        return os;
     }
 
     // Get Methods
@@ -131,6 +145,10 @@ public:
         return sqrt(Px * Px + Py * Py + Pz * Pz);
     }
 
+    MCParticle *getParent() const {
+        return Parent;
+    }
+
     // Set Methods
     void setId(int ID) {
         MCParticle::id = ID;
@@ -196,6 +214,18 @@ public:
         P = p;
     }
 
+    void setParent(MCParticle *parent) {
+        Parent = parent;
+    }
+
+    double getERemain() const {
+        return ERemain;
+    }
+
+    void setERemain(double eRemain) {
+        ERemain = eRemain;
+    }
+
 protected:
     // internal debug only
     int id{0};
@@ -218,7 +248,12 @@ protected:
     double EndPointY{0.};
     double EndPointZ{0.};
 
+    double ERemain{0.};
+
+    MCParticle *Parent{};
+
 ClassDefOverride(MCParticle, 1);
 };
+
 
 #endif //PSIM_DPARTICLE_H

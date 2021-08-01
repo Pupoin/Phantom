@@ -69,13 +69,14 @@ bool PEvent::DeleteCollection(const TString &col_name, Phantom_DataType datatype
 }
 
 void PEvent::ListAllCollections(const TString &str) {
-    Printf("\n[Memory Check] %s", str.Data());
-    Printf("Collection Name               size");
-    Printf("==================================");
-    ListCollection(mcparticle_col);
-    ListCollection(step_col);
-    ListCollection(hit_col);
-    Printf("==================================");
+    Printf("[All Collections] %s", str.Data());
+    Printf("================================================================");
+    Printf("Col. Type                     Col. Name                     size");
+    Printf("----------------------------------------------------------------");
+    ListCollection(mcparticle_col, Form("%-30s", "MCParticle"));
+    ListCollection(step_col, Form("%-30s", "ParticleStep: PStep"));
+    ListCollection(hit_col, Form("%-30s", "DetectorHit: PHit"));
+    Printf("----------------------------------------------------------------");
 }
 
 
@@ -111,8 +112,56 @@ void PEvent::PrintObjectStatistics(const TString &str) {
     Printf("===============================================================================================");
 }
 
-
 #endif
+
+void PEvent::PrintDetails() {
+    for (const auto &m : *mcparticle_col) {
+        Printf("\n");
+        PrintHeader(m.first, "MCParticle");
+        for (auto v : m.second) {
+            std::cout << *v << std::endl;
+        }
+    }
+
+    for (const auto &m : *step_col) {
+        Printf("\n");
+        PrintHeader(m.first, "ParticleStep(PStep)");
+        for (auto v : m.second) {
+            std::cout << *v << std::endl;
+        }
+    }
+    for (const auto &m : *hit_col) {
+        Printf("\n");
+        PrintHeader(m.first, "DetectorHit(PHit)");
+        for (auto v : m.second) {
+            std::cout << *v << std::endl;
+        }
+    }
+}
+
+void PEvent::PrintHeader(const TString &col_name, const TString &class_type) {
+    Printf("==>  Collection Type: %s, Collection Name: %s", col_name.Data(), class_type.Data());
+
+    if (class_type == "ParticleStep(PStep)") {
+        Printf("%s", std::string(140, '=').data());
+        Printf("|  %-5s  |  %3s%-25s  |  %-8s%-38s  |   %-21s   %-15s  |", "id", "", "Position (x, y, z) [mm]", "",
+               "4-Momentum (px, py, pz, E) [MeV]", "Physical Volume", "Process");
+        Printf("%s", std::string(140, '-').data());
+    }
+
+    if (class_type == "DetectorHit(PHit)") {
+        Printf("%s", std::string(76, '=').data());
+        Printf("|   %-5s  |  %3s%-25s  |  %16s  | %s |", "id", "", "Position (x, y, z) [mm]", "E [MeV], T [ns]", "Cell ID");
+        Printf("%s", std::string(76, '-').data());
+    }
+
+    if (class_type == "MCParticle") {
+        Printf("%s", std::string(186, '=').data());
+        Printf("| %-5s | %-8s  %-8s | %12s%-58s | %3s%-25s | %3s%-25s | %-15s %-8s |", "id", "Name", "PDG", "","Momentum (px, py, pz), E, Mass, ERemain [MeV]" ,  "","Vertex (x, y, z) [mm]", "","End (x, y, z) [mm]", "Create Process", "ParentID");
+        Printf("%s", std::string(186, '-').data());
+    }
+
+}
 
 
 

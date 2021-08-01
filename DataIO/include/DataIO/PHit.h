@@ -6,6 +6,7 @@
 #define PSIM_DHIT_H
 
 #include "TObject.h"
+#include "TString.h"
 
 enum DetectorType {
     nNone, nTracker, nECAL, nHCAL
@@ -16,7 +17,7 @@ public:
     // Constructor and Destructor
     PHit() = default;
 
-    PHit(const PHit &rhs)  : TObject(rhs) {
+    PHit(const PHit &rhs) : TObject(rhs) {
         *this = rhs;
     }
 
@@ -55,6 +56,16 @@ public:
         E = rhs.E;
 
         return *this;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const PHit &hit) {
+        TString str(
+                Form("|   %-5d  |  %8.3f, %8.3f, %8.3f  |  %8.3f, %6.3f  |  %5d  |",
+                     hit.id, hit.X, hit.Y, hit.Z, hit.E, hit.T, hit.CellID
+                )
+        );
+        os << str;
+        return os;
     }
 
     // Get Methods

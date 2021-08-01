@@ -62,6 +62,10 @@ void RootManager::book() { //run level init for all
     tr->Branch("Rndm", &Rndm, "Rndm[4]/D");
     tr->Branch("EventData", &evt, 320000000, 0);
 
+    /* Add default collections in evt */
+    evt->RegisterCollection(pControl->ParticleStep_Name, Phantom_DataType::ParticleStep);
+    evt->RegisterCollection(pControl->MCParticle_Name, Phantom_DataType::MCParticle);
+
     cout << "==> ROOT file is opened in " << fileName << endl;
 }
 
@@ -102,7 +106,71 @@ void RootManager::FillGeometry(const G4String &filename) {
 }
 
 void RootManager::FillSimHit(const TString &name, PHit *sim_hit) {
+    sim_hit->setId(static_cast<int>(evt->GetData(name, DetectorHit_DataType::COL)->size()));
     evt->GetData(name, DetectorHit_DataType::COL)->emplace_back(sim_hit);
+}
+
+void RootManager::FillSimTrack(const TString &name, MCParticle *mcp, int ParentID) {
+
+    auto mcps = evt->GetData(name, MCParticle_DataType::COL);
+    mcp->setParent(PEvent::SearchID(mcps, ParentID));
+
+    auto tmp1 = G4String(mcp->getCreateProcess());
+    const char *tmp2;
+    if (tmp1.contains("biasWrapper"))
+        tmp2 = tmp1(tmp1.index("(") + 1, tmp1.index(")") - tmp1.index("(") - 1).data();
+    else
+        tmp2 = tmp1.data();
+    mcp->setCreateProcess(std::string(tmp2));
+
+    mcps->emplace_back(mcp);
+
+}
+
+void RootManager::FillSimStep(const TString &name, const G4Step *aStep) {
+    G4StepPoint *prev = aStep->GetPreStepPoint();
+    G4StepPoint *post = aStep->GetPostStepPoint();
+
+    auto Steps = evt->GetData(name, ParticleStep_DataType::COL);
+    if (Steps->empty()) {
+        auto step_first = new PStep();
+        step_first->setId(static_cast<int>(Steps->size()));
+        step_first->setX(prev->GetPosition()[0]);
+        step_first->setY(prev->GetPosition()[1]);
+        step_first->setZ(prev->GetPosition()[2]);
+        step_first->setPx(prev->GetMomentum()[0]);
+        step_first->setPy(prev->GetMomentum()[1]);
+        step_first->setPz(prev->GetMomentum()[2]);
+        step_first->setE(prev->GetTotalEnergy());
+        step_first->setPVName(prev->GetPhysicalVolume()->GetName().data());
+        step_first->setProcessName("Initial Step");
+        Steps->emplace_back(step_first);
+    }
+    auto step = new PStep();
+    step->setId(static_cast<int>(Steps->size()));
+    step->setX(post->GetPosition()[0]);
+    step->setY(post->GetPosition()[1]);
+    step->setZ(post->GetPosition()[2]);
+    step->setPx(post->GetMomentum()[0]);
+    step->setPy(post->GetMomentum()[1]);
+    step->setPz(post->GetMomentum()[2]);
+    step->setE(post->GetTotalEnergy());
+
+    if (post->GetPhysicalVolume() == nullptr) {
+        step->setPVName("OutofWorld");
+        step->setProcessName("Transportation");
+    } else {
+        step->setPVName(post->GetPhysicalVolume()->GetName().data());
+        auto tmp2 = post->GetProcessDefinedStep()->GetProcessName();
+        const char *tmp3;
+        if (tmp2.contains("biasWrapper"))
+            tmp3 = tmp2(tmp2.index("(") + 1, tmp2.index(")") - tmp2.index("(") - 1).data();
+        else
+            tmp3 = tmp2.data();
+        step->setProcessName(std::string(tmp3));
+    }
+
+    Steps->emplace_back(step);
 }
 
 void RootManager::FillTree(int eventID, const double *Rnd) {
