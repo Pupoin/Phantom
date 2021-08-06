@@ -55,7 +55,7 @@ void RootManager::book() { //run level init for all
     }
 
     tr = new TTree(pControl->tree_Name, pControl->tree_Name);
-    tr->SetAutoSave();
+    //tr->SetAutoSave();
     //tr->SetAutoFlush(-500000000);
 
     tr->Branch("RunNumber", &RunNumber, "RunNumber/I");
