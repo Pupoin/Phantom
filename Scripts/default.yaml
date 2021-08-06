@@ -49,7 +49,7 @@ optical_simulation: false
 ###########################################
 RootManager:
   outfile_Name: "p_out.root"
-  tree_Name: "p"
+  tree_Name: "pct"
 
   # job run number
   Run_Number: 0
