@@ -59,6 +59,10 @@ public:
 
     ~PEvent() override {
         Initialization(nALL);
+
+        delete mcparticle_col;
+        delete step_col;
+        delete hit_col;
     }
 
     // Operators
@@ -134,6 +138,7 @@ public:
 
     /* Print Information */
     void PrintHeader(const TString &col_name, const TString &class_type);
+
     void PrintDetails();
 
     /* Search for certain MCParticle */

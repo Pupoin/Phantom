@@ -3,7 +3,6 @@
 /// \brief Implementation of the RunAction class
 
 #include "UserAction//RunAction.h"
-#include "RootManager/RootManager.h"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -25,8 +24,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
     
     //inform the runManager to save random number seed
-    
-    G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+
+    //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
 
 }
 
