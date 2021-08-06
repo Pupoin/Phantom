@@ -51,8 +51,9 @@ EventDump::EventDump(TString fName, TString tName, long long eventnumber)
 
     t = f->Get<TTree>(t_name.Data());
     if (!t) {
-        std::cerr << "[Error] -- No tree " << t_name << " found" << std::endl
-        exit(-1);
+        std::cerr << "[Error] -- No tree " << t_name << " found" << std::endl;
+        exit(EXIT_FAILURE);
+        ;
     }
     total_entries = t->GetEntries();
     if (event_number >= total_entries) {
