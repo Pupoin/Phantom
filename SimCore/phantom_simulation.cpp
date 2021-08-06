@@ -125,7 +125,6 @@ int main(int argc, char **argv) {
         runManager->BeamOn(pControl->BeamOnNumber);
     }
 
-
     delete visManager;
     delete runManager;
 
