@@ -19,6 +19,15 @@
 #pragma link C++ class PStep+;
 #pragma link C++ class PHit+;
 #pragma link C++ class MCParticle+;
+
+#pragma link C++ class std::vector<PStep *>+;
+#pragma link C++ class std::vector<PHit *>+;
+#pragma link C++ class std::vector<MCParticle *>+;
+
+#pragma link C++ class std::map<TString, std::vector<PStep * >>+;
+#pragma link C++ class std::map<TString, std::vector<PHit * >>+;
+#pragma link C++ class std::map<TString, std::vector<MCParticle * >>+;
+
 #pragma link C++ class PEvent+;
 
 
