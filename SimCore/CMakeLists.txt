@@ -1,5 +1,5 @@
 #CADMesh
-include_directories(${PROJECT_SOURCE_DIR}/CADMesh/include)
+include_directories(../External_Tools/CADMesh/include)
 # PEvent
 include_directories(${PROJECT_SOURCE_DIR}/DataIO/include)
 
