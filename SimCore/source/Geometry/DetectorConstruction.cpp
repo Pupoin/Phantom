@@ -26,7 +26,7 @@ DetectorConstruction::DetectorConstruction() {
 
     fCheckOverlaps = pControl->check_overlaps;
     fStepLimit = nullptr;
-
+    hm = new HumanModel();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,12 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     if (pControl->build_telescope) DefineDet(pControl->telescope_name, PlaceType::ECAL); // Build Range Telescope
 
-    if (pControl->build_target) DefineTarget(); // Define Target
+    if (pControl->build_human) {
+        hm->BuildAll(World_LV);
+    } else {
+        if (pControl->build_target) DefineTarget(); // Define Target
+    }
+
 
     // Book RootMng
     pRootMng->book();

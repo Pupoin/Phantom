@@ -19,6 +19,7 @@
 #include "G4Colour.hh"
 
 #include "Geometry/MatrixPlacement.h"
+#include "Geometry/HumanModel.h"
 
 #include <vector>
 
@@ -51,7 +52,6 @@ private:
 
     void DefineSD(const G4String& det_name, PlaceType type);
 
-
     G4LogicalVolume *World_LV{}; // Logical Volume of World.
     G4PVPlacement *World_PV{}; // Placement (Phyisical Volume) of the World.
 
@@ -60,6 +60,9 @@ private:
     //global option
     G4UserLimits *fStepLimit; // pointer to user step limits
     G4bool fCheckOverlaps;   // option to activate checking of volumes overlaps
+
+    // Human Building
+    HumanModel* hm;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

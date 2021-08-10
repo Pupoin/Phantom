@@ -165,6 +165,10 @@ bool Control::ReadYAML(const G4String &file_in) {
             telescope_size = readV3(n["telescope_size"], true);
             telescope_arrangement = readV3(n["telescope_arrangement"]);
             telescope_offset = readV2(n["telescope_offset"]);
+
+            // --------
+            // Build Human Models
+            ReadHumanModel();
         }
     }
     catch (YAML::BadConversion &e) {
@@ -401,6 +405,24 @@ double Control::readMatDensity(const YAML::Node &n) {
 void Control::addElements(G4Material *mat, const YAML::Node &n) {
     for (size_t i = 0; i < n.size(); i += 2) {
         mat->AddElement(nistManager->FindOrBuildElement(n[i].as<string>()), n[i + 1].as<double>());
+    }
+}
+
+void Control::ReadHumanModel() {
+    auto hn = Node["Geometry"]["human_model"];
+    if (hn.IsNull()) {
+        build_human = false;
+        return;
+    }
+
+    build_human = hn["use_human_model"].IsDefined() && hn["use_human_model"].as<bool>();
+    human_model_directory = hn["directory"].IsDefined() ? hn["directory"].as<std::string>() : "";
+    if (auto com_n = hn["composition"]; com_n.IsDefined()) {
+        for (auto com: com_n) {
+            auto name = com["name"].as<std::string>();
+            auto material = nistManager->FindMaterial(com["material"].as<string>());
+            human_model_composition.insert(std::make_pair(name, material));
+        }
     }
 }
 

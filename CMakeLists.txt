@@ -72,6 +72,7 @@ endif ()
 #----------------------------------------------------------------------------
 # Add sub-directory for this project
 #
+add_subdirectory(CADMesh)
 
 add_subdirectory(DataIO)
 

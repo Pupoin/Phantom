@@ -50,6 +50,8 @@ public:
 
     void ReadAndSetRandomSeed();
 
+    void ReadHumanModel();
+
 public:
     /*************************************/
     /*  Define all the variables needed  */
@@ -154,21 +156,27 @@ public:
     // Optics
 
     // Wrapper
-    G4MaterialPropertiesTable *wrapper_surface_material;
-    G4OpticalSurface *wrapper_surface;
+    G4MaterialPropertiesTable *wrapper_surface_material{};
+    G4OpticalSurface *wrapper_surface{};
     vector<double> wrapper_energy; // photon energy [eV]
     vector<double> wrapper_reflectivity;
     vector<double> wrapper_efficiency;
     vector<double> wrapper_transmittance;
 
     // Crystal
-    double crystal_ScintillationYield;
-    double crystal_FastTimeConstant;
+    double crystal_ScintillationYield{};
+    double crystal_FastTimeConstant{};
     vector<double> crystal_energy; // photon energy [eV]
     vector<double> crystal_RefractionIdx;
     vector<double> crystal_AbsorptionLength;
     vector<double> crystal_ScintEnergy;
     vector<double> crystal_ScintFast;
+
+    //------
+    // Human Model
+    bool build_human{};
+    G4String human_model_directory;
+    map<G4String, G4Material*> human_model_composition;
 
     // Misalliance
     calo_info_map calo_info;
