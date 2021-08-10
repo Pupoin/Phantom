@@ -78,6 +78,8 @@ add_subdirectory(DataIO)
 
 add_subdirectory(SimCore)
 
+add_subdirectory(AnalysisCore)
+
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #

@@ -12,36 +12,35 @@ enum DetectorType {
     nNone, nTracker, nECAL, nHCAL
 };
 
-class PHit : public TObject {
+struct PCTTruth {
+    double E = 0.;
+    double T = 0.;
+};
+
+struct PCTWaveform {
+
+};
+
+struct PCTDigi {
+
+};
+
+struct PCTImage {
+
+};
+
+class PCTXData : public TObject {
 public:
     // Constructor and Destructor
-    PHit() = default;
+    PCTXData() = default;
 
-    PHit(const PHit &rhs) : TObject(rhs) {
+    PCTXData(const PCTXData &rhs) : TObject(rhs) {
         *this = rhs;
     }
 
-    ~PHit() override = default;
+    ~PCTXData() override = default;
 
-    bool operator==(const PHit &rhs) const {
-        return id == rhs.id &&
-               CellID == rhs.CellID &&
-               CellID_X == rhs.CellID_X &&
-               CellID_Y == rhs.CellID_Y &&
-               CellID_Z == rhs.CellID_Z &&
-               Detector == rhs.Detector &&
-               X == rhs.X &&
-               Y == rhs.Y &&
-               Z == rhs.Z &&
-               T == rhs.T &&
-               E == rhs.E;
-    }
-
-    bool operator!=(const PHit &rhs) const {
-        return !(rhs == *this);
-    }
-
-    PHit &operator=(const PHit &rhs) {
+    PCTXData &operator=(const PCTXData &rhs) {
         if (&rhs == this) { return *this; }
         id = rhs.id;
         CellID = rhs.CellID;
@@ -52,16 +51,18 @@ public:
         X = rhs.X;
         Y = rhs.Y;
         Z = rhs.Z;
-        T = rhs.T;
-        E = rhs.E;
+        Truth = rhs.Truth;
+        Image = rhs.Image;
+        Waveform = rhs.Waveform;
+        Digi = rhs.Digi;
 
         return *this;
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const PHit &hit) {
+    friend std::ostream &operator<<(std::ostream &os, const PCTXData &hit) {
         TString str(
                 Form("|   %-5d  |  %8.3f, %8.3f, %8.3f  |  %8.3f, %6.3f  |  %5d  |",
-                     hit.id, hit.X, hit.Y, hit.Z, hit.E, hit.T, hit.CellID
+                     hit.id, hit.X, hit.Y, hit.Z, hit.Truth.E, hit.Truth.T, hit.CellID
                 )
         );
         os << str;
@@ -89,14 +90,6 @@ public:
         return Z;
     }
 
-    double getT() const {
-        return T;
-    }
-
-    double getE() const {
-        return E;
-    }
-
     DetectorType getDetector() const {
         return Detector;
     }
@@ -115,7 +108,7 @@ public:
 
     // Set Methods
     void setId(int ID) {
-        PHit::id = ID;
+        PCTXData::id = ID;
     }
 
     void setCellId(int cellId) {
@@ -134,14 +127,6 @@ public:
         Z = z;
     }
 
-    void setT(double t) {
-        T = t;
-    }
-
-    void setE(double e) {
-        E = e;
-    }
-
     void setDetector(DetectorType detector) {
         Detector = detector;
     }
@@ -158,6 +143,39 @@ public:
         CellID_Z = cellIdZ;
     }
 
+    // Getter and Setter for structures
+    [[nodiscard]] const PCTTruth &getTruth() const {
+        return Truth;
+    }
+
+    void setTruth(const PCTTruth &truth) {
+        Truth = truth;
+    }
+
+    [[nodiscard]] const PCTWaveform &getWaveform() const {
+        return Waveform;
+    }
+
+    void setWaveform(const PCTWaveform &waveform) {
+        Waveform = waveform;
+    }
+
+    [[nodiscard]] const PCTDigi &getDigi() const {
+        return Digi;
+    }
+
+    void setDigi(const PCTDigi &digi) {
+        Digi = digi;
+    }
+
+    [[nodiscard]] const PCTImage &getImage() const {
+        return Image;
+    }
+
+    void setImage(const PCTImage &image) {
+        Image = image;
+    }
+
 
 protected:
     int id{0};
@@ -166,16 +184,18 @@ protected:
     int CellID_X{0};
     int CellID_Y{0};
     int CellID_Z{0};
-
-    DetectorType Detector{nNone};
-
     double X{0.};
     double Y{0.};
     double Z{0.};
-    double T{0.};
-    double E{0.};
 
-ClassDefOverride(PHit, 1);
+    DetectorType Detector{nNone};
+
+    PCTTruth Truth;
+    PCTWaveform Waveform;
+    PCTDigi Digi;
+    PCTImage Image;
+
+ClassDefOverride(PCTXData, 1);
 };
 
 #endif //PSIM_DHIT_H

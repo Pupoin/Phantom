@@ -40,7 +40,7 @@ void DetectorSD::Initialize(G4HCofThisEvent *) {
         else if (sd_name == pControl->telescope_name) arr = pControl->telescope_arrangement;
 
         for (int i = 0; i < arr.x() * arr.y() * arr.z(); i++)
-            fSimHitVec.push_back(new PHit());
+            fSimHitVec.push_back(new PCTXData());
 
     }
 }
@@ -66,8 +66,8 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
     copyNo = touchable->GetReplicaNumber(1); // for calo, depth=1
 
     // Get hit accounting data for this cell
-    PHit *hit;
-    if (fType == SDType::Tracker) hit = new PHit();
+    PCTXData *hit;
+    if (fType == SDType::Tracker) hit = new PCTXData();
     else hit = fSimHitVec[copyNo];
 
     // Calculate the center position of this cell
@@ -86,14 +86,17 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
 
     // Add values
     hit->setCellId(copyNo + 1); // replica start from 0 in DetectorConstruction
-    hit->setE((E_EM + E_Had) / MeV); // MeV
-    hit->setT(step->GetPostStepPoint()->GetGlobalTime() / ns); // ns
     hit->setX(CellPosition.x() / mm); // mm
     hit->setY(CellPosition.y() / mm); // mm
     hit->setZ(CellPosition.z() / mm); // mm
 
+    // Truth Info
+    PCTTruth truth = {(E_EM + E_Had) / MeV, step->GetPostStepPoint()->GetGlobalTime() / ns};
+    hit->setTruth(truth);
+
     if (fType == SDType::Tracker) {
-        hit->setCellId(touchable->GetReplicaNumber(0)+1);
+        hit->setDetector(nTracker);
+        hit->setCellId(touchable->GetReplicaNumber(0) + 1);
         pRootMng->FillSimHit(sd_name, hit);
     }
 
@@ -105,9 +108,10 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
 void DetectorSD::EndOfEvent(G4HCofThisEvent *) {
     if (fType == SDType::Calorimeter) {
         for (auto sim_hit : fSimHitVec) {
-            if (sim_hit->getE() >= 1e-10)
+            if (sim_hit->getTruth().E >= 1e-10) {
+                sim_hit->setDetector(nECAL);
                 pRootMng->FillSimHit(sd_name, sim_hit);
-            else
+            } else
                 delete sim_hit;
         }
     }

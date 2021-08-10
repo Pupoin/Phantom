@@ -17,15 +17,20 @@
 #pragma link C++ nestedclasses;
 
 #pragma link C++ class PStep+;
-#pragma link C++ class PHit+;
 #pragma link C++ class MCParticle+;
 
+#pragma link C++ class PCTTruth+;
+#pragma link C++ class PCTWaveform+;
+#pragma link C++ class PCTDigi+;
+#pragma link C++ class PCTImage+;
+#pragma link C++ class PCTXData+;
+
 #pragma link C++ class std::vector<PStep *>+;
-#pragma link C++ class std::vector<PHit *>+;
+#pragma link C++ class std::vector<PCTXData *>+;
 #pragma link C++ class std::vector<MCParticle *>+;
 
 #pragma link C++ class std::map<TString, std::vector<PStep * >>+;
-#pragma link C++ class std::map<TString, std::vector<PHit * >>+;
+#pragma link C++ class std::map<TString, std::vector<PCTXData * >>+;
 #pragma link C++ class std::map<TString, std::vector<MCParticle * >>+;
 
 #pragma link C++ class PEvent+;

@@ -47,7 +47,7 @@ public:
     /* Fill Methods */
     void FillGeometry(const G4String &filename);
 
-    void FillSimHit(const TString& name, PHit* sim_hit);
+    void FillSimHit(const TString& name, PCTXData* sim_hit);
 
     void FillSimStep(const TString& name, const G4Step *aStep);
 

@@ -76,17 +76,17 @@ PEvent is the self-developed C++ data structure used for Phantom Simulation. It'
 
 - ```MCParticle```: a class recording all monte carlo particle information.
 - ```PStep```: mainly focusing on step of motion of the primary proton.
-- ```PHit```: containing raw hits and digitization information.
+- ```PCTXData```: containing raw hits and digitization information.
 
 Each basic type has its own collection map:
 
 - ```mcp_map = std::map<TString, vector<MCParticle * >>```
 - ```step_map = std::map<TString, vector<PStep * >>```
-- ```hit_map = std::map<TString, vector<PHit * >>```
+- ```hit_map = std::map<TString, vector<PCTXData * >>```
 
 All the information records in the corresponding map. For example, the detector hits of Scintillator module fills
-as ```std::pair("Scintillator", vector of PHit* )```, and the hits from Range Telescope
-are ```std::pair("Telescope", vector of PHit* )```.
+as ```std::pair("Scintillator", vector of PCTXData* )```, and the hits from Range Telescope
+are ```std::pair("Telescope", vector of PCTXData* )```.
 
 </details>
 
@@ -112,7 +112,7 @@ auto mcps = evt->GetData("MCPaticles", MCParticle_DataType::COL);
 auto steps = evt->GetData("Init_Particle_Step", ParticleStep_DataType::COL);
 
 /*
- * hits: std::vector<PHit* >* 
+ * hits: std::vector<PCTXData* >* 
  * mcps: std::vector<MCParticle* >*
  * steps: std::vector<PStep* >*
  */

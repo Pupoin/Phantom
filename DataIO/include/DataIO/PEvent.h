@@ -13,7 +13,7 @@
 #include <iostream>
 #include <memory>
 
-#include "DataIO/PHit.h"
+#include "DataIO/PCTXData.h"
 #include "DataIO/PStep.h"
 #include "DataIO/MCParticle.h"
 
@@ -29,7 +29,7 @@ using std::make_tuple;
 /* Type Define */
 using mcp_map = map<TString, vector<MCParticle * >>;
 using step_map = map<TString, vector<PStep * >>;
-using hit_map = map<TString, vector<PHit * >>;
+using hit_map = map<TString, vector<PCTXData * >>;
 
 /* enum class */
 enum CleanType {
@@ -129,7 +129,7 @@ public:
     // Fetch Collection
     vector<MCParticle *> *GetData(const TString &col_name, MCParticle_DataType);
 
-    vector<PHit *> *GetData(const TString &col_name, DetectorHit_DataType);
+    vector<PCTXData *> *GetData(const TString &col_name, DetectorHit_DataType);
 
     vector<PStep *> *GetData(const TString &col_name, ParticleStep_DataType);
 

@@ -8,7 +8,7 @@
 #include "G4VSensitiveDetector.hh"
 #include "RootManager/RootManager.h"
 
-#include "DataIO/PHit.h"
+#include "DataIO/PCTXData.h"
 
 #include <vector>
 #include <iterator>
@@ -45,7 +45,7 @@ private:
     G4int copyNo{}; // replical number of PV
     G4int hit_no;
 
-    vector<PHit *> fSimHitVec;
+    vector<PCTXData *> fSimHitVec;
 
 };
 

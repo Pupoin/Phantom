@@ -7,7 +7,7 @@ include_directories(./)
 include_directories(include)
 
 SET(PEvent_header
-        include/DataIO/PHit.h
+        include/DataIO/PCTXData.h
         include/DataIO/PStep.h
         include/DataIO/MCParticle.h
         include/DataIO/PEvent.h

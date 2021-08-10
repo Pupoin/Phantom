@@ -6,7 +6,7 @@ digitized readout for each sensitive detector
 
 #include "TObject.h"
 #include "TString.h"
-#include "PHit.h"
+#include "PCTXData.h"
 
 class PCTDigi : public TObject {
 public:

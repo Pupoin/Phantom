@@ -106,7 +106,7 @@ void RootManager::FillGeometry(const G4String &filename) {
 
 }
 
-void RootManager::FillSimHit(const TString &name, PHit *sim_hit) {
+void RootManager::FillSimHit(const TString &name, PCTXData *sim_hit) {
     sim_hit->setId(static_cast<int>(evt->GetData(name, DetectorHit_DataType::COL)->size()));
     evt->GetData(name, DetectorHit_DataType::COL)->emplace_back(sim_hit);
 }
