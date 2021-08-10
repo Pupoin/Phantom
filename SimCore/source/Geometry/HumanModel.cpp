@@ -10,6 +10,8 @@
 
 void HumanModel::ImportModel(const G4String &model_name, G4Material *model_mat) {
 
+    std::cout << "[Human Model] ==> Importing " << model_name << " ..." << std::endl;
+
     auto current_mesh = CADMesh::TessellatedMesh::FromSTL(pControl->human_model_directory + "/" + model_name + ".stl");
     current_mesh->SetScale(500);
 
@@ -22,7 +24,7 @@ void HumanModel::ImportModel(const G4String &model_name, G4Material *model_mat) 
 
     human_lv.insert(std::make_pair(model_name, bunny_logical));
 
-    std::cout << "[Human Model] ==> Import " << model_name << " sucessfully..." << std::endl;
+    std::cout << "[Human Model] ==> Import " << model_name << " successfully..." << std::endl;
 }
 
 void HumanModel::BuildAll(G4LogicalVolume *world) {
