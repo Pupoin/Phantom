@@ -7,6 +7,7 @@
 #include "Core/EventReader.h"
 #include "Core/ConfigManager.h"
 #include "Core/ControlManager.h"
+#include "Core/AnalyzerManager.h"
 
 using std::cerr, std::endl;
 using std::string;
@@ -40,8 +41,11 @@ int main(int argc, char **argv) {
     EventReader::CreateInstance();
     ConfigManager::CreateInstance();
     ControlManager::CreateInstance();
+    AnalyzerManager::CreateInstance();
 
+    pControlMgr->initialize();
     if (print_usage) pControlMgr->generate_config();
+
 
     return 0;
 }

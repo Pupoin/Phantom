@@ -1,4 +1,7 @@
+#include "Core/EventReader.h"
+#include "Core/ConfigManager.h"
 #include "Core/ControlManager.h"
+#include "Core/AnalyzerManager.h"
 
 // Required by Singleton
 ControlManager *pControlMgr = nullptr;
@@ -13,8 +16,58 @@ ControlManager *ControlManager::CreateInstance() {
 
 ControlManager::ControlManager() = default;
 
+
+void ControlManager::initialize() {
+    pAnaMgr->InitializeAnalyzers();
+}
+
 void ControlManager::run() {
-    //pEvtReader->getEntryNext();
+
+    // Read Data from ROOT file
+    pEvtReader->setInput("test.root", "pct");
+    /*
+     *  Processing
+     */
+    pAnaMgr->BeginAnalyzers();
+
+    while (auto evt = pEvtReader->getEntryNext()) {
+        if (Verbose > 1) {
+            cout << "--------------------------";
+            cout << " Process Event: " << pEvtReader->getCurrentEventNumber();
+            cout << " --------------------------" << endl;
+        }
+#ifdef MEMCK
+        if (false)
+            PEvent::PrintObjectStatistics(Form("Begin of Event: %d", pEvtReader->getCurrentEventNumber()));
+#endif
+        // process algorithms
+        pAnaMgr->ProcessEvtAnalyzers(evt);
+
+        // check algorithms
+        pAnaMgr->CheckEvtAnalyzers(evt);
+
+        if (Verbose > 1) {
+            cout << "--------------------------";
+            cout << " End of Event:  " << pEvtReader->getCurrentEventNumber();
+            cout << " --------------------------" << endl;
+        }
+
+        evt->Initialization(nALL);
+
+#ifdef MEMCK
+        if (false)
+            PEvent::PrintObjectStatistics(Form("End of Event: %d", pEvtReader->getCurrentEventNumber()));
+#endif
+
+    }
+
+    /*
+     *  End
+     */
+    pAnaMgr->EndAnalyzers();
+    pAnaMgr->PrintRunLog();
+
+    std::cout << std::endl << " ==> Done ..." << std::endl;
 }
 
 
@@ -45,5 +98,6 @@ void ControlManager::generate_config() {
 
     // Analyzers Settings
     print_title("Analyzer Settings");
-    
+
 }
+

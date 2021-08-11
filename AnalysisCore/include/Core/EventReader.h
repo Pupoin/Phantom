@@ -38,6 +38,8 @@ public:
 
     [[nodiscard]] int getVerbose() const { return Verbose; }
 
+    [[nodiscard]] int getCurrentEventNumber() const { return current_event_number; }
+
 private:
     friend class ControlManager;
 
@@ -57,6 +59,7 @@ private:
     int event_number{-1};
     int skip_number{0};
     int event_processed_number{0};
+    int current_event_number{0};
 
     // Root files
     TString file_name;

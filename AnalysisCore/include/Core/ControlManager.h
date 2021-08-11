@@ -8,12 +8,16 @@ class ControlManager {
 public:
     static ControlManager *CreateInstance();
 
+    void initialize();
+
     void run();
 
     void generate_config();
 
 private:
     ControlManager();
+
+    int Verbose{0};
 
 public:
     // Delete Copy constructor

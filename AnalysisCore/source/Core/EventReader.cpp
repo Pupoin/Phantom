@@ -79,11 +79,15 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
 PEvent *EventReader::getEntryNext() {
     if (tree_reader->IsInvalid()) return nullptr;
 
-    while (event_processed_number < skip_number)
+    while (event_processed_number < skip_number) {
         tree_reader->Next();
+        current_event_number++;
+    }
 
     if (!tree_reader->Next()) return nullptr;
 
     event_processed_number++;
+    current_event_number++;
+
     return this->getEvt();
 }
