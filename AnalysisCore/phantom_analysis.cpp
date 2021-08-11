@@ -4,10 +4,12 @@
 
 #include <iostream>
 
-#include "Core/AlgoManager.h"
+#include "Core/EventReader.h"
+#include "Core/ConfigManager.h"
 #include "Core/ControlManager.h"
 
-using namespace std;
+using std::cerr, std::endl;
+using std::string;
 
 namespace {
     void PrintUsage() {
@@ -32,22 +34,14 @@ int main(int argc, char **argv) {
     else if (std::string(argv[1]) == "-h") {
         PrintUsage();
         return 1;
-    }
-    else
+    } else
         configfile = argv[1];
 
-    AnaData::CreateInstance();
+    EventReader::CreateInstance();
+    ConfigManager::CreateInstance();
+    ControlManager::CreateInstance();
 
-    auto control = new ControlManager();
-    control->setOnlyPrintUsage(print_usage);
+    if (print_usage) pControlMgr->generate_config();
 
-    auto evtrdr = new EventReader();
-    control->setEvtReader(evtrdr);
-
-    auto algo = new AlgoManager();
-    control->setAlgo(algo);
-    control->run();
-
-    delete control;
     return 0;
 }

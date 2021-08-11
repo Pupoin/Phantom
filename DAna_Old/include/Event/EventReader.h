@@ -14,6 +14,8 @@
 
 #include "Event/AnaEvent.h"
 #include "EventStoreAndWriter.h"
+#include "Core/EventReader.h"
+
 
 using namespace std;
 
@@ -94,7 +96,7 @@ public:
     }
 
 private:
-    TFile* data_file;
+    TFile *data_file;
 
     AnaEvent *evt{nullptr};
     TBranch *b_DEvent;   //!
@@ -123,5 +125,6 @@ private:
     Double_t Rndm[4] = {0, 0, 0, 0};
 
 };
+
 
 #endif //DSIMU_EVENTREADER_H
