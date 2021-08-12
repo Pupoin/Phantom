@@ -106,3 +106,6 @@ foreach (_script ${RUN_SCRIPTS})
             COPYONLY
     )
 endforeach ()
+
+install(FILES ${RUN_SCRIPTS} DESTINATION scripts)
+

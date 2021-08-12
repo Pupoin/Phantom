@@ -84,26 +84,58 @@ void PAnalyzer::RegisterParameter(const string &var_name, T *var, T default_valu
 
 // Define the macro to read AnaVar
 #define assignAnaVar(var, var_type, yaml_node)                                                                      \
-    if ((var_type) == "bool") *get<0>(var) = (yaml_node).as<bool>();                                                \
-    else if ((var_type) == "int") *get<1>(var) = (yaml_node).as<int>();                                             \
-    else if ((var_type) == "double") *get<2>(var) = (yaml_node).as<double>();                                       \
-    else if ((var_type) == "string") *get<3>(var) = (yaml_node).as<string>();                                       \
+    if ((var_type) == "bool") *std::get<0>(var) = (yaml_node).as<bool>();                                                \
+    else if ((var_type) == "int") *std::get<1>(var) = (yaml_node).as<int>();                                             \
+    else if ((var_type) == "double") *std::get<2>(var) = (yaml_node).as<double>();                                       \
+    else if ((var_type) == "string") *std::get<3>(var) = (yaml_node).as<string>();                                       \
     else if ((var_type).find("bool") != std::string::npos && (var_type).find("vector") != std::string::npos) {      \
         std::vector<bool> tmp = {};                                                                                 \
-        for (auto val : (yaml_node) ) tmp.push_back((yaml_node).as<bool>());                                        \
-        *get<4>(var) = tmp;                                                                                         \
+        for (auto val : (yaml_node) ) tmp.push_back(val.as<bool>());                                        \
+        *std::get<4>(var) = tmp;                                                                                         \
     } else if ((var_type).find("int") != std::string::npos && (var_type).find("vector") != std::string::npos) {     \
     std::vector<int> tmp = {};                                                                                      \
-    for (auto val : (yaml_node) ) tmp.push_back((yaml_node).as<int>());                                             \
-    *get<5>(var) = tmp;                                                                                             \
+    for (auto val : (yaml_node) ) tmp.push_back(val.as<int>());                                             \
+    *std::get<5>(var) = tmp;                                                                                             \
     } else if ((var_type).find("double") != std::string::npos && (var_type).find("vector") != std::string::npos) {  \
     std::vector<double> tmp = {};                                                                                   \
-    for (auto val : (yaml_node) ) tmp.push_back((yaml_node).as<double>());                                          \
-    *get<6>(var) = tmp;                                                                                             \
+    for (auto val : (yaml_node) ) tmp.push_back(val.as<double>());                                          \
+    *std::get<6>(var) = tmp;                                                                                             \
     } else if ((var_type).find("string") != std::string::npos && (var_type).find("vector") != std::string::npos) {  \
     std::vector<std::string> tmp = {};                                                                              \
-    for (auto val : (yaml_node) ) tmp.push_back((yaml_node).as<std::string>());                                     \
-    *get<7>(var) = tmp;                                                                                             \
+    for (auto val : (yaml_node) ) tmp.push_back(val.as<std::string>());                                     \
+    *std::get<7>(var) = tmp;                                                                                             \
+    }
+
+// Define the macro to Print AnaVar
+#define printAnaVar(var, var_type)                                                                                  \
+    if ((var_type) == "bool") printf("%d", *std::get<0>(var));                                                      \
+    else if ((var_type) == "int") printf("%d", *std::get<1>(var));                                                  \
+    else if ((var_type) == "double") printf("%f", *std::get<2>(var));                                               \
+    else if ((var_type) == "string") printf("%s", std::get<3>(var)->c_str());                                       \
+    else if ((var_type).find("bool") != std::string::npos && (var_type).find("vector") != std::string::npos) {      \
+        if (!std::get<4>(var)->empty()) {                                                                            \
+            printf("[ %d", (int)std::get<4>(var)->front());                                                              \
+            for (unsigned i = 1; i < std::get<4>(var)->size(); ++i) printf(", %d", (int)std::get<4>(var)->at(i));      \
+            printf(" ]");                                                                                           \
+        } else printf("[ ]");                                                                                       \
+    }  else if ((var_type).find("int") != std::string::npos && (var_type).find("vector") != std::string::npos) {    \
+        if (!std::get<5>(var)->empty()) {                                                                            \
+            printf("[ %d", std::get<5>(var)->front());                                                              \
+            for (unsigned i = 1; i < std::get<5>(var)->size(); ++i) printf(", %d", std::get<5>(var)->at(i));        \
+            printf(" ]");                                                                                           \
+        } else printf("[ ]");                                                                                       \
+    }  else if ((var_type).find("double") != std::string::npos && (var_type).find("vector") != std::string::npos) { \
+        if (!std::get<6>(var)->empty()) {                                                                            \
+            printf("[ %f", std::get<6>(var)->front());                                                              \
+            for (unsigned i = 1; i < std::get<6>(var)->size(); ++i) printf(", %f", std::get<6>(var)->at(i));        \
+            printf(" ]");                                                                                           \
+        } else printf("[ ]");                                                                                       \
+    }  else if ((var_type).find("string") != std::string::npos && (var_type).find("vector") != std::string::npos) { \
+        if (!std::get<7>(var)->empty()) {                                                                            \
+            printf("[ \"%s\"", std::get<7>(var)->front().c_str());                                                  \
+            for (unsigned i = 1; i < std::get<7>(var)->size(); ++i) printf(", \"%s\"", std::get<7>(var)->at(i).c_str());\
+            printf(" ]");                                                                                           \
+        } else printf("[ ]");                                                                                       \
     }
 
 #endif //PCTSIMULATION_PANALYZER_H

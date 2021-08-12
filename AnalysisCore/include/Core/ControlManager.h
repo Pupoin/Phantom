@@ -17,6 +17,13 @@ public:
 private:
     ControlManager();
 
+    friend class ConfigManager;
+
+    std::string file_name;
+    std::string geom_name;
+    std::string input_tree;
+    std::string outfile_name;
+
     int Verbose{0};
 
 public:

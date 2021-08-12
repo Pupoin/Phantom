@@ -44,7 +44,14 @@ int main(int argc, char **argv) {
     AnalyzerManager::CreateInstance();
 
     pControlMgr->initialize();
-    if (print_usage) pControlMgr->generate_config();
+    if (print_usage) {
+        pControlMgr->generate_config();
+        return 0;
+    }
+
+    pConfigMgr->ReadConfig(configfile);
+
+    pControlMgr->run();
 
 
     return 0;

@@ -8,13 +8,17 @@ class AnalyzerManager {
 public:
     static AnalyzerManager *CreateInstance();
 
-    void RegisterAnalyzer(PAnalyzer* );
+    void RegisterAnalyzer(PAnalyzer *);
 
     // Summary Log
     void PrintRunLog();
 
     // Register Processors
-    void SetAnalyzerList(const std::string &AnalyzerList);
+    void setAnalyzerList(const vector<std::string> &analyzerList);
+
+    [[nodiscard]] const map<std::string, PAnalyzer *> &getAnalyzerCol() const { return analyzer_col; }
+
+    [[nodiscard]] const vector<std::string> &getAnalyzerList() const { return analyzer_list; }
 
     // Run AnaProcessor
     void InitializeAnalyzers();
@@ -29,7 +33,7 @@ public:
 
 
 private:
-    std::map<std::string, PAnalyzer*> analyzer_col;
+    std::map<std::string, PAnalyzer *> analyzer_col;
     std::vector<std::string> analyzer_list;
 
     // Time and Event Log

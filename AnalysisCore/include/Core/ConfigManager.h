@@ -13,6 +13,11 @@ public:
 
     void ReadConfig(const string &yaml_file);
 
+    void ReadBasic();
+
+    void ReadVerbosity();
+
+    void ReadAnalyzers();
 
 private:
     ConfigManager();

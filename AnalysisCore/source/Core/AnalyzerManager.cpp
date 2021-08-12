@@ -3,6 +3,8 @@
 /* Include all needed analyzers here */
 #include "Analyzer/ExampleAnalyzer.h"
 
+#include <sstream>
+
 // Required by Singleton
 AnalyzerManager *pAnaMgr = nullptr;
 
@@ -110,29 +112,6 @@ void AnalyzerManager::EndAnalyzers() {
     global_end = clock();
 }
 
-void AnalyzerManager::SetAnalyzerList(const std::string &AnalyzerList) {
-
-    analyzer_list.clear();
-    std::istringstream sin(AnalyzerList);
-    do {
-        std::string ProcessorName;
-        sin >> ProcessorName;
-
-        if (!ProcessorName.empty()) {
-            if (std::find(analyzer_list.begin(), analyzer_list.end(), ProcessorName) == analyzer_list.end()) {
-                {
-                    if (analyzer_col.count(ProcessorName) != 0)
-                        analyzer_list.emplace_back(ProcessorName);
-                    else
-                        std::cerr << "[WARNING] ==> No Analyzer named: " << ProcessorName << std::endl;
-                }
-            } else
-                std::cerr << "[WARNING] ==> Duplicate Analyzer Name." << std::endl;
-        }
-    } while (sin);
-}
-
-
 void AnalyzerManager::PrintRunLog() {
     cout << "======================================================================" << endl;
     cout << "---------------------------> Run Summary <----------------------------" << endl;
@@ -157,4 +136,21 @@ void AnalyzerManager::PrintRunLog() {
          << (double) (global_end - global_start) / CLOCKS_PER_SEC;
     cout << " [sec]" << endl;
     cout << "======================================================================" << endl;
+}
+
+void AnalyzerManager::setAnalyzerList(const vector<std::string> &analyzerList) {
+    analyzer_list.clear();
+    for (const auto &input_ana: analyzerList) {
+        if (!input_ana.empty()) {
+            if (std::find(analyzer_list.begin(), analyzer_list.end(), input_ana) == analyzer_list.end()) {
+                {
+                    if (analyzer_col.count(input_ana) != 0)
+                        analyzer_list.emplace_back(input_ana);
+                    else
+                        std::cerr << "[WARNING] ==> No Analyzer named: " << input_ana << std::endl;
+                }
+            } else
+                std::cerr << "[WARNING] ==> Duplicate Analyzer Name: " << input_ana << std::endl;
+        }
+    }
 }

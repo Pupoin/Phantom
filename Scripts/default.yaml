@@ -12,9 +12,9 @@ material_file: "material.yaml"
 # Geant4 General Settings
 ###########################################
 verbosity:
-  run:        2
-  event:      0
-  tracking:   0
+  run: 2
+  event: 0
+  tracking: 0
 
 random_seed:
   mode: "time" # "time" for current time seed, others for seed defined below

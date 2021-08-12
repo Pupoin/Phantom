@@ -20,8 +20,12 @@ class EventReader {
 public:
     static EventReader *CreateInstance();
 
-    // Set Verbosity
+    // Setters
     void setVerbose(int verbose) { Verbose = verbose; }
+
+    void setEventNumber(int eventNumber) { event_number = eventNumber; }
+
+    void setSkipNumber(int skipNumber) { skip_number = skipNumber; }
 
     // Getters
     [[nodiscard]] const TString &getFileName() const { return file_name; }

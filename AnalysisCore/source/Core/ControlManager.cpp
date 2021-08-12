@@ -2,6 +2,7 @@
 #include "Core/ConfigManager.h"
 #include "Core/ControlManager.h"
 #include "Core/AnalyzerManager.h"
+#include "Analyzer/PAnalyzer.h"
 
 // Required by Singleton
 ControlManager *pControlMgr = nullptr;
@@ -24,7 +25,7 @@ void ControlManager::initialize() {
 void ControlManager::run() {
 
     // Read Data from ROOT file
-    pEvtReader->setInput("test.root", "pct");
+    pEvtReader->setInput(file_name, input_tree, geom_name);
     /*
      *  Processing
      */
@@ -72,9 +73,9 @@ void ControlManager::run() {
 
 
 void print_title(const std::string &str) {
-    printf("########################################### \n");
+    printf("# ----------------- \n");
     printf("# %s \n", str.data());
-    printf("########################################### \n");
+
 }
 
 void ControlManager::generate_config() {
@@ -85,6 +86,7 @@ void ControlManager::generate_config() {
     print_title("Basic Settings");
     printf("input_file: \"p_out.root\" \n");
     printf("geometry_file: \"p_out.root\" \n");
+    printf("input_tree: \"pct\" \n");
     printf("output_file: \"p_ana.root\" \n \n");
 
     printf("event_number: -1 \t# number of events to be analyzed \n");
@@ -93,11 +95,30 @@ void ControlManager::generate_config() {
     // Verbosity Settings
     print_title("Verbosity Settings");
 
+    printf("\n");
+
     // Analyzers List
     print_title("Analyzer Lists");
+    printf("Analyzer_List:  \n");
+    for (const auto &ana : pAnaMgr->getAnalyzerCol()) {
+        printf("  - %-25s # %s \n", ana.first.data(), ana.second->getDescription().data());
+    }
+    printf("\n");
 
     // Analyzers Settings
     print_title("Analyzer Settings");
+    printf("Analyzer_Settings:  \n");
+    for (const auto &ana : pAnaMgr->getAnalyzerCol()) {
+        printf("  %s: \n", ana.first.data());
 
+        for (const auto &var : ana.second->getAnaVarCol()) {
+            printf("    # %s\n", std::get<2>(var.second).c_str());
+            printf("    %s: ", var.first.c_str());
+            printAnaVar(std::get<1>(var.second), std::get<0>(var.second));
+            printf("\n");
+        }
+    }
+
+    printf("\n\n# End of file\n");
 }
 
