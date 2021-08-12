@@ -51,7 +51,7 @@ private:
     [[nodiscard]] PEvent *getEntryNext();
 
     // Should not call explicitly, which should be called by getEntryNext()
-    [[nodiscard]] PEvent *getEvt() const { return *evt->Get(); }
+    [[nodiscard]] PEvent *getEvt() const { return evt; }
 
     // Set input file
     void setInput(const TString &fileName, const TString &treeName, const TString &geomName = "");
@@ -72,8 +72,10 @@ private:
 
     TFile *f{};
     TFile *g{};
-    TTreeReader *tree_reader{};
-    TTreeReaderValue<PEvent *> *evt{};
+    TTree *tree{};
+    PEvent *evt{};
+//    TTreeReader *tree_reader{};
+//    TTreeReaderValue<PEvent *> *evt{};
 
     // Verbosity
     int Verbose{0};

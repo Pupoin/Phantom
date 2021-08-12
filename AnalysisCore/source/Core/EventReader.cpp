@@ -29,10 +29,11 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
         exit(EXIT_FAILURE);
     }
 
-    tree_reader = new TTreeReader(tree_name, f);
-    evt = new TTreeReaderValue<PEvent *>(*tree_reader, "EventData");
+    tree = f->Get<TTree>(treeName);
+    tree->SetMakeClass(1);
+    tree->SetBranchAddress("EventData", &evt);
 
-    auto Entries = tree_reader->GetEntries();
+    auto Entries = tree->GetEntries();
     if (Verbose > -1) {
         cout << "======================================================================" << endl;
         std::cout << "[ READ FILE ] : (Verbosity 0)" << std::endl;
@@ -48,16 +49,16 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
         std::cout << std::setw(5) << " " << std::setw(30);
         std::cout << "==> Skip Event(s): " << std::setw(30) << skip_number << std::endl;
 
-        int Evt = 0;
         if (event_number == -1)
-            Evt = (Entries >= skip_number) ? static_cast<int>(Entries) - skip_number : 0;
+            event_number = (Entries >= skip_number) ? static_cast<int>(Entries) - skip_number : 0;
         else if (Entries >= skip_number)
-            Evt = (Entries >= skip_number + event_number) ? event_number : static_cast<int>(Entries) - skip_number;
+            event_number = (Entries >= skip_number + event_number) ? event_number : static_cast<int>(Entries) -
+                                                                                    skip_number;
         else
-            Evt = 0;
+            event_number = 0;
 
         std::cout << std::setw(5) << " " << std::setw(30);
-        std::cout << "==> Process Event(s): " << std::setw(30) << Evt << std::endl;
+        std::cout << "==> Process Event(s): " << std::setw(30) << event_number << std::endl;
     }
 
     // Read Geometry
@@ -77,14 +78,15 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
 }
 
 PEvent *EventReader::getEntryNext() {
-    if (tree_reader->IsInvalid()) return nullptr;
+    if (!tree) return nullptr;
 
     while (event_processed_number < skip_number) {
-        tree_reader->Next();
         current_event_number++;
     }
 
-    if (!tree_reader->Next()) return nullptr;
+    if (event_processed_number >= event_number) return nullptr;
+
+    tree->GetEntry(current_event_number);
 
     event_processed_number++;
     current_event_number++;
