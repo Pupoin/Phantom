@@ -34,7 +34,7 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
     tree->SetBranchAddress("EventData", &evt);
 
     auto Entries = tree->GetEntries();
-    if (Verbose > -1) {
+    if (Verbose >= 0) {
         cout << "======================================================================" << endl;
         std::cout << "[ READ FILE ] : (Verbosity 0)" << std::endl;
         std::cout << std::left;
@@ -80,7 +80,7 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
 PEvent *EventReader::getEntryNext() {
     if (!tree) return nullptr;
 
-    while (event_processed_number < skip_number) {
+    while (current_event_number < skip_number) {
         current_event_number++;
     }
 
@@ -90,6 +90,12 @@ PEvent *EventReader::getEntryNext() {
 
     event_processed_number++;
     current_event_number++;
+
+    if (Verbose >= 1 && event_number >= 100) {
+        if (event_processed_number % (event_number / PrintModule) == 0)
+            printf("[Event Reader] ==> Porcess: %10d/%-10d [%5.2f]\n", event_processed_number, event_number,
+                   (double) event_processed_number / event_number);
+    }
 
     return this->getEvt();
 }

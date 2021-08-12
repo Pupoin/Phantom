@@ -10,6 +10,8 @@ public:
 
     void RegisterAnalyzer(PAnalyzer *);
 
+    void setVerbose(int verbose) { Verbose = verbose; }
+
     // Summary Log
     void PrintRunLog();
 

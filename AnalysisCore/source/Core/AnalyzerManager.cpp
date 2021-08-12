@@ -38,7 +38,7 @@ void AnalyzerManager::BeginAnalyzers() {
     Processed_Evt = 0;
     global_start = clock();
 
-    if (Verbose > 0) {
+    if (Verbose >= 0) {
         cout << "======================================================================" << endl;
         cout << "[ ALGO PROCESS LIST ] : (Verbosity 1)" << endl;
         cout << std::right;
@@ -58,7 +58,7 @@ void AnalyzerManager::BeginAnalyzers() {
         // Initialize Timer
         processing_avg_time.insert(std::pair<std::string, double>(*itr, 0.));
 
-        if (Verbose > 0) {
+        if (Verbose >= 0) {
             cout << std::right << std::setw(5) << " " << std::left;
             cout << std::setw(39) << *itr;
             cout << std::setw(50) << analyzer_col.at(*itr)->getDescription() << endl;
@@ -72,7 +72,7 @@ void AnalyzerManager::ProcessEvtAnalyzers(PEvent *evt) {
         // record start time for each processor
         start_processing = clock();
 
-        if (Verbose > 2) {
+        if (Verbose >= 2) {
             cout << "[ PROCESSOR ] (Verbosity 3) : " << itr << endl;
         }
 

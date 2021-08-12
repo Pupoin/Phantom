@@ -79,7 +79,7 @@ Geometry:
   # The offset from target for detectors (the radius of target circle)
   target_offset: [ 25, "cm" ]
   human_model:
-    use_human_model: true
+    use_human_model: false
     directory: "./../Organism_Models"
     composition:
       - name: "liver"

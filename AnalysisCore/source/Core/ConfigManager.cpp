@@ -54,7 +54,11 @@ void ConfigManager::ReadBasic() {
 }
 
 void ConfigManager::ReadVerbosity() {
-
+    if (auto n = Node["Verbosity"]; n.IsDefined()) {
+        pEvtReader->setVerbose(n["EventReader"].IsDefined() ? n["EventReader"].as<int>() : 0);
+        pControlMgr->setVerbose(n["ControlManager"].IsDefined() ? n["ControlManager"].as<int>() : 0);
+        pAnaMgr->setVerbose(n["AnalyzerManager"].IsDefined() ? n["AnalyzerManager"].as<int>() : 0);
+    }
 }
 
 void ConfigManager::ReadAnalyzers() {

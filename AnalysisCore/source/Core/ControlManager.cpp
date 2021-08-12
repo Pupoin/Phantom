@@ -32,13 +32,13 @@ void ControlManager::run() {
     pAnaMgr->BeginAnalyzers();
 
     while (auto evt = pEvtReader->getEntryNext()) {
-        if (Verbose > 1) {
+        if (Verbose >= 1) {
             cout << "--------------------------";
             cout << " Process Event: " << pEvtReader->getCurrentEventNumber();
             cout << " --------------------------" << endl;
         }
 #ifdef MEMCK
-        if (false)
+        if (Verbose >= 2)
             PEvent::PrintObjectStatistics(Form("Begin of Event: %d", pEvtReader->getCurrentEventNumber()));
 #endif
         // process algorithms
@@ -56,7 +56,7 @@ void ControlManager::run() {
         evt->Initialization(nALL);
 
 #ifdef MEMCK
-        if (false)
+        if (Verbose >= 2)
             PEvent::PrintObjectStatistics(Form("End of Event: %d", pEvtReader->getCurrentEventNumber()));
 #endif
 
@@ -94,7 +94,10 @@ void ControlManager::generate_config() {
 
     // Verbosity Settings
     print_title("Verbosity Settings");
-
+    printf("Verbosity:  \n");
+    printf("  %-20s %d\n", " EventReader:", 0);
+    printf("  %-20s %d\n", " ControlManager:", 0);
+    printf("  %-20s %d\n", " AnalyzerManager:", 0);
     printf("\n");
 
     // Analyzers List

@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
     pControlMgr->initialize();
     if (print_usage) {
-        pControlMgr->generate_config();
+        ControlManager::generate_config();
         return 0;
     }
 

@@ -12,7 +12,9 @@ public:
 
     void run();
 
-    void generate_config();
+    static void generate_config();
+
+    void setVerbose(int verbose) { Verbose = verbose; }
 
 private:
     ControlManager();

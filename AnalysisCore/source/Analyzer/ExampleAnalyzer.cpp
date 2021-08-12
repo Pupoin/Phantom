@@ -10,7 +10,8 @@ ExampleAnalyzer::ExampleAnalyzer() {
     name = "ExampleAnalyzer";
     description = "An example of how to use analyzer";
 
-    // Register Parameters
+    // Register Parameters, default value matters
+    // RegisterParameter(variable_name, variable address, default value, description, variable_type)
     RegisterParameter("IntParameter", &parameter_1, 1, "An int var", "int");
     RegisterParameter("DoubleParameter", &parameter_2, 0.5, "An double var", "double");
     RegisterParameter("VecStrParameter", &parameter_3, {"e", "x"}, "vector of string", "vector<string>");
@@ -18,17 +19,11 @@ ExampleAnalyzer::ExampleAnalyzer() {
 }
 
 void ExampleAnalyzer::Begin() {
-    // Test for parameters
-    cout << "Parameter 1: " << parameter_1 << endl;
-    cout << "Parameter 2: " << parameter_2 << endl;
-    for (const auto &p: parameter_3) {
-        cout << "-- " << p << endl;
-    }
 
 }
 
 void ExampleAnalyzer::ProcessEvt(PEvent *evt) {
-    cout << evt->getEventId() << endl;
+    //cout << evt->getEventId() << endl;
 }
 
 void ExampleAnalyzer::CheckEvt(PEvent *) {

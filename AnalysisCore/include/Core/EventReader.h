@@ -6,8 +6,6 @@
 #include "TROOT.h"
 #include "TChain.h"
 #include "TFile.h"
-#include "TTreeReader.h"
-#include "TTreeReaderValue.h"
 #include "TGeoManager.h"
 
 #include <iostream>
@@ -74,11 +72,11 @@ private:
     TFile *g{};
     TTree *tree{};
     PEvent *evt{};
-//    TTreeReader *tree_reader{};
-//    TTreeReaderValue<PEvent *> *evt{};
 
     // Verbosity
     int Verbose{0};
+    // Print read info every 10% of total events
+    int PrintModule{10};
 public:
     // Delete Copy constructor
     EventReader(const EventReader &) = delete;
