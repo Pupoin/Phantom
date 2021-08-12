@@ -19,7 +19,7 @@ SET(PEvent_source
         )
 
 root_generate_dictionary(G__PEvent ${PEvent_header} LINKDEF include/PEventLinkDef.h)
-add_library(PEvent STATIC ${PEvent_header} ${PEvent_source} G__PEvent.cxx)
+add_library(PEvent SHARED ${PEvent_header} ${PEvent_source} G__PEvent.cxx)
 
 
 add_executable(PDump source/EventDump.cpp)
