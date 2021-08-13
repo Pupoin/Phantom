@@ -77,7 +77,7 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
 
 }
 
-PEvent *EventReader::getEntryNext() {
+PCTEvent *EventReader::getEntryNext() {
     if (!tree) return nullptr;
 
     while (current_event_number < skip_number) {

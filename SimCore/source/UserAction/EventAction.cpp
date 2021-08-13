@@ -44,7 +44,7 @@ void EventAction::BeginOfEventAction(const G4Event *event) {
     G4RunManager::GetRunManager()->StoreRandomNumberStatusToG4Event(1);
 
 #ifdef MEMCK
-    //if(pControl->memory_check) PEvent::PrintObjectStatistics("Begin of event");
+    //if(pControl->memory_check) PCTEvent::PrintObjectStatistics("Begin of event");
 #endif
 }
 
@@ -88,6 +88,6 @@ void EventAction::EndOfEventAction(const G4Event *event) {
     pRootMng->FillTree(eventID, rndm);
 
 #ifdef MEMCK
-    if(pControl->memory_check) PEvent::PrintObjectStatistics("End of event");
+    if(pControl->memory_check) PCTEvent::PrintObjectStatistics("End of event");
 #endif
 }

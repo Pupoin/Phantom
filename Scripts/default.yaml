@@ -48,7 +48,7 @@ optical_simulation: false
 # Root Manager Settings
 ###########################################
 RootManager:
-  outfile_Name: "p_out.root"
+  outfile_Name: "pct_out.root"
   tree_Name: "pct"
 
   # job run number
@@ -93,7 +93,7 @@ Geometry:
   # Front Tracker
   ftrk_material: "G4_Si"
   ftrk_strip_size: [ 2.5 , "mm", 10 , "cm", 0.1 , "mm" ] # size of one silicon strip
-  ftrk_strip_arrangement: [ 60, 3, 1 ] # arrangement of one silicon strip
+  ftrk_strip_arrangement: [ 61, 3, 1 ] # arrangement of one silicon strip
   ftrk_position:
     - [ 0 , "cm", 0 , "cm", -10 , "cm" ] # Layer 1
     - [ 0 , "cm", 0 , "cm",   0 , "cm" ] # Layer 2
@@ -102,7 +102,7 @@ Geometry:
   # Rear Tracker
   rtrk_material: "G4_Si"
   rtrk_strip_size: [ 2.5 , "mm", 10 , "cm", 0.1 , "mm" ] # size of one silicon strip
-  rtrk_strip_arrangement: [ 60, 3, 1 ] # arrangement of one silicon strip
+  rtrk_strip_arrangement: [ 61, 3, 1 ] # arrangement of one silicon strip
   rtrk_position:
     - [ 0 , "cm", 0 , "cm", -10 , "cm" ] # Layer 1
     - [ 0 , "cm", 0 , "cm",   0 , "cm" ] # Layer 2

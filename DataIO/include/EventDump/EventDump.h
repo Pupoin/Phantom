@@ -9,7 +9,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "DataIO/PEvent.h"
+#include "DataIO/PCTEvent.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -33,7 +33,7 @@ private:
     TTree *t{};
 
     TBranch *b_evt{};
-    PEvent *evt{};
+    PCTEvent *evt{};
 
     long long event_number{};
     long long total_entries{};

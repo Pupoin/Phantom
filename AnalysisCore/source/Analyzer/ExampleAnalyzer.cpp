@@ -22,11 +22,11 @@ void ExampleAnalyzer::Begin() {
 
 }
 
-void ExampleAnalyzer::ProcessEvt(PEvent *evt) {
+void ExampleAnalyzer::ProcessEvt(PCTEvent *evt) {
     //cout << evt->getEventId() << endl;
 }
 
-void ExampleAnalyzer::CheckEvt(PEvent *) {
+void ExampleAnalyzer::CheckEvt(PCTEvent *) {
 
 }
 

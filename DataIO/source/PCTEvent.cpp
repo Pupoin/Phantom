@@ -2,20 +2,20 @@
 // Created by Zhang Yulei on 9/19/20.
 //
 
-#include "DataIO/PEvent.h"
+#include "DataIO/PCTEvent.h"
 
 #include "TObjectTable.h"
 #include "TROOT.h"
 
 
-PEvent::PEvent() {
+PCTEvent::PCTEvent() {
     mcparticle_col = new mcp_map();
     step_col = new step_map();
     hit_col = new hit_map();
 
 }
 
-void PEvent::Initialization(CleanType ct) {
+void PCTEvent::Initialization(CleanType ct) {
     // clean constant variables
 
     // Clean maps
@@ -24,26 +24,26 @@ void PEvent::Initialization(CleanType ct) {
     ClearMap(hit_col, ct);
 }
 
-vector<MCParticle *> *PEvent::GetData(const TString &col_name, MCParticle_DataType) {
+vector<MCParticle *> *PCTEvent::GetData(const TString &col_name, MCParticle_DataType) {
     return GetDataVec<MCParticle>(col_name, mcparticle_col);
 }
 
-vector<PStep *> *PEvent::GetData(const TString &col_name, ParticleStep_DataType) {
-    return GetDataVec<PStep>(col_name, step_col);
+vector<PCTStep *> *PCTEvent::GetData(const TString &col_name, ParticleStep_DataType) {
+    return GetDataVec<PCTStep>(col_name, step_col);
 }
 
-vector<PCTXData *> *PEvent::GetData(const TString &col_name, DetectorHit_DataType) {
+vector<PCTXData *> *PCTEvent::GetData(const TString &col_name, DetectorHit_DataType) {
     return GetDataVec<PCTXData>(col_name, hit_col);
 }
 
-bool PEvent::RegisterCollection(const TString &col_name, Phantom_DataType datatype) {
+bool PCTEvent::RegisterCollection(const TString &col_name, Phantom_DataType datatype) {
     bool result = false;
     switch (datatype) {
         case Phantom_DataType::MCParticle:
             result = RegisterColMap<mcp_map, MCParticle>(col_name, mcparticle_col);
             break;
         case Phantom_DataType::ParticleStep:
-            result = RegisterColMap<step_map, PStep>(col_name, step_col);
+            result = RegisterColMap<step_map, PCTStep>(col_name, step_col);
             break;
         case Phantom_DataType::DetectorHit:
             result = RegisterColMap<hit_map, PCTXData>(col_name, hit_col);
@@ -52,14 +52,14 @@ bool PEvent::RegisterCollection(const TString &col_name, Phantom_DataType dataty
     return result;
 }
 
-bool PEvent::DeleteCollection(const TString &col_name, Phantom_DataType datatype) {
+bool PCTEvent::DeleteCollection(const TString &col_name, Phantom_DataType datatype) {
     bool result = false;
     switch (datatype) {
         case Phantom_DataType::MCParticle:
             result = DeleteColMap<mcp_map, MCParticle>(col_name, mcparticle_col);
             break;
         case Phantom_DataType::ParticleStep:
-            result = DeleteColMap<step_map, PStep>(col_name, step_col);
+            result = DeleteColMap<step_map, PCTStep>(col_name, step_col);
             break;
         case Phantom_DataType::DetectorHit:
             result = DeleteColMap<hit_map, PCTXData>(col_name, hit_col);
@@ -68,13 +68,13 @@ bool PEvent::DeleteCollection(const TString &col_name, Phantom_DataType datatype
     return result;
 }
 
-void PEvent::ListAllCollections(const TString &str) {
+void PCTEvent::ListAllCollections(const TString &str) {
     Printf("[All Collections] %s", str.Data());
     Printf("================================================================");
     Printf("Col. Type                     Col. Name                     size");
     Printf("----------------------------------------------------------------");
     ListCollection(mcparticle_col, Form("%-30s", "MCParticle"));
-    ListCollection(step_col, Form("%-30s", "ParticleStep: PStep"));
+    ListCollection(step_col, Form("%-30s", "ParticleStep: PCTStep"));
     ListCollection(hit_col, Form("%-30s", "DetectorHit: PCTXData"));
     Printf("----------------------------------------------------------------");
 }
@@ -82,9 +82,9 @@ void PEvent::ListAllCollections(const TString &str) {
 
 #ifdef MEMCK
 
-void PEvent::PrintObjectStatistics(const TString &str) {
+void PCTEvent::PrintObjectStatistics(const TString &str) {
 
-    std::vector<std::string> Mem_Collections = {"PEvent", "PStep", "MCParticle", "PCTXData"};
+    std::vector<std::string> Mem_Collections = {"PCTEvent", "PCTStep", "MCParticle", "PCTXData"};
 
     gObjectTable->UpdateInstCount();
 
@@ -114,7 +114,7 @@ void PEvent::PrintObjectStatistics(const TString &str) {
 
 #endif
 
-void PEvent::PrintDetails() {
+void PCTEvent::PrintDetails() {
     for (const auto &m : *mcparticle_col) {
         Printf("\n");
         PrintHeader(m.first, "MCParticle");
@@ -125,7 +125,7 @@ void PEvent::PrintDetails() {
 
     for (const auto &m : *step_col) {
         Printf("\n");
-        PrintHeader(m.first, "ParticleStep(PStep)");
+        PrintHeader(m.first, "ParticleStep(PCTStep)");
         for (auto v : m.second) {
             std::cout << *v << std::endl;
         }
@@ -139,10 +139,10 @@ void PEvent::PrintDetails() {
     }
 }
 
-void PEvent::PrintHeader(const TString &col_name, const TString &class_type) {
+void PCTEvent::PrintHeader(const TString &col_name, const TString &class_type) {
     Printf("==>  Collection Type: %s, Collection Name: %s", col_name.Data(), class_type.Data());
 
-    if (class_type == "ParticleStep(PStep)") {
+    if (class_type == "ParticleStep(PCTStep)") {
         Printf("%s", std::string(140, '=').data());
         Printf("|  %-5s  |  %3s%-25s  |  %-8s%-38s  |   %-21s   %-15s  |", "id", "", "Position (x, y, z) [mm]", "",
                "4-Momentum (px, py, pz, E) [MeV]", "Physical Volume", "Process");

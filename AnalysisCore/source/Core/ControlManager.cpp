@@ -39,7 +39,7 @@ void ControlManager::run() {
         }
 #ifdef MEMCK
         if (Verbose >= 2)
-            PEvent::PrintObjectStatistics(Form("Begin of Event: %d", pEvtReader->getCurrentEventNumber()));
+            PCTEvent::PrintObjectStatistics(Form("Begin of Event: %d", pEvtReader->getCurrentEventNumber()));
 #endif
         // process algorithms
         pAnaMgr->ProcessEvtAnalyzers(evt);
@@ -57,7 +57,7 @@ void ControlManager::run() {
 
 #ifdef MEMCK
         if (Verbose >= 2)
-            PEvent::PrintObjectStatistics(Form("End of Event: %d", pEvtReader->getCurrentEventNumber()));
+            PCTEvent::PrintObjectStatistics(Form("End of Event: %d", pEvtReader->getCurrentEventNumber()));
 #endif
 
     }

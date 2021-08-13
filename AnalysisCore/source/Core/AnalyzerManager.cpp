@@ -66,7 +66,7 @@ void AnalyzerManager::BeginAnalyzers() {
     }
 }
 
-void AnalyzerManager::ProcessEvtAnalyzers(PEvent *evt) {
+void AnalyzerManager::ProcessEvtAnalyzers(PCTEvent *evt) {
     for (const auto &itr : analyzer_list) {
 
         // record start time for each processor
@@ -100,7 +100,7 @@ void AnalyzerManager::ProcessEvtAnalyzers(PEvent *evt) {
     Processed_Evt++;
 }
 
-void AnalyzerManager::CheckEvtAnalyzers(PEvent *evt) {
+void AnalyzerManager::CheckEvtAnalyzers(PCTEvent *evt) {
     for (const auto &itr : analyzer_list)
         analyzer_col.at(itr)->CheckEvt(evt);
 }

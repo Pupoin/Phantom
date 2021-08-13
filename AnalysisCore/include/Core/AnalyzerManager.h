@@ -27,9 +27,9 @@ public:
 
     void BeginAnalyzers();
 
-    void ProcessEvtAnalyzers(PEvent *);
+    void ProcessEvtAnalyzers(PCTEvent *);
 
-    void CheckEvtAnalyzers(PEvent *);
+    void CheckEvtAnalyzers(PCTEvent *);
 
     void EndAnalyzers();
 

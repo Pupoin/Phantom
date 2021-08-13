@@ -14,7 +14,7 @@ void HumanModel::ImportModel(const G4String &model_name, G4Material *model_mat) 
     std::cout << "[Human Model] ==> Importing " << model_name << " ..." << std::endl;
 
     auto current_mesh = CADMesh::TessellatedMesh::FromSTL(pControl->human_model_directory + "/" + model_name + ".stl");
-    current_mesh->SetScale(500);
+    current_mesh->SetScale(300);
 
     auto bunny_logical = new G4LogicalVolume(current_mesh->GetSolid(), model_mat, model_name + "_LV",
                                              nullptr, nullptr, nullptr);

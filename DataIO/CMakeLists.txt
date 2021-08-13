@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Generate ROOT library for PEvent
+# Generate ROOT library for PCTEvent
 #
 # Header
 
@@ -8,24 +8,24 @@ include_directories(include)
 
 SET(PEvent_header
         include/DataIO/PCTXData.h
-        include/DataIO/PStep.h
+        include/DataIO/PCTStep.h
         include/DataIO/MCParticle.h
-        include/DataIO/PEvent.h
+        include/DataIO/PCTEvent.h
         )
 
 # Source
 SET(PEvent_source
-        source/PEvent.cpp
+        source/PCTEvent.cpp
         )
 
-root_generate_dictionary(G__PEvent ${PEvent_header} LINKDEF include/PEventLinkDef.h)
-add_library(PEvent SHARED ${PEvent_header} ${PEvent_source} G__PEvent.cxx)
+root_generate_dictionary(G__PCTEvent ${PEvent_header} LINKDEF include/PCTEventLinkDef.h)
+add_library(PCTEvent SHARED ${PEvent_header} ${PEvent_source} G__PCTEvent.cxx)
 
 
-add_executable(PDump source/EventDump.cpp)
-target_link_libraries(PDump PEvent)
-install(TARGETS PDump DESTINATION bin)
+add_executable(PCTDump source/EventDump.cpp)
+target_link_libraries(PCTDump PCTEvent)
+install(TARGETS PCTDump DESTINATION bin)
 
-install(TARGETS PEvent LIBRARY DESTINATION lib)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libPEvent_rdict.pcm DESTINATION lib)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libPEvent.rootmap DESTINATION lib)
+install(TARGETS PCTEvent LIBRARY DESTINATION lib)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libPCTEvent_rdict.pcm DESTINATION lib)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libPCTEvent.rootmap DESTINATION lib)

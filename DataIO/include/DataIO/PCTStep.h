@@ -11,18 +11,18 @@
 #include "TObject.h"
 #include "TString.h"
 
-class PStep : public TObject {
+class PCTStep : public TObject {
 public:
-    PStep() = default;
+    PCTStep() = default;
 
-    PStep(const PStep &rhs) : TObject(rhs) {
+    PCTStep(const PCTStep &rhs) : TObject(rhs) {
         *this = rhs;
     }
 
-    ~PStep() override = default;
+    ~PCTStep() override = default;
 
     // Operators
-    bool operator==(const PStep &rhs) const {
+    bool operator==(const PCTStep &rhs) const {
         return id == rhs.id &&
                X == rhs.X &&
                Y == rhs.Y &&
@@ -35,11 +35,11 @@ public:
                ProcessName == rhs.ProcessName;
     }
 
-    bool operator!=(const PStep &rhs) const {
+    bool operator!=(const PCTStep &rhs) const {
         return !(rhs == *this);
     }
 
-    PStep &operator=(const PStep &rhs) {
+    PCTStep &operator=(const PCTStep &rhs) {
         if (&rhs == this) { return *this; }
         id = rhs.id;
         X = rhs.X;
@@ -55,7 +55,7 @@ public:
         return *this;
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const PStep &step) {
+    friend std::ostream &operator<<(std::ostream &os, const PCTStep &step) {
         TString str(
                 Form("|  %-5d  |  %8.3f, %8.3f, %8.3f  |  %10.5f, %10.5f, %10.5f, %10.5f  |   %-21s   %-15s  |",
                      step.id, step.X, step.Y, step.Z, step.Px, step.Py,
@@ -159,7 +159,7 @@ private:
     std::string PVName;
     std::string ProcessName;
 
-ClassDefOverride(PStep, 1);
+ClassDefOverride(PCTStep, 1);
 };
 
 #endif //PSIM_DSTEP_H
