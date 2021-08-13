@@ -14,7 +14,7 @@ material_file: "material.yaml"
 verbosity:
   run: 2
   event: 0
-  tracking: 0
+  tracking: 1
 
 random_seed:
   mode: "time" # "time" for current time seed, others for seed defined below
@@ -93,7 +93,7 @@ Geometry:
   # Front Tracker
   ftrk_material: "G4_Si"
   ftrk_strip_size: [ 2.5 , "mm", 10 , "cm", 0.1 , "mm" ] # size of one silicon strip
-  ftrk_strip_arrangement: [ 60, 3, 1 ] # arrangement of one silicon strip
+  ftrk_strip_arrangement: [ 61, 3, 1 ] # arrangement of one silicon strip
   ftrk_position:
     - [ 0 , "cm", 0 , "cm", -10 , "cm" ] # Layer 1
     - [ 0 , "cm", 0 , "cm",   0 , "cm" ] # Layer 2
@@ -102,7 +102,7 @@ Geometry:
   # Rear Tracker
   rtrk_material: "G4_Si"
   rtrk_strip_size: [ 2.5 , "mm", 10 , "cm", 0.1 , "mm" ] # size of one silicon strip
-  rtrk_strip_arrangement: [ 60, 3, 1 ] # arrangement of one silicon strip
+  rtrk_strip_arrangement: [ 61, 3, 1 ] # arrangement of one silicon strip
   rtrk_position:
     - [ 0 , "cm", 0 , "cm", -10 , "cm" ] # Layer 1
     - [ 0 , "cm", 0 , "cm",   0 , "cm" ] # Layer 2
