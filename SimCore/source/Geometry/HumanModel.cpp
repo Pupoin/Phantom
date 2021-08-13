@@ -2,6 +2,7 @@
 // Created by Zhang Yulei on 8/10/21.
 //
 
+#include "G4Box.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 
