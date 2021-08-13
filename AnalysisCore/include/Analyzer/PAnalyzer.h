@@ -5,7 +5,7 @@
 #ifndef PCTSIMULATION_PANALYZER_H
 #define PCTSIMULATION_PANALYZER_H
 
-#include "DataIO/PEvent.h"
+#include "DataIO/PCTEvent.h"
 
 #include <iostream>
 #include <string>
@@ -48,9 +48,9 @@ public:
 
     virtual void Begin() = 0;
 
-    virtual void ProcessEvt(PEvent *) = 0;
+    virtual void ProcessEvt(PCTEvent *) = 0;
 
-    virtual void CheckEvt(PEvent *) = 0;
+    virtual void CheckEvt(PCTEvent *) = 0;
 
     virtual void End() = 0;
 

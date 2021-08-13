@@ -14,9 +14,9 @@ public:
     // Override virtual function of base class
     void Begin() override;
 
-    void ProcessEvt(PEvent *event) override;
+    void ProcessEvt(PCTEvent *event) override;
 
-    void CheckEvt(PEvent *event) override;
+    void CheckEvt(PCTEvent *event) override;
 
     void End() override;
 

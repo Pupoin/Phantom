@@ -25,7 +25,7 @@
 
 /* Phantom */
 #include "Control/Control.h"
-#include "DataIO/PEvent.h"
+#include "DataIO/PCTEvent.h"
 
 class RootManager {
 public:
@@ -71,7 +71,7 @@ private:
 
     double Rndm[4]{}; //Random double array, size=4
 
-    PEvent* evt{};
+    PCTEvent* evt{};
 
 private:
     RootManager();

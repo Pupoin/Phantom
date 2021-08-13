@@ -1,4 +1,4 @@
-# PEvent
+# PCTEvent
 include_directories(${PROJECT_SOURCE_DIR}/DataIO/include)
 
 include_directories(include)
@@ -9,7 +9,7 @@ file(GLOB ana_header include/*/*.h)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(PAna phantom_analysis.cpp ${ana_source} ${ana_header})
-target_link_libraries(PAna PEvent)
+add_executable(PCTAna phantom_analysis.cpp ${ana_source} ${ana_header})
+target_link_libraries(PCTAna PCTEvent)
 
-install(TARGETS PAna DESTINATION bin)
+install(TARGETS PCTAna DESTINATION bin)

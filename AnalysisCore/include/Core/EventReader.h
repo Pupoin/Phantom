@@ -1,7 +1,7 @@
 #ifndef PCTSIMULATION_EVENTREADER_H
 #define PCTSIMULATION_EVENTREADER_H
 
-#include "DataIO/PEvent.h"
+#include "DataIO/PCTEvent.h"
 
 #include "TROOT.h"
 #include "TChain.h"
@@ -46,10 +46,10 @@ private:
     friend class ControlManager;
 
     // Call next entry, should call by Control Manager
-    [[nodiscard]] PEvent *getEntryNext();
+    [[nodiscard]] PCTEvent *getEntryNext();
 
     // Should not call explicitly, which should be called by getEntryNext()
-    [[nodiscard]] PEvent *getEvt() const { return evt; }
+    [[nodiscard]] PCTEvent *getEvt() const { return evt; }
 
     // Set input file
     void setInput(const TString &fileName, const TString &treeName, const TString &geomName = "");
@@ -71,7 +71,7 @@ private:
     TFile *f{};
     TFile *g{};
     TTree *tree{};
-    PEvent *evt{};
+    PCTEvent *evt{};
 
     // Verbosity
     int Verbose{0};

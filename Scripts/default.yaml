@@ -14,7 +14,7 @@ material_file: "material.yaml"
 verbosity:
   run: 2
   event: 0
-  tracking: 1
+  tracking: 0
 
 random_seed:
   mode: "time" # "time" for current time seed, others for seed defined below

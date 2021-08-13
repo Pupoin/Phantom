@@ -21,7 +21,7 @@ RootManager *RootManager::CreateInstance() {
 RootManager::RootManager()
         : rootFile(nullptr), tr(nullptr) {
 
-    evt = new PEvent();
+    evt = new PCTEvent();
 
 #ifdef MEMCK
     if (pControl->memory_check) {
@@ -114,7 +114,7 @@ void RootManager::FillSimHit(const TString &name, PCTXData *sim_hit) {
 void RootManager::FillSimTrack(const TString &name, MCParticle *mcp, int ParentID) {
 
     auto mcps = evt->GetData(name, MCParticle_DataType::COL);
-    mcp->setParent(PEvent::SearchID(mcps, ParentID));
+    mcp->setParent(PCTEvent::SearchID(mcps, ParentID));
 
     auto tmp1 = G4String(mcp->getCreateProcess());
     const char *tmp2;
@@ -134,7 +134,7 @@ void RootManager::FillSimStep(const TString &name, const G4Step *aStep) {
 
     auto Steps = evt->GetData(name, ParticleStep_DataType::COL);
     if (Steps->empty()) {
-        auto step_first = new PStep();
+        auto step_first = new PCTStep();
         step_first->setId(static_cast<int>(Steps->size()));
         step_first->setX(prev->GetPosition()[0]);
         step_first->setY(prev->GetPosition()[1]);
@@ -147,7 +147,7 @@ void RootManager::FillSimStep(const TString &name, const G4Step *aStep) {
         step_first->setProcessName("Initial Step");
         Steps->emplace_back(step_first);
     }
-    auto step = new PStep();
+    auto step = new PCTStep();
     step->setId(static_cast<int>(Steps->size()));
     step->setX(post->GetPosition()[0]);
     step->setY(post->GetPosition()[1]);
@@ -186,7 +186,7 @@ void RootManager::FillTree(int eventID, const double *Rnd) {
     tr->Fill();
 
 #ifdef MEMCK
-    if (pControl->memory_check) PEvent::PrintObjectStatistics("Waiting for Filling the tree");
+    if (pControl->memory_check) PCTEvent::PrintObjectStatistics("Waiting for Filling the tree");
 #endif
 
     initialize();
