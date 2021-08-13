@@ -48,7 +48,7 @@ optical_simulation: false
 # Root Manager Settings
 ###########################################
 RootManager:
-  outfile_Name: "p_out.root"
+  outfile_Name: "pct_out.root"
   tree_Name: "pct"
 
   # job run number
