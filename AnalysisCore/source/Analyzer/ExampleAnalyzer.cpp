@@ -37,6 +37,7 @@ void ExampleAnalyzer::ProcessEvt(PCTEvent *evt) {
     // Get The distance of one point to the surface
     TVector3 point = {110., 50., 2.1};
     double distance = pGeo->GetDisToSuf(point, "Scintillator", 1, surface::z_plus);
+    cout << distance << endl;
 }
 
 void ExampleAnalyzer::CheckEvt(PCTEvent *) {
