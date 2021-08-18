@@ -54,7 +54,7 @@ void GeometryHelper::setGeoManager() {
         if (Verbose >= 0) {
             Printf("%-24s%4d%7s| (%2.1f, %2.1f, % 8.3f) | (%8.2f, %8.2f, % 8.3f) ", cur_Name.Data(),
                    cur_node->GetNdaughters(), "", cur_pos_x,
-                   cur_pos_y, cur_pos_z, "", cur_size_x,
+                   cur_pos_y, cur_pos_z, cur_size_x,
                    cur_size_y, cur_size_z);
         }
 
