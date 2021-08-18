@@ -48,21 +48,21 @@ private:
 
     void DefineWorld();
 
-    void DefineDet(const G4String& det_name, PlaceType type);
+    void DefineDet(const G4String &det_name, PlaceType type, bool if_parameterized = false);
 
-    void DefineSD(const G4String& det_name, PlaceType type);
+    void DefineSD(const G4String &det_name, PlaceType type);
 
     G4LogicalVolume *World_LV{}; // Logical Volume of World.
     G4PVPlacement *World_PV{}; // Placement (Phyisical Volume) of the World.
 
-    map<G4String, G4LogicalVolume*> LV_Storage;
+    map<G4String, G4LogicalVolume *> LV_Storage;
 
     //global option
     G4UserLimits *fStepLimit; // pointer to user step limits
     G4bool fCheckOverlaps;   // option to activate checking of volumes overlaps
 
     // Human Building
-    HumanModel* hm;
+    HumanModel *hm;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

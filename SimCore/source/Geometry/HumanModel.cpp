@@ -30,7 +30,6 @@ void HumanModel::ImportModel(const G4String &model_name, G4Material *model_mat) 
 
 void HumanModel::BuildAll(G4LogicalVolume *world) {
 
-
     auto target_solid = new G4Box("Target_Region_Box", 0.95 * pControl->target_offset, 0.95 * pControl->target_offset,
                                   0.95 * pControl->target_offset);
     auto target_logical = new G4LogicalVolume(target_solid, pControl->world_material, "Target_LV",

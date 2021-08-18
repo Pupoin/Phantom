@@ -115,7 +115,7 @@ void DetectorConstruction::DefineTarget() {
     Target_Region_LV->SetVisAttributes(vis_attr_r);
 }
 
-void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type) {
+void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type, bool if_parameterized) {
 
     // Some parameters
     auto box_size = std::get<0>(pControl->calo_info.at(det_name));
@@ -179,8 +179,18 @@ void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type) {
     // Then do matrix placement to replicate
     auto Target_LV = (type == PlaceType::Tracker) ? LV : OUT_LV;
     auto *MP = new MatrixPlacement(det_name, type);
-    new G4PVParameterised(det_name + "Out", Target_LV, Region_LV, kZAxis, total_No, MP, fCheckOverlaps);
+    if (if_parameterized) {
+        new G4PVParameterised(det_name + "Out", Target_LV, Region_LV, kZAxis, total_No, MP, fCheckOverlaps);
+    } else {
+        for (auto cell_dict : pControl->det_dict.at(det_name)) {
+            auto position = G4ThreeVector(
+                    {std::get<0>(cell_dict.second), std::get<1>(cell_dict.second), std::get<2>(cell_dict.second)});
 
+            new G4PVPlacement(nullptr, position, Target_LV, det_name + "Out", Region_LV, false, cell_dict.first,
+                              fCheckOverlaps);
+        }
+
+    }
     LV_Storage.insert(make_pair(det_name, LV));
 
     vis_attr->SetVisibility(true);

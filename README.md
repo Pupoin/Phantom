@@ -193,3 +193,58 @@ MCParticle, ParticleStep, DetectorHit
 ```
 
 </details>
+
+# PCTAna Wiki
+
+There are several singleton classes in **PCTAna** so that one can easily retrieve global information:
+
+- ```GeometryHelper```: pGeo
+- ...
+
+<details> <summary><b>GeometryHelper</b></summary>
+<mark>The default unit in GeometryHelper is millimeter.</mark>
+
+The extern pointer of this singleton class is ```pGeo```, which is equivalent to ```GeometryHelper::CreateInstace()```.
+Before running any function of this class, it will automatically scan if the Geometry is successfully imported. If not,
+the program will exit with failure and error message. The main function of this geometry class is to quickly calculate
+the geometry information as followed:
+
+```c++
+// Calculate distance of two points
+double GetDisOfTwo(const TVector3 &a, const TVector3 &b);
+
+// Get Center Point of the targeted geometry
+TVector3 GetPosOfVolume(const TString &det_name, int copyNo);
+
+// Get Size of the targeted geometry (Not Half!)
+TVector3 GetSizeOfVolume(const TString &det_name, int copyNo);
+
+// Get Distance between the given point and the surface of targeted geometry
+// surface is defined as:
+//  x_plus: point to the +x surface (left)
+//  x_minus: point to the -x surface (right)
+//  y_plus: point to the +y surface (top)
+//  y_minus: point to the -y surface (bottom)
+//  z_plus: point to the +z surface (front)
+//  z_minus: point to the -z surface (back)
+//
+double GetDisToSuf(const TVector3 &point, const TString &det_name, int copyNo, surface surf);
+```
+
+It's user's responsibility to supply the detector name and the corresponding copy number of the wanted cell, which
+usually can be fetched in hit information. One can do the calculation in the Analyzer:
+
+````c++
+/* Example of how to use GeometryHelper Class to calculate geometry information */
+// Get The position of Scintillator with copy number of 2
+TVector3 position = pGeo->GetPosOfVolume("Scintillator", 2);
+
+// Get The length of Scintillator with copy number of 2
+TVector3 size = pGeo->GetSizeOfVolume("Telescope", 2);
+
+// Get The distance of one point to the surface
+TVector3 point = { 110., 50., 2.1 };
+double distance = pGeo->GetDisToSuf(point, "Scintillator", 1, surface::z_plus); // distance to the +z surface
+````
+
+</details>

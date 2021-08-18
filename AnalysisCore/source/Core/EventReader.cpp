@@ -1,3 +1,4 @@
+#include "Core/GeometryHelper.h"
 #include "Core/EventReader.h"
 
 #include <iostream>
@@ -74,7 +75,7 @@ void EventReader::setInput(const TString &fileName, const TString &treeName, con
         std::cerr << "[ READ Geometry ] ==> No Geometry in the file..." << std::endl;
         return;
     }
-
+    pGeo->setGeoManager();
 }
 
 PCTEvent *EventReader::getEntryNext() {

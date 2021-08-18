@@ -4,6 +4,8 @@
 
 #include "Analyzer/ExampleAnalyzer.h"
 
+#include "Core/GeometryHelper.h"
+
 ExampleAnalyzer::ExampleAnalyzer() {
     // Basic setup
     // It's necessary if you want to correctly register your analyzer
@@ -24,6 +26,17 @@ void ExampleAnalyzer::Begin() {
 
 void ExampleAnalyzer::ProcessEvt(PCTEvent *evt) {
     //cout << evt->getEventId() << endl;
+
+    /* Example of how to use GeometryHelper Class to calculate geometry information */
+    // Get The position of Scintillator with copy number of 2
+    TVector3 position = pGeo->GetPosOfVolume("Scintillator", 2);
+
+    // Get The length of Scintillator with copy number of 2
+    TVector3 size = pGeo->GetSizeOfVolume("Telescope", 2);
+
+    // Get The distance of one point to the surface
+    TVector3 point = {110., 50., 2.1};
+    double distance = pGeo->GetDisToSuf(point, "Scintillator", 1, surface::z_plus);
 }
 
 void ExampleAnalyzer::CheckEvt(PCTEvent *) {

@@ -6,3 +6,4 @@
 - human model needs to be imported outside
 - Change PCTXData to PCTXData; change the data structure of PCTXData, please check the class file
 - Add **PAna** for reconstruction and analysis
+- Add GeometryHelper Singleton class 

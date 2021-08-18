@@ -8,6 +8,7 @@
 #include "Core/ConfigManager.h"
 #include "Core/ControlManager.h"
 #include "Core/AnalyzerManager.h"
+#include "Core/GeometryHelper.h"
 
 using std::cerr, std::endl;
 using std::string;
@@ -38,11 +39,12 @@ int main(int argc, char **argv) {
     } else
         configfile = argv[1];
 
+    GeometryHelper::CreateInstance();
     EventReader::CreateInstance();
     ConfigManager::CreateInstance();
     ControlManager::CreateInstance();
     AnalyzerManager::CreateInstance();
-
+    
     pControlMgr->initialize();
     if (print_usage) {
         ControlManager::generate_config();
