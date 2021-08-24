@@ -143,6 +143,7 @@ void RootManager::FillSimStep(const TString &name, const G4Step *aStep) {
         step_first->setPy(prev->GetMomentum()[1]);
         step_first->setPz(prev->GetMomentum()[2]);
         step_first->setE(prev->GetTotalEnergy());
+        step_first->setDeltaE(0.);
         step_first->setPVName(prev->GetPhysicalVolume()->GetName().data());
         step_first->setProcessName("Initial Step");
         Steps->emplace_back(step_first);
@@ -156,6 +157,7 @@ void RootManager::FillSimStep(const TString &name, const G4Step *aStep) {
     step->setPy(post->GetMomentum()[1]);
     step->setPz(post->GetMomentum()[2]);
     step->setE(post->GetTotalEnergy());
+    step->setDeltaE(aStep->GetTotalEnergyDeposit());
 
     if (post->GetPhysicalVolume() == nullptr) {
         step->setPVName("OutofWorld");

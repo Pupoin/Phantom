@@ -2,7 +2,7 @@
 #include "Core/ConfigManager.h"
 #include "Core/ControlManager.h"
 #include "Core/AnalyzerManager.h"
-#include "Analyzer/PAnalyzer.h"
+#include "Analyzer/PCTAnalyzer.h"
 
 // Required by Singleton
 ControlManager *pControlMgr = nullptr;

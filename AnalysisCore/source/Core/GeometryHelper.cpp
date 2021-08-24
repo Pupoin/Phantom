@@ -127,6 +127,5 @@ double GeometryHelper::GetDisToSuf(const TVector3 &point, const TString &det_nam
     return -1;
 }
 
-
 GeometryHelper::GeometryHelper() = default;
 

@@ -15,3 +15,5 @@ add_executable(PCTSim phantom_simulation.cpp ${sim_source} ${sim_header})
 target_link_libraries(PCTSim ${Geant4_LIBRARIES} PCTEvent cadmesh)
 
 install(TARGETS PCTSim DESTINATION bin)
+
+#message(${Geant4_LIBRARIES})

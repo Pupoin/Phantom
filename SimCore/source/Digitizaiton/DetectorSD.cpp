@@ -91,9 +91,13 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
     hit->setZ(CellPosition.z() / mm); // mm
 
     // Truth Info
-    PCTTruth truth = {(E_EM + E_Had) / MeV, step->GetPostStepPoint()->GetGlobalTime() / ns};
-    hit->setTruth(truth);
+    PCTTruth truth = {(E_EM + E_Had) / MeV, step->GetPostStepPoint()->GetGlobalTime() / ns,
+                      HitPoint.x() / mm, HitPoint.y() / mm, HitPoint.z() / mm};
+    hit->addTruth(truth);
+    hit->setE(hit->getE() + truth.E);
 
+    double T_weighted = truth.T * (truth.E / (hit->getE())) + hit->getT() * ((hit->getE() - truth.E) / hit->getE());
+    hit->setT(T_weighted);
     if (fType == SDType::Tracker) {
         hit->setDetector(nTracker);
         hit->setCellId(touchable->GetReplicaNumber(0) + 1);
@@ -108,7 +112,7 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
 void DetectorSD::EndOfEvent(G4HCofThisEvent *) {
     if (fType == SDType::Calorimeter) {
         for (auto sim_hit : fSimHitVec) {
-            if (sim_hit->getTruth().E >= 1e-10) {
+            if (sim_hit->getE() >= 1e-10) {
                 sim_hit->setDetector(nECAL);
                 pRootMng->FillSimHit(sd_name, sim_hit);
             } else

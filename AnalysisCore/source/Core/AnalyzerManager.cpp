@@ -2,6 +2,7 @@
 
 /* Include all needed analyzers here */
 #include "Analyzer/ExampleAnalyzer.h"
+#include "Analyzer/ScintDigitizer.h"
 
 #include <sstream>
 
@@ -22,10 +23,12 @@ AnalyzerManager::AnalyzerManager() = default;
 void AnalyzerManager::InitializeAnalyzers() {
     // Register Example Analyzer to AnalyzerManager
     this->RegisterAnalyzer(new ExampleAnalyzer);
+    this->RegisterAnalyzer(new ScintDigitizer);
+
 }
 
 
-void AnalyzerManager::RegisterAnalyzer(PAnalyzer *analyzer) {
+void AnalyzerManager::RegisterAnalyzer(PCTAnalyzer *analyzer) {
     if (analyzer_col.count(analyzer->getName()) != 0) {
         std::cerr << "[WARNING] ==> Analyzer " + analyzer->getName() + " already exists." << std::endl;
     } else {

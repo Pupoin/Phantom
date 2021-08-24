@@ -20,6 +20,7 @@
 #pragma link C++ class MCParticle+;
 
 #pragma link C++ class PCTTruth+;
+#pragma link C++ class std::vector<PCTTruth>+;
 #pragma link C++ class PCTWaveform+;
 #pragma link C++ class PCTDigi+;
 #pragma link C++ class PCTImage+;

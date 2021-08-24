@@ -31,6 +31,7 @@ public:
                Py == rhs.Py &&
                Pz == rhs.Pz &&
                E == rhs.E &&
+               deltaE == rhs.deltaE &&
                PVName == rhs.PVName &&
                ProcessName == rhs.ProcessName;
     }
@@ -49,6 +50,7 @@ public:
         Py = rhs.Py;
         Pz = rhs.Pz;
         E = rhs.E;
+        deltaE = rhs.deltaE;
         PVName = rhs.PVName;
         ProcessName = rhs.ProcessName;
 
@@ -98,6 +100,10 @@ public:
         return E;
     }
 
+    double getDeltaE() const {
+        return deltaE;
+    }
+
     const std::string &getPVName() const {
         return PVName;
     }
@@ -139,6 +145,10 @@ public:
         E = e;
     }
 
+    void setDeltaE(double deltae) {
+        PCTStep::deltaE = deltae;
+    }
+
     void setPVName(const std::string &pvName) {
         PVName = pvName;
     }
@@ -156,6 +166,7 @@ private:
     double Py{0.};
     double Pz{0.};
     double E{0.};
+    double deltaE{0.};
     std::string PVName;
     std::string ProcessName;
 

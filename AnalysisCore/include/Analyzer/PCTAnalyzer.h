@@ -2,8 +2,8 @@
 // Created by Zhang Yulei on 8/11/21.
 //
 
-#ifndef PCTSIMULATION_PANALYZER_H
-#define PCTSIMULATION_PANALYZER_H
+#ifndef PCTSIMULATION_PCTANALYZER_H
+#define PCTSIMULATION_PCTANALYZER_H
 
 #include "DataIO/PCTEvent.h"
 
@@ -23,11 +23,11 @@ using AnaVar = std::variant<bool *, int *, double *, std::string *, vector<bool>
 using MapAnaVar = map<string, tuple<string, AnaVar, string>>;
 
 // Abstract class of analyzers
-class PAnalyzer {
+class PCTAnalyzer {
 public:
-    PAnalyzer() = default;
+    PCTAnalyzer() = default;
 
-    virtual ~PAnalyzer() = default;
+    virtual ~PCTAnalyzer() = default;
 
     [[nodiscard]] const MapAnaVar &getAnaVarCol() const { return ana_var_col; }
 
@@ -65,8 +65,8 @@ private:
 };
 
 template<typename T>
-void PAnalyzer::RegisterParameter(const string &var_name, T *var, T default_value, const string &var_description,
-                                  const string &var_type) {
+void PCTAnalyzer::RegisterParameter(const string &var_name, T *var, T default_value, const string &var_description,
+                                    const string &var_type) {
     if (ana_var_col.count(var_name) != 0)
         std::cerr << "[WARNING] ==> Parameter " + var_name + " already exists." << std::endl;
     else {
@@ -138,4 +138,4 @@ void PAnalyzer::RegisterParameter(const string &var_name, T *var, T default_valu
         } else printf("[ ]");                                                                                       \
     }
 
-#endif //PCTSIMULATION_PANALYZER_H
+#endif //PCTSIMULATION_PCTANALYZER_H

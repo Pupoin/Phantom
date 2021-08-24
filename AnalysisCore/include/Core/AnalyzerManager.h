@@ -1,14 +1,14 @@
 #ifndef PCTSIMULATION_ANALYZERMANAGER_H
 #define PCTSIMULATION_ANALYZERMANAGER_H
 
-#include "Analyzer/PAnalyzer.h"
+#include "Analyzer/PCTAnalyzer.h"
 #include "Core/EventReader.h"
 
 class AnalyzerManager {
 public:
     static AnalyzerManager *CreateInstance();
 
-    void RegisterAnalyzer(PAnalyzer *);
+    void RegisterAnalyzer(PCTAnalyzer *);
 
     void setVerbose(int verbose) { Verbose = verbose; }
 
@@ -18,7 +18,7 @@ public:
     // Register Processors
     void setAnalyzerList(const vector<std::string> &analyzerList);
 
-    [[nodiscard]] const map<std::string, PAnalyzer *> &getAnalyzerCol() const { return analyzer_col; }
+    [[nodiscard]] const map<std::string, PCTAnalyzer *> &getAnalyzerCol() const { return analyzer_col; }
 
     [[nodiscard]] const vector<std::string> &getAnalyzerList() const { return analyzer_list; }
 
@@ -35,7 +35,7 @@ public:
 
 
 private:
-    std::map<std::string, PAnalyzer *> analyzer_col;
+    std::map<std::string, PCTAnalyzer *> analyzer_col;
     std::vector<std::string> analyzer_list;
 
     // Time and Event Log

@@ -9,6 +9,8 @@
 #include "TGeoBBox.h"
 #include "TGeoVolume.h"
 
+#include "DataIO/PCTXData.h"
+
 #include <map>
 
 #ifdef RM_UNIT
@@ -69,8 +71,12 @@ public:
     // Get Center Point of the targeted geometry
     TVector3 GetPosOfVolume(const TString &det_name, int copyNo);
 
+//    TVector3 GetPosOfVolume(PCTXData *hit);
+
     // Get Size of the targeted geometry (Not Half!)
     TVector3 GetSizeOfVolume(const TString &det_name, int copyNo);
+
+//    TVector3 GetSizeOfVolume(PCTXData *hit);
 
     // Get Distance between the given point and the surface of targeted geometry
     /* surface is defined as:
@@ -82,6 +88,8 @@ public:
      *  z_minus: point to the -z surface (back)
      */
     double GetDisToSuf(const TVector3 &point, const TString &det_name, int copyNo, surface surf);
+
+//    TVector3 GetDisToSuf( PCTXData *hit, surface surf);
 
 public:
     // Delete Copy constructor

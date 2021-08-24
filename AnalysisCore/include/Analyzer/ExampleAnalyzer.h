@@ -5,9 +5,9 @@
 #ifndef PCTSIMULATION_EXAMPLEANALYZER_H
 #define PCTSIMULATION_EXAMPLEANALYZER_H
 
-#include "Analyzer/PAnalyzer.h"
+#include "Analyzer/PCTAnalyzer.h"
 
-class ExampleAnalyzer : public PAnalyzer {
+class ExampleAnalyzer : public PCTAnalyzer {
 public:
     ExampleAnalyzer();
 
