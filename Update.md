@@ -8,3 +8,4 @@
 - Add **PAna** for reconstruction and analysis
 - Add GeometryHelper Singleton class
 - Add deltaE in PCTStep collection
+- Add Scintillator Digitization Analyzer by Jifeng Hu
