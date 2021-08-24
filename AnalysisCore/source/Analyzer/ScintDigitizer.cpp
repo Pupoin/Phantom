@@ -23,7 +23,9 @@ void ScintDigitizer::ProcessEvt(PCTEvent *evt) {
     const double adc_noise_a = 0.;
     const double adc_noise_b = 0.;
 
-    for (auto det_name : {"Scintillator", "Telescope"}) {
+    auto det_name_list = std::vector<TString>({"Scintillator", "Telescope"});
+
+    for (const auto &det_name : det_name_list) {
         auto data_vec = evt->GetData(det_name, DetectorHit_DataType::COL);
         size_t nHits = data_vec->size();
 
@@ -57,8 +59,7 @@ void ScintDigitizer::ProcessEvt(PCTEvent *evt) {
 
 }
 
-void ScintDigitizer::CheckEvt(PCTEvent *evt) {
-    double a = 0;
+void ScintDigitizer::CheckEvt(PCTEvent *) {
 }
 
 void ScintDigitizer::End() {

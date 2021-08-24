@@ -79,9 +79,10 @@ void AnalyzerManager::ProcessEvtAnalyzers(PCTEvent *evt) {
             cout << "[ PROCESSOR ] (Verbosity 3) : " << itr << endl;
         }
 
+        analyzer_col.at(itr)->ProcessEvt(evt);
         try {
             // process evt
-            analyzer_col.at(itr)->ProcessEvt(evt);
+
         } catch (const std::out_of_range &oor) {
             std::cerr << "[ERROR] Evt: " << Processed_Evt << " -- Out of Range error: " << oor.what() << " in Algo"
                       << itr << endl;

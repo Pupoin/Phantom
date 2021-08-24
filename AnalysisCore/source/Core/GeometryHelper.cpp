@@ -71,7 +71,7 @@ void GeometryHelper::setGeoManager() {
                                  2 * cur.shape->GetDY() * CUNIT,
                                  2 * cur.shape->GetDZ() * CUNIT});
 
-            cur_det_dict.insert(std::make_pair(j, cur));
+            cur_det_dict.insert(std::make_pair(j + 1, cur));
         }
         det_info.emplace(std::make_pair(cur_Name, cur_det_dict));
     }
