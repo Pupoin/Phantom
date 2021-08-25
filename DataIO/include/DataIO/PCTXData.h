@@ -7,6 +7,7 @@
 
 #include "TObject.h"
 #include "TString.h"
+#include <cassert>
 
 enum DetectorType {
     nNone, nTracker, nECAL, nHCAL
