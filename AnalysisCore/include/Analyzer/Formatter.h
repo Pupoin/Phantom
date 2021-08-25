@@ -25,6 +25,7 @@ public:
 
 private:
     std::string out_file_name;
+    int input_Z{};
 
     std::ofstream out_file;
 };

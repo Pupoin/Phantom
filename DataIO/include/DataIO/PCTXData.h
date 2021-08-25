@@ -19,6 +19,7 @@ struct PCTTruth {
     double X = 0.;
     double Y = 0.;
     double Z = 0;
+    int trackID = 0;
 };
 typedef std::vector<PCTTruth> PCTTruthVec;
 

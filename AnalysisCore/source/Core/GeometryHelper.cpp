@@ -59,6 +59,7 @@ void GeometryHelper::setGeoManager() {
         }
 
         std::map<int, DetCell> cur_det_dict;
+        std::map<double, int> cur_det_cell_z_map;
         for (int j = 0; j < cur_node->GetNdaughters(); ++j) {
             DetCell cur;
             cur.node = dynamic_cast<TGeoNode *>(cur_node->GetDaughter(j));
@@ -72,7 +73,17 @@ void GeometryHelper::setGeoManager() {
                                  2 * cur.shape->GetDZ() * CUNIT});
 
             cur_det_dict.insert(std::make_pair(j + 1, cur));
+
+            if (cur_det_cell_z_map.count(cur.position.z()) == 0)
+                cur_det_cell_z_map.insert(std::make_pair(cur.position.z(), 0));
         }
+        int idx_z = 0;
+        // pass the current index to map, then ++;
+        for (auto &pos : cur_det_cell_z_map)
+            pos.second = idx_z++;
+        for (auto &cell :cur_det_dict)
+            cell.second.idx_z = cur_det_cell_z_map.at(cell.second.position.z());
+
         det_info.emplace(std::make_pair(cur_Name, cur_det_dict));
     }
     if (Verbose >= 0) {

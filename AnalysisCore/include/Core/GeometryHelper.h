@@ -29,6 +29,7 @@ struct DetCell {
 
     TVector3 position;
     TVector3 size;
+    int idx_z;
 };
 
 enum class surface {

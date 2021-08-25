@@ -92,7 +92,7 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
 
     // Truth Info
     PCTTruth truth = {(E_EM + E_Had) / MeV, step->GetPostStepPoint()->GetGlobalTime() / ns,
-                      HitPoint.x() / mm, HitPoint.y() / mm, HitPoint.z() / mm};
+                      HitPoint.x() / mm, HitPoint.y() / mm, HitPoint.z() / mm, step->GetTrack()->GetTrackID()};
     hit->addTruth(truth);
     hit->setE(hit->getE() + truth.E);
 
