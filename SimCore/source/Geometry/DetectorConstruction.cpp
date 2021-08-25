@@ -102,8 +102,10 @@ void DetectorConstruction::DefineWorld() {
 
 void DetectorConstruction::DefineTarget() {
     // Build Target Region
-    G4VSolid *Target_Region_Box = new G4Box("Target_Region_Box", pControl->target_size.x() / 2.,
-                                            pControl->target_size.y() / 2., pControl->target_size.z() / 2.);
+//    auto *Target_Region_Box = new G4Box("Target_Region_Box", pControl->target_size.x() / 2.,
+//                                        pControl->target_size.y() / 2., pControl->target_size.z() / 2.);
+    auto *Target_Region_Box = new G4Sphere("Target_Region_Box", 0., pControl->target_size.z(), 0, 2 * TMath::Pi(), 0.,
+                                           TMath::Pi());
     auto *Target_Region_LV = new G4LogicalVolume(Target_Region_Box,
                                                  pControl->target_material,
                                                  "Target_Region_LV");

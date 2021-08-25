@@ -28,9 +28,14 @@ general_particle_source:
     particle: "proton"
     ene/mono: "250 MeV"
     direction: "0 0 1"
-    position: "0 0 -50 cm"
+    #position: "0 0 -50 cm"
+    # Square box
+    pos/shape: "Square"
+    pos/centre: "0 0 -50 cm"
+    pos/halfx: "1 cm"
+    pos/halfy: "1 cm"
   # Number of particles emitted
-  beam_on: 1
+  beam_on: 10
 
 ###########################################
 # Global Variables
@@ -76,10 +81,10 @@ Geometry:
   scintillator_name: "Scintillator"
   telescope_name: "Telescope"
 
-  target_size: [ 10, "cm", 10, "cm", 2,"cm" ]
+  target_size: [ 10, "cm", 10, "cm", 4,"cm" ]
   target_material: "Water"
   # The offset from target for detectors (the radius of target circle)
-  target_offset: [ 25, "cm" ]
+  target_offset: [ 10, "cm" ]
   human_model:
     use_human_model: false
     directory: "./../Organism_Models"

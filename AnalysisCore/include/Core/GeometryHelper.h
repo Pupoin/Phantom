@@ -63,6 +63,8 @@ private:
     DetectorInfo det_info;
 
 public:
+    [[nodiscard]] const DetectorInfo &getDetInfo() const { return det_info; }
+
     /* Calculation */
 
     // Calculate distance of two points
