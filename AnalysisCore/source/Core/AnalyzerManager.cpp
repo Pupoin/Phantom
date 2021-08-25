@@ -23,8 +23,8 @@ AnalyzerManager::AnalyzerManager() = default;
 
 void AnalyzerManager::InitializeAnalyzers() {
     // Register Example Analyzer to AnalyzerManager
-//    this->RegisterAnalyzer(new ExampleAnalyzer);
-//    this->RegisterAnalyzer(new ScintDigitizer);
+    this->RegisterAnalyzer(new ExampleAnalyzer);
+    this->RegisterAnalyzer(new ScintDigitizer);
     this->RegisterAnalyzer(new Formatter);
 }
 

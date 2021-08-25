@@ -84,8 +84,8 @@ void ControlManager::generate_config() {
 
     // Basic Settings
     print_title("Basic Settings");
-    printf("input_file: \"p_out.root\" \n");
-    printf("geometry_file: \"p_out.root\" \n");
+    printf("input_file: \"pct_out.root\" \n");
+    printf("geometry_file: \"pct_out.root\" \n");
     printf("input_tree: \"pct\" \n");
     printf("output_file: \"p_ana.root\" \n \n");
 
@@ -103,8 +103,8 @@ void ControlManager::generate_config() {
     // Analyzers List
     print_title("Analyzer Lists");
     printf("Analyzer_List:  \n");
-    for (const auto &ana : pAnaMgr->getAnalyzerCol()) {
-        printf("  - %-25s # %s \n", ana.first.data(), ana.second->getDescription().data());
+    for (const auto &ana : pAnaMgr->getAnalyzerList()) {
+        printf("  - %-25s # %s \n", ana.data(), pAnaMgr->getAnalyzerCol().at(ana)->getDescription().data());
     }
     printf("\n");
 
@@ -118,7 +118,6 @@ void ControlManager::generate_config() {
             printf("    # %s\n", std::get<2>(var.second).c_str());
             printf("    %s: ", var.first.c_str());
             printAnaVar(std::get<1>(var.second), std::get<0>(var.second));
-            printf("\n%s", std::get<3>(std::get<1>(var.second))->c_str());
             printf("\n");
         }
     }
