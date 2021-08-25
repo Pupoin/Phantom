@@ -76,6 +76,8 @@ Geometry:
   scintillator_name: "Scintillator"
   telescope_name: "Telescope"
 
+  target_size: [ 10, "cm", 10, "cm", 2,"cm" ]
+  target_material: "Water"
   # The offset from target for detectors (the radius of target circle)
   target_offset: [ 25, "cm" ]
   human_model:

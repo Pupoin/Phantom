@@ -7,6 +7,9 @@
 #include "Core/GeometryHelper.h"
 
 ExampleAnalyzer::ExampleAnalyzer() {
+    // IMPORTANT
+    //
+
     // Basic setup
     // It's necessary if you want to correctly register your analyzer
     name = "ExampleAnalyzer";

@@ -102,9 +102,10 @@ void DetectorConstruction::DefineWorld() {
 
 void DetectorConstruction::DefineTarget() {
     // Build Target Region
-    G4VSolid *Target_Region_Box = new G4Box("Target_Region_Box", 8 * cm, 8 * cm, 8 * cm);
+    G4VSolid *Target_Region_Box = new G4Box("Target_Region_Box", pControl->target_size.x() / 2.,
+                                            pControl->target_size.y() / 2., pControl->target_size.z() / 2.);
     auto *Target_Region_LV = new G4LogicalVolume(Target_Region_Box,
-                                                 G4NistManager::Instance()->FindMaterial("Water"),
+                                                 pControl->target_material,
                                                  "Target_Region_LV");
     new G4PVPlacement(nullptr, G4ThreeVector(), Target_Region_LV,
                       "Target_Region", World_LV, false, 0, fCheckOverlaps);

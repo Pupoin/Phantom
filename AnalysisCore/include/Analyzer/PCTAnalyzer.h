@@ -87,7 +87,7 @@ void PCTAnalyzer::RegisterParameter(const string &var_name, T *var, T default_va
     if ((var_type) == "bool") *std::get<0>(var) = (yaml_node).as<bool>();                                                \
     else if ((var_type) == "int") *std::get<1>(var) = (yaml_node).as<int>();                                             \
     else if ((var_type) == "double") *std::get<2>(var) = (yaml_node).as<double>();                                       \
-    else if ((var_type) == "string") *std::get<3>(var) = (yaml_node).as<string>();                                       \
+    else if ((var_type).find("string") != std::string::npos) *std::get<3>(var) = (yaml_node).as<string>();                                       \
     else if ((var_type).find("bool") != std::string::npos && (var_type).find("vector") != std::string::npos) {      \
         std::vector<bool> tmp = {};                                                                                 \
         for (auto val : (yaml_node) ) tmp.push_back(val.as<bool>());                                        \
@@ -111,7 +111,7 @@ void PCTAnalyzer::RegisterParameter(const string &var_name, T *var, T default_va
     if ((var_type) == "bool") printf("%d", *std::get<0>(var));                                                      \
     else if ((var_type) == "int") printf("%d", *std::get<1>(var));                                                  \
     else if ((var_type) == "double") printf("%f", *std::get<2>(var));                                               \
-    else if ((var_type) == "string") printf("%s", std::get<3>(var)->c_str());                                       \
+    else if ((var_type).find("string") != std::string::npos) printf("%s", std::get<3>(var)->c_str());                                       \
     else if ((var_type).find("bool") != std::string::npos && (var_type).find("vector") != std::string::npos) {      \
         if (!std::get<4>(var)->empty()) {                                                                            \
             printf("[ %d", (int)std::get<4>(var)->front());                                                              \

@@ -122,6 +122,10 @@ bool Control::ReadYAML(const G4String &file_in) {
             telescope_name = n["telescope_name"].as<string>();
 
             target_offset = readV2(n["target_offset"]);
+            target_size = n["target_size"].IsDefined() ? readV3(n["target_size"], true)
+                                                       : G4ThreeVector({8 * cm, 8 * cm, 8 * cm});
+            target_material = nistManager->FindMaterial(
+                    n["target_material"].IsDefined() ? n["target_material"].as<string>() : "Water");
 
             world_material = nistManager->FindMaterial(n["world_material"].as<string>());
 

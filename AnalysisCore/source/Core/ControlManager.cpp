@@ -118,6 +118,7 @@ void ControlManager::generate_config() {
             printf("    # %s\n", std::get<2>(var.second).c_str());
             printf("    %s: ", var.first.c_str());
             printAnaVar(std::get<1>(var.second), std::get<0>(var.second));
+            printf("\n%s", std::get<3>(std::get<1>(var.second))->c_str());
             printf("\n");
         }
     }

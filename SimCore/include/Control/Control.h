@@ -42,7 +42,7 @@ public:
     void RebuildVariables();
 
     // Read data from yaml
-    bool ReadYAML(const G4String& file_in);
+    bool ReadYAML(const G4String &file_in);
 
     void ReadAndSetVerbosity();
 
@@ -101,18 +101,20 @@ public:
 
     G4Material *world_material{};
 
+    G4ThreeVector target_size{};
+    G4Material *target_material{};
     double target_offset{};
 
     // Tracker
     // --------
     // Front Tracker
-    G4Material* ftrk_material{};
+    G4Material *ftrk_material{};
     G4ThreeVector ftrk_strip_size;
     G4ThreeVector ftrk_strip_arrangement;
     vector<G4ThreeVector> ftrk_position;
     // --------
     // Rear Tracker
-    G4Material* rtrk_material{};
+    G4Material *rtrk_material{};
     G4ThreeVector rtrk_strip_size;
     G4ThreeVector rtrk_strip_arrangement;
     vector<G4ThreeVector> rtrk_position;
@@ -121,21 +123,21 @@ public:
     // material reference: https://www.crystals.saint-gobain.com/products/bc-408-bc-412-bc-416
     // --------
     // holder
-    G4Material* holder_material{};
+    G4Material *holder_material{};
     double holder_gap{};
     // --------
     // wrapper
-    G4Material* wrapper_material{};
+    G4Material *wrapper_material{};
     G4ThreeVector wrapper_size;
     // --------
     // Scintillator
-    G4Material* scintillator_material{};
+    G4Material *scintillator_material{};
     G4ThreeVector scintillator_size;
     G4ThreeVector scintillator_arrangement;
     double scintillator_offset{};
     // --------
     // Range Telescope
-    G4Material* telescope_material{};
+    G4Material *telescope_material{};
     G4ThreeVector telescope_size;
     G4ThreeVector telescope_arrangement;
     double telescope_offset{};
@@ -176,7 +178,7 @@ public:
     // Human Model
     bool build_human{};
     G4String human_model_directory;
-    map<G4String, G4Material*> human_model_composition;
+    map<G4String, G4Material *> human_model_composition;
 
     // Misalliance
     calo_info_map calo_info;
@@ -186,19 +188,23 @@ public:
 private:
     Control();
 
-    static G4ThreeVector readV3(const YAML::Node &n, bool unit=false);
+    static G4ThreeVector readV3(const YAML::Node &n, bool unit = false);
+
     static double readV2(const YAML::Node &n);
 
     YAML::Node Node;
 
     // For geant4 internal settings
-    G4UImanager* UIManager;
+    G4UImanager *UIManager;
 
     // For Material
     G4NistManager *nistManager;
-    void BuildMaterialTable(const G4String& mat_file);
+
+    void BuildMaterialTable(const G4String &mat_file);
+
     static double readMatDensity(const YAML::Node &n);
-    void addElements(G4Material* mat, const YAML::Node &n);
+
+    void addElements(G4Material *mat, const YAML::Node &n);
 
 };
 
