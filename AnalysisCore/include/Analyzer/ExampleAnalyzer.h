@@ -7,6 +7,8 @@
 
 #include "Analyzer/PCTAnalyzer.h"
 
+#include "TH1D.h"
+
 class ExampleAnalyzer : public PCTAnalyzer {
 public:
     ExampleAnalyzer();
@@ -24,6 +26,8 @@ private:
     int parameter_1{};
     double parameter_2{};
     vector<string> parameter_3;
+
+    vector<TH1D *> hists;
 };
 
 #endif //PCTSIMULATION_EXAMPLEANALYZER_H

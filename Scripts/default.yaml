@@ -30,10 +30,11 @@ general_particle_source:
     direction: "0 0 1"
     #position: "0 0 -50 cm"
     # Square box
-    pos/shape: "Square"
+    pos/type: "Plane"
+    pos/shape: "Rectangle"
     pos/centre: "0 0 -50 cm"
     pos/halfx: "1 cm"
-    pos/halfy: "1 cm"
+    pos/halfy: "3 cm"
   # Number of particles emitted
   beam_on: 10
 
@@ -45,7 +46,7 @@ save_geometry: false
 # check geometry overlap, maybe very slow
 check_overlaps: false
 # memory check
-memory_check: true
+memory_check: false
 # if to allow optical process
 optical_simulation: false
 

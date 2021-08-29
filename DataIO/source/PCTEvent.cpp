@@ -144,20 +144,23 @@ void PCTEvent::PrintHeader(const TString &col_name, const TString &class_type) {
 
     if (class_type == "ParticleStep(PCTStep)") {
         Printf("%s", std::string(140, '=').data());
-        Printf("|  %-5s  |  %3s%-25s  |  %-8s%-38s  |   %-21s   %-15s  |", "id", "", "Position (x, y, z) [mm]", "",
-               "4-Momentum (px, py, pz, E) [MeV]", "Physical Volume", "Process");
+        Printf("|  %-5s  |  %3s%-25s  |  %-8s%-50s  |   %-21s   %-15s  |", "id", "", "Position (x, y, z) [mm]", "",
+               "4-Momentum (px, py, pz, E), dE [MeV]", "Physical Volume", "Process");
         Printf("%s", std::string(140, '-').data());
     }
 
     if (class_type == "DetectorHit(PCTXData)") {
         Printf("%s", std::string(76, '=').data());
-        Printf("|   %-5s  |  %3s%-25s  |  %16s  | %s |", "id", "", "Position (x, y, z) [mm]", "E [MeV], T [ns]", "Cell ID");
+        Printf("|   %-5s  |  %3s%-25s  |  %16s  | %s |", "id", "", "Position (x, y, z) [mm]", "E [MeV], T [ns]",
+               "Cell ID");
         Printf("%s", std::string(76, '-').data());
     }
 
     if (class_type == "MCParticle") {
         Printf("%s", std::string(186, '=').data());
-        Printf("| %-5s | %-8s  %-8s | %12s%-58s | %3s%-25s | %3s%-25s | %-15s %-8s |", "id", "Name", "PDG", "","Momentum (px, py, pz), E, Mass, ERemain [MeV]" ,  "","Vertex (x, y, z) [mm]", "","End (x, y, z) [mm]", "Create Process", "ParentID");
+        Printf("| %-5s | %-8s  %-8s | %12s%-58s | %3s%-25s | %3s%-25s | %-15s %-8s |", "id", "Name", "PDG", "",
+               "Momentum (px, py, pz), E, Mass, ERemain [MeV]", "", "Vertex (x, y, z) [mm]", "", "End (x, y, z) [mm]",
+               "Create Process", "ParentID");
         Printf("%s", std::string(186, '-').data());
     }
 

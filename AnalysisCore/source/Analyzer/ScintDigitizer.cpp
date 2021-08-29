@@ -33,7 +33,7 @@ void ScintDigitizer::ProcessEvt(PCTEvent *evt) {
             PCTXData *item = (*data_vec)[i];
             double time = item->getT();//get the occurrence time [ns]
             double de = item->getE();//get the energy deposition
-            if (de < 0.01) continue;//discard very small energy depostion: 0.01 MeV
+            if (de < 0.01) continue;//discard very small energy deposition: 0.01 MeV
 
             double x = item->getX();
             double y = item->getY();
@@ -56,7 +56,6 @@ void ScintDigitizer::ProcessEvt(PCTEvent *evt) {
             ++fNumOfDigisProduced;
         }
     }
-
 }
 
 void ScintDigitizer::CheckEvt(PCTEvent *) {
