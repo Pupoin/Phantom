@@ -24,6 +24,7 @@ public:
     void End() override;
 
 private:
+    std::string out_string;
     std::string out_file_name;
     int input_Z{};
 

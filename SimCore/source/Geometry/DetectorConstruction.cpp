@@ -7,6 +7,7 @@
 #include "RootManager/RootManager.h"
 #include "Digitization/DetectorSD.h"
 
+#include "G4NistManager.hh"
 #include "G4GDMLParser.hh"
 #include "G4SolidStore.hh"
 #include "G4UserLimits.hh"
@@ -116,6 +117,18 @@ void DetectorConstruction::DefineTarget() {
     vis_attr_r->SetVisibility(true);
     vis_attr_r->SetForceSolid();
     Target_Region_LV->SetVisAttributes(vis_attr_r);
+    // build center box
+    // Build Target Region
+    auto *Target_Center_Box = new G4Box("Target_Center_Box", 1.5 * mm, 2 * mm, 2.5 * mm);
+    auto *Target_Center_LV = new G4LogicalVolume(Target_Center_Box, G4NistManager::Instance()->FindMaterial("G4_Ca"),
+                                                 "Target_Center_LV");
+    new G4PVPlacement(nullptr, G4ThreeVector(), Target_Center_LV,
+                      "Target_Center", Target_Region_LV, false, 0, fCheckOverlaps);
+    auto vis_attr_c = new G4VisAttributes(G4Color(0.5, 0.3, 1, 0.55));
+    vis_attr_c->SetVisibility(true);
+    vis_attr_c->SetForceSolid();
+    Target_Center_LV->SetVisAttributes(vis_attr_c);
+
 }
 
 void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type, bool if_parameterized) {
@@ -185,7 +198,7 @@ void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type, b
     if (if_parameterized) {
         new G4PVParameterised(det_name + "Out", Target_LV, Region_LV, kZAxis, total_No, MP, fCheckOverlaps);
     } else {
-        for (auto cell_dict : pControl->det_dict.at(det_name)) {
+        for (auto cell_dict: pControl->det_dict.at(det_name)) {
             auto position = G4ThreeVector(
                     {std::get<0>(cell_dict.second), std::get<1>(cell_dict.second), std::get<2>(cell_dict.second)});
 

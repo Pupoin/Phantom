@@ -54,6 +54,12 @@ public:
 
     virtual void End() = 0;
 
+    // Overload output operator
+    friend std::ostream &operator<<(std::ostream &os, const PCTAnalyzer &analyzer) {
+        os << "name: " << analyzer.name;
+        return os;
+    }
+
 protected:
     string name;
     string description;

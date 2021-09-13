@@ -58,7 +58,7 @@ G4bool DetectorSD::ProcessHits(G4Step *step,
         stepLength = step->GetStepLength();
     }
 
-    if (edep == 0. && stepLength == 0.) return false;
+    if (edep == 0.) return false;
 
     auto *touchable = (G4TouchableHistory *) (step->GetPreStepPoint()->GetTouchable());
 
