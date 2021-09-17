@@ -32,5 +32,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
         G4Exception("PrimaryGeneratorAction::GeneratePrimaries",
                     "PrimaryGeneratorAction001", FatalException,
                     "generator is not instanciated.");
+
+//    anEvent->GetPrimaryVertex()->Print();
 }
 

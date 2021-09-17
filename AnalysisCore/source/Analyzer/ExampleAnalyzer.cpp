@@ -54,19 +54,22 @@ void ExampleAnalyzer::ProcessEvt(PCTEvent *evt) {
     auto Contain = [](const std::string &str, const std::string &tar) {
         return str.find(tar) != std::string::npos;
     };
-    for (auto step : *proton_steps) {
+    for (auto step: *proton_steps) {
         std::string tar_name = "Target";
         if (prev_step) {
-            if (step->getPVName() == "Target_Region") {
+//            if (step->getPVName() == "Target_Region") {
+//                E_total += step->getDeltaE();
+//            }
+            if (step->getZ() >= -25 && step->getZ() <= 25)
                 E_total += step->getDeltaE();
-            }
+
             // Record the momentum of proton while entering the target
             if (Contain(step->getPVName(), tar_name) && Contain(prev_step->getPVName(), "World")) {
 //                cout << evt->getEventId() << ": " << step->getE() << Form(" (%6.3f) ", E_total);
                 E_diff = step->getE();
             }
             if (Contain(step->getPVName(), "World") && Contain(prev_step->getPVName(), tar_name)) {
-                E_diff -= prev_step->getE();
+                E_diff -= step->getE();
 //                cout << " " << prev_step->getE() << Form(" (%6.3f) ", E_total);
             }
         }

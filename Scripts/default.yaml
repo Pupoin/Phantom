@@ -26,8 +26,12 @@ general_particle_source:
     source/multiplevertex: true
     source/intensity: 5
     particle: "proton"
-    ene/mono: "250 MeV"
-    direction: "0 0 1"
+      # Energy Setting
+      ene/mono: "250 MeV"
+    #    ene/type: "Lin"
+    #    ene/min: "50 MeV"
+    #    ene/max: "150 MeV"
+    #    direction: "0 0 1"
     #position: "0 0 -50 cm"
     # Square box
     pos/type: "Plane"

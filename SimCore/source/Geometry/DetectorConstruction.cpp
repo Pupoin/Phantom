@@ -122,7 +122,7 @@ void DetectorConstruction::DefineTarget() {
     auto *Target_Center_Box = new G4Box("Target_Center_Box", 1.5 * mm, 2 * mm, 2.5 * mm);
     auto *Target_Center_LV = new G4LogicalVolume(Target_Center_Box, G4NistManager::Instance()->FindMaterial("G4_Ca"),
                                                  "Target_Center_LV");
-    new G4PVPlacement(nullptr, G4ThreeVector(), Target_Center_LV,
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., +2 * CLHEP::mm), Target_Center_LV,
                       "Target_Center", Target_Region_LV, false, 0, fCheckOverlaps);
     auto vis_attr_c = new G4VisAttributes(G4Color(0.5, 0.3, 1, 0.55));
     vis_attr_c->SetVisibility(true);

@@ -25,6 +25,7 @@ internal_material:
   - name: "G4_PLASTIC_SC_VINYLTOLUENE"
   - name: "G4_Al"
   - name: "G4_Si"
+  - name: "G4_Ca"
 
 optical_property:
   wrapper:
@@ -34,7 +35,7 @@ optical_property:
     transmittance: [ 0.1, 0.1 ]
   crystal:
     ScintillationYield: [ 400, "MeV" ] # 200 photons per MeV
-    FastTimeConstant: [40, "ns"]
+    FastTimeConstant: [ 40, "ns" ]
     energy: [ 0.1 , 2.21 , 2.58 , 2.82 , 2.95 , 3.10 , 4.00 ]
     RefractionIdx: [ 1.85, 1.833, 1.821, 1.813, 1.809, 1.804, 1.79 ]
     AbsorptionLength: [ 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm" ]
