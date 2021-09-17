@@ -31,7 +31,7 @@ general_particle_source:
     #    ene/type: "Lin"
     #    ene/min: "50 MeV"
     #    ene/max: "150 MeV"
-    #    direction: "0 0 1"
+    direction: "0 0 1"
     #position: "0 0 -50 cm"
     # Square box
     pos/type: "Plane"
@@ -86,10 +86,10 @@ Geometry:
   scintillator_name: "Scintillator"
   telescope_name: "Telescope"
 
-  target_size: [ 10, "cm", 10, "cm", 4,"cm" ]
+  target_size: [ 3, "cm", 4, "cm", 5,"cm" ]
   target_material: "Water"
   # The offset from target for detectors (the radius of target circle)
-  target_offset: [ 10, "cm" ]
+  target_offset: [ 3, "cm" ]
   human_model:
     use_human_model: false
     directory: "./../Organism_Models"
