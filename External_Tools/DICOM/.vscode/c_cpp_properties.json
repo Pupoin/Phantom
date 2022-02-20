@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${default}",
+                "/Users/zhaoyangyuan/newppp/DICOM/dicomReader/include",
+                "/opt/local/include/Geant4/Geant4.10.6/Geant4/",
+                
+            ],
+            "macFrameworkPath": [],
+            "compilerPath": "/usr/local/bin/gcc-10",
+            "cStandard": "gnu17",
+            "intelliSenseMode": "macos-gcc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            // "envFile" : "/Users/zhaoyangyuan/newppp/DICOM/loadenv.sh",
+            "defines":[
+                // "G4MULTITHREADED=4",
+                "G4_DCMTK=1"
+                // "G4_DCMTK=1"
+                
+            ],
+            
+        }
+    ],
+    "version": 4
+}
