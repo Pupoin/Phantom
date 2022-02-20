@@ -4,6 +4,12 @@
 #include "Analyzer/ExampleAnalyzer.h"
 #include "Analyzer/ScintDigitizer.h"
 #include "Analyzer/Formatter.h"
+#include "Analyzer/PStepDump.h"
+#include "Analyzer/ImagingUsingdEdx.h"
+#include "Analyzer/ImagingUsingCalibdEdx.h"
+#include "Analyzer/ImagingUsingIntersection2D.h"
+#include "Analyzer/ImagingUsingIntersection3D.h"
+#include "Analyzer/EnergyDepositionCalibrator.h"
 
 #include <sstream>
 
@@ -23,9 +29,15 @@ AnalyzerManager::AnalyzerManager() = default;
 
 void AnalyzerManager::InitializeAnalyzers() {
     // Register Example Analyzer to AnalyzerManager
-    this->RegisterAnalyzer(new ExampleAnalyzer);
-    this->RegisterAnalyzer(new ScintDigitizer);
-    this->RegisterAnalyzer(new Formatter);
+    //this->RegisterAnalyzer(new ScintDigitizer);
+    //this->RegisterAnalyzer(new ExampleAnalyzer);
+    //this->RegisterAnalyzer(new Formatter);
+    this->RegisterAnalyzer(new PStepDump);
+    //this->RegisterAnalyzer(new EnergyDepositionCalibrator);
+    this->RegisterAnalyzer(new ImagingUsingdEdx);
+    this->RegisterAnalyzer(new ImagingUsingCalibdEdx);
+    this->RegisterAnalyzer(new ImagingUsingIntersection2D);
+    //this->RegisterAnalyzer(new ImagingUsingIntersection3D);
 }
 
 

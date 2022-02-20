@@ -10,8 +10,8 @@
 Formatter::Formatter() {
     // Basic setup
     // It's necessary if you want to correctly register your analyzer
-    name = "Formatter";
-    description = "Format data to output txt file";
+    SetName("Formatter");
+    SetTips("Format data to output txt file");
 
     // Register Parameters, default value matters
     // RegisterParameter(variable_name, variable address, default value, description, variable_type)
@@ -44,7 +44,7 @@ void Formatter::ProcessEvt(PCTEvent *evt) {
         if (det_name == "Target") continue;
 
         // Loop each detector cell
-        auto hit_col = evt->GetData(det_name, DetectorHit_DataType::COL);
+        auto hit_col = evt->GetData(det_name, DetectorData_DataType::COL);
 
         std::vector<std::string> det_strs;
         if (Contain(det_name.Data(), "Tracker")) {

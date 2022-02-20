@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${default}",
+                "/opt/local/include/Geant4/Geant4.10.6/Geant4/**",
+                "/Users/zhaoyangyuan/phantom/DataIO/include/**",
+                "/Users/zhaoyangyuan/phantom/SimCore/include/**/**",
+                "/Users/zhaoyangyuan/phantom/External_Tools/DICOM/install/include/"
+
+            ],
+            "defines":[
+                // "G4MULTITHREADED=4",
+                "G4_DCMTK=1"
+                // "G4_DCMTK=1"
+                
+            ],            "macFrameworkPath": [],
+            "compilerPath": "/usr/local/bin/gcc-10",
+            "cStandard": "gnu17",
+            "intelliSenseMode": "macos-gcc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}

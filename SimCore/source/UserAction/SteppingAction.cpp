@@ -27,7 +27,9 @@ SteppingAction::~SteppingAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step *aStep) {
+double all = 0;
+void SteppingAction::UserSteppingAction(const G4Step *aStep)
+{
 
     // Only select initial track
     if (aStep->GetTrack()->GetTrackID() == 1) {
@@ -43,8 +45,9 @@ void SteppingAction::UserSteppingAction(const G4Step *aStep) {
 //        }
 
         pRootMng->FillSimStep(pControl->ParticleStep_Name, aStep);
+        all += aStep->GetTotalEnergyDeposit();
+        G4cout << __LINE__ << " every step: " << aStep->GetTotalEnergyDeposit() << " all: " << all<< G4endl;
     }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

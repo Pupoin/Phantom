@@ -4,8 +4,9 @@
 #include "Core/GeometryHelper.h"
 
 ScintDigitizer::ScintDigitizer() {
-    name = "ScintDigitizer";
-    description = "Fast Digitization by Jifeng Hu";
+    SetName("ScintDigitizer");
+    SetTips("Fast digitization for scintillators");
+
     RegisterParameter("ScintRefractionIndex", &nBC408, 1.58, "Refraction Index of BC408 Scintillator", "double");
     RegisterParameter("ADCUnit", &cADC_per_MeV, 1000., "ADC count per MeV", "double");
     RegisterParameter("cATTEN_LENGTH", &cATTEN_LENGTH, 380., "attenuation length in mm", "double");
@@ -26,11 +27,11 @@ void ScintDigitizer::ProcessEvt(PCTEvent *evt) {
     auto det_name_list = std::vector<TString>({"Scintillator", "Telescope"});
 
     for (const auto &det_name : det_name_list) {
-        auto data_vec = evt->GetData(det_name, DetectorHit_DataType::COL);
+        auto data_vec = evt->GetData(det_name, DetectorHits_DataType::COL);
         size_t nHits = data_vec->size();
 
         for (size_t i = 0; i < nHits; ++i) {
-            PCTXData *item = (*data_vec)[i];
+            PCTHit *item = (*data_vec)[i];
             double time = item->getT();//get the occurrence time [ns]
             double de = item->getE();//get the energy deposition
             if (de < 0.01) continue;//discard very small energy deposition: 0.01 MeV

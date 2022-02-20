@@ -1,0 +1,46 @@
+--- 
+# Default configuration file for Phantom Analysis 
+ 
+# ----------------- 
+# Basic Settings 
+input_file: "pct_out.root" 
+geometry_file: "pct_out.root" 
+input_tree: "pct" 
+output_file: "p_ana.root" 
+ 
+event_number: -1 	# number of events to be analyzed 
+skip_number: 0 		# number of events to be skipped 
+ 
+# ----------------- 
+# Verbosity Settings 
+Verbosity:  
+   EventReader:        0
+   ControlManager:     0
+   AnalyzerManager:    0
+
+# ----------------- 
+# Analyzer Lists 
+Analyzer_List:  
+  - PStepDump                 # Format data to output ROOT file 
+  - ImagingUsingdEdx          # imaging the target with energy deposition 
+  - ImagingUsingCalibdEdx     # imaging the target with energy deposition 
+  - ImagingUsingIntersection2D # imaging the target with scattering points 
+
+# ----------------- 
+# Analyzer Settings 
+Analyzer_Settings:  
+  ImagingUsingCalibdEdx: 
+    # output file from imagingUsingCalibdEdX
+    output_file: "image_2d_calib_dedx.root"
+  ImagingUsingIntersection2D: 
+    # output file from ImagingUsingIntersection2D
+    output_file: "image_2d_intersection.root"
+  ImagingUsingdEdx: 
+    # output file from imagingUsingdEdX
+    output_file: "image_2d_dedx.root"
+  PStepDump: 
+    # output file from formatter
+    output_file: "truth.root"
+
+
+# End of file

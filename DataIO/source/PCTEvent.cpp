@@ -11,8 +11,9 @@
 PCTEvent::PCTEvent() {
     mcparticle_col = new mcp_map();
     step_col = new step_map();
-    hit_col = new hit_map();
-
+    data_col = new data_map();
+    hits_col = new hits_map();
+    digi_col = new digi_map();
 }
 
 void PCTEvent::Initialization(CleanType ct) {
@@ -21,7 +22,7 @@ void PCTEvent::Initialization(CleanType ct) {
     // Clean maps
     ClearMap(mcparticle_col, ct);
     ClearMap(step_col, ct);
-    ClearMap(hit_col, ct);
+    ClearMap(data_col, ct);
 }
 
 vector<MCParticle *> *PCTEvent::GetData(const TString &col_name, MCParticle_DataType) {
@@ -32,8 +33,16 @@ vector<PCTStep *> *PCTEvent::GetData(const TString &col_name, ParticleStep_DataT
     return GetDataVec<PCTStep>(col_name, step_col);
 }
 
-vector<PCTXData *> *PCTEvent::GetData(const TString &col_name, DetectorHit_DataType) {
-    return GetDataVec<PCTXData>(col_name, hit_col);
+vector<PCTXData *> *PCTEvent::GetData(const TString &col_name, DetectorData_DataType) {
+    return GetDataVec<PCTXData>(col_name, data_col);
+}
+
+vector<PCTHit*> *PCTEvent::GetData(const TString &col_name, DetectorHits_DataType) {
+    return GetDataVec<PCTHit>(col_name, hits_col);
+}
+
+vector<PCTDigi*> *PCTEvent::GetData(const TString &col_name, DetectorDigi_DataType) {
+    return GetDataVec<PCTDigi>(col_name, digi_col);
 }
 
 bool PCTEvent::RegisterCollection(const TString &col_name, Phantom_DataType datatype) {
@@ -45,8 +54,14 @@ bool PCTEvent::RegisterCollection(const TString &col_name, Phantom_DataType data
         case Phantom_DataType::ParticleStep:
             result = RegisterColMap<step_map, PCTStep>(col_name, step_col);
             break;
-        case Phantom_DataType::DetectorHit:
-            result = RegisterColMap<hit_map, PCTXData>(col_name, hit_col);
+        case Phantom_DataType::DetectorData:
+            result = RegisterColMap<data_map, PCTXData>(col_name, data_col);
+            break;
+        case Phantom_DataType::DetectorHits:
+            result = RegisterColMap<hits_map, PCTHit>(col_name, hits_col);
+            break;
+        case Phantom_DataType::DetectorDigi:
+            result = RegisterColMap<digi_map, PCTDigi>(col_name, digi_col);
             break;
     }
     return result;
@@ -61,8 +76,14 @@ bool PCTEvent::DeleteCollection(const TString &col_name, Phantom_DataType dataty
         case Phantom_DataType::ParticleStep:
             result = DeleteColMap<step_map, PCTStep>(col_name, step_col);
             break;
-        case Phantom_DataType::DetectorHit:
-            result = DeleteColMap<hit_map, PCTXData>(col_name, hit_col);
+        case Phantom_DataType::DetectorData:
+            result = DeleteColMap<data_map, PCTXData>(col_name, data_col);
+            break;
+        case Phantom_DataType::DetectorHits:
+            result = DeleteColMap<hits_map, PCTHit>(col_name, hits_col);
+            break;
+        case Phantom_DataType::DetectorDigi:
+            result = DeleteColMap<digi_map, PCTDigi>(col_name, digi_col);
             break;
     }
     return result;
@@ -75,7 +96,9 @@ void PCTEvent::ListAllCollections(const TString &str) {
     Printf("----------------------------------------------------------------");
     ListCollection(mcparticle_col, Form("%-30s", "MCParticle"));
     ListCollection(step_col, Form("%-30s", "ParticleStep: PCTStep"));
-    ListCollection(hit_col, Form("%-30s", "DetectorHit: PCTXData"));
+    ListCollection(data_col, Form("%-30s", "DetectorData: PCTXData"));
+    ListCollection(hits_col, Form("%-30s", "DetectorHits: PCTHit"));
+    ListCollection(digi_col, Form("%-30s", "DetectorDigi: PCTDigi"));
     Printf("----------------------------------------------------------------");
 }
 
@@ -130,9 +153,23 @@ void PCTEvent::PrintDetails() {
             std::cout << *v << std::endl;
         }
     }
-    for (const auto &m : *hit_col) {
+    for (const auto &m : *data_col) {
         Printf("\n");
-        PrintHeader(m.first, "DetectorHit(PCTXData)");
+        PrintHeader(m.first, "DetectorData(PCTXData)");
+        for (auto v : m.second) {
+            std::cout << *v << std::endl;
+        }
+    }
+    for (const auto &m : *hits_col) {
+        Printf("\n");
+        PrintHeader(m.first, "DetectorHit(PCTHit)");
+        for (auto v : m.second) {
+            std::cout << *v << std::endl;
+        }
+    }
+    for (const auto &m : *digi_col) {
+        Printf("\n");
+        PrintHeader(m.first, "DetectorDigi(PCTDigi)");
         for (auto v : m.second) {
             std::cout << *v << std::endl;
         }
@@ -149,7 +186,7 @@ void PCTEvent::PrintHeader(const TString &col_name, const TString &class_type) {
         Printf("%s", std::string(140, '-').data());
     }
 
-    if (class_type == "DetectorHit(PCTXData)") {
+    if (class_type == "DetectorData(PCTXData)") {
         Printf("%s", std::string(76, '=').data());
         Printf("|   %-5s  |  %3s%-25s  |  %16s  | %s |", "id", "", "Position (x, y, z) [mm]", "E [MeV], T [ns]",
                "Cell ID");

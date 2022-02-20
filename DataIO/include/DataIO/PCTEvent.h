@@ -16,6 +16,8 @@
 #include "DataIO/PCTXData.h"
 #include "DataIO/PCTStep.h"
 #include "DataIO/MCParticle.h"
+#include "DataIO/PCTHit.h"
+#include "DataIO/PCTDigi.h"
 
 #include "TObject.h"
 #include "TString.h"
@@ -29,7 +31,9 @@ using std::make_tuple;
 /* Type Define */
 using mcp_map = map<TString, vector<MCParticle * >>;
 using step_map = map<TString, vector<PCTStep * >>;
-using hit_map = map<TString, vector<PCTXData * >>;
+using data_map = map<TString, vector<PCTXData * >>;
+using hits_map = map<TString, vector<PCTHit* >>;
+using digi_map = map<TString, vector<PCTDigi* >>;
 
 /* enum class */
 enum CleanType {
@@ -37,7 +41,7 @@ enum CleanType {
 };
 
 enum class Phantom_DataType {
-    MCParticle, ParticleStep, DetectorHit
+    MCParticle, ParticleStep, DetectorData, DetectorHits, DetectorDigi
 };
 
 enum class MCParticle_DataType {
@@ -46,7 +50,13 @@ enum class MCParticle_DataType {
 enum class ParticleStep_DataType {
     COL
 };
-enum class DetectorHit_DataType {
+enum class DetectorData_DataType {
+    COL
+};
+enum class DetectorHits_DataType {
+    COL
+};
+enum class DetectorDigi_DataType {
     COL
 };
 
@@ -62,7 +72,7 @@ public:
 
         delete mcparticle_col;
         delete step_col;
-        delete hit_col;
+        delete data_col;
     }
 
     // Operators
@@ -129,10 +139,13 @@ public:
     // Fetch Collection
     vector<MCParticle *> *GetData(const TString &col_name, MCParticle_DataType);
 
-    vector<PCTXData *> *GetData(const TString &col_name, DetectorHit_DataType);
+    vector<PCTXData *> *GetData(const TString &col_name, DetectorData_DataType);
 
     vector<PCTStep *> *GetData(const TString &col_name, ParticleStep_DataType);
 
+    vector<PCTHit *> *GetData(const TString &col_name, DetectorHits_DataType);
+
+    vector<PCTDigi*> *GetData(const TString &col_name, DetectorDigi_DataType);
     template<class BT, class T>
     vector<BT *> *GetDataVec(const TString &col_name, T *cmap);
 
@@ -171,8 +184,10 @@ protected:
 
     // Data Collections
     mcp_map *mcparticle_col;
-    hit_map *hit_col;
+    data_map *data_col;
     step_map *step_col;
+    hits_map *hits_col;
+    digi_map *digi_col;
 
 ClassDefOverride(PCTEvent, 1);
 };

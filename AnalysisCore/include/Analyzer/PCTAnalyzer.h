@@ -37,6 +37,9 @@ public:
 
     [[nodiscard]] int getVerbose() const { return Verbose; }
 
+    void SetName(const std::string& _msg){ name = _msg; }
+    void SetTips(const std::string& _msg){ description = _msg; }
+
     template<typename T>
     void RegisterParameter(const string &var_name, T *var, T default_value, const string &var_description,
                            const string &var_type);

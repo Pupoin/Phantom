@@ -20,11 +20,24 @@
 
 #include "Geometry/MatrixPlacement.h"
 #include "Geometry/HumanModel.h"
+// start, dicom 
+#include "DicomRegularDetectorConstruction.hh"
+#include "DicomNestedParamDetectorConstruction.hh"
+#include "DicomPartialDetectorConstruction.hh"
+// #include "Dicom2ActionInitialization.hh"
+#include "DicomIntersectVolume.hh"
+#include "DicomDetectorConstruction.hh"
+#ifdef G4_DCMTK
+#   include "DicomFileMgr.hh"
+#else
+#   include "DicomHandler.hh"
+#endif
+// end of dicom
 
 #include <vector>
 
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
+class DetectorConstruction : public DicomDetectorConstruction {
 public:
     explicit DetectorConstruction();
 
@@ -43,6 +56,9 @@ public:
 private:
     // methods
     G4VPhysicalVolume *DefineVolumes();
+
+    void ConstructPhantom() override;
+    // void ConstructPhantomContainerNew();
 
     void DefineParameters();
 
@@ -63,6 +79,8 @@ private:
 
     // Human Building
     HumanModel *hm;
+    // for dicom targets
+    // DicomDetectorConstruction *dicom_target;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

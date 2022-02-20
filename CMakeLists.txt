@@ -1,6 +1,15 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+SET(CMAKE_INSTALL_PREFIX ./install)
+set(CMAKE_BUILD_TYPE Debug)
+
+
+# set (CMAKE_C_COMPILER "/opt/local/bin/clang-mp-13")
+# set (CMAKE_CXX_COMPILER "/opt/local/bin/clang++-mp-13")
+# set (CMAKE_C_COMPILER "/opt/local/bin/gcc-mp-11")
+# set (CMAKE_CXX_COMPILER "/opt/local/bin/g++-mp-11")
+
 project(PCTSimulation)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -32,17 +41,19 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find YAML and XercesC required packages
 #
-
-# yaml-cpp
-find_package(yaml-cpp REQUIRED)
-LINK_LIBRARIES(yaml-cpp)
-
 find_package(XercesC REQUIRED)
 if (XercesC_FOUND)
     INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
     LINK_LIBRARIES(${XercesC_LIBRARIES})
 endif ()
-
+#----------------------------------------------------------------------------
+# Find DICOM required packages
+#
+find_package(DICOM REQUIRED)
+if (DICOM_FOUND)
+    INCLUDE_DIRECTORIES(${DICOM_INCLUDE_DIRS})
+    LINK_LIBRARIES(${DICOM_LIBRARIES})
+endif ()
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
 #
@@ -78,15 +89,13 @@ add_subdirectory(DataIO)
 
 add_subdirectory(SimCore)
 
-add_subdirectory(AnalysisCore)
+# add_subdirectory(AnalysisCore)
 
+# add_subdirectory(PctSim)
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 
-
-#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libDEvent_rdict.pcm DESTINATION lib)
-#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libDEvent.rootmap DESTINATION lib)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory

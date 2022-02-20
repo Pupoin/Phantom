@@ -13,6 +13,7 @@ enum DetectorType {
     nNone, nTracker, nECAL, nHCAL
 };
 
+
 struct PCTTruth {
     double E = 0.;
     double T = 0.;
@@ -22,7 +23,7 @@ struct PCTTruth {
     int trackID = 0;
 };
 typedef std::vector<PCTTruth> PCTTruthVec;
-
+/*
 struct PCTWaveform {
     double InitialTime{0.};//in unit of ns
     double SamplingFrequency = 1.E6;//in unit of HZ, defaul 1MHz
@@ -42,7 +43,7 @@ struct PCTImage {
     int Depth = 1;//1 slice
     //representation: Depth slices Width x Height pixels 2D image
     std::vector<unsigned char> Data;//default 2M bytes per 3D image
-};
+};*/
 
 class PCTXData : public TObject {
 public:
@@ -68,10 +69,10 @@ public:
         Z = rhs.Z;
         E = rhs.E;
         T = rhs.T;
-        Truth = rhs.Truth;
-        Image = rhs.Image;
-        Waveform = rhs.Waveform;
-        Digi = rhs.Digi;
+        //Truth = rhs.Truth;
+        //Image = rhs.Image;
+        //Waveform = rhs.Waveform;
+        //Digi = rhs.Digi;
 
         return *this;
     }
@@ -141,62 +142,62 @@ public:
 
     void setTruth(const PCTTruthVec &truth) { Truth = truth; }
 
-    [[nodiscard]] const PCTWaveform &getWaveform() const { return Waveform; }
+    //[[nodiscard]] const PCTWaveform &getWaveform() const { return Waveform; }
 
-    void setWaveform(const PCTWaveform &waveform) { Waveform = waveform; }
+    //void setWaveform(const PCTWaveform &waveform) { Waveform = waveform; }
 
-    [[nodiscard]] const PCTDigi &getDigi() const { return Digi; }
+    //[[nodiscard]] const PCTDigi &getDigi() const { return Digi; }
 
-    void setDigi(const PCTDigi &digi) { Digi = digi; }
+    //void setDigi(const PCTDigi &digi) { Digi = digi; }
 
-    [[nodiscard]] const PCTImage &getImage() const { return Image; }
+    //[[nodiscard]] const PCTImage &getImage() const { return Image; }
 
-    void setImage(const PCTImage &image) { Image = image; }
+    //void setImage(const PCTImage &image) { Image = image; }
 
     //the following 4 interfaces for digi
-    double getTDC(bool front) {
-        return front ? Digi.fTDC : Digi.bTDC;
-    }
+    //double getTDC(bool front) {
+    //    return front ? Digi.fTDC : Digi.bTDC;
+    //}
 
-    double getADC(bool front) {
-        return front ? Digi.fADC : Digi.bADC;
-    }
+    //double getADC(bool front) {
+    //    return front ? Digi.fADC : Digi.bADC;
+    //}
 
-    void setADC(double adc, bool front) {
-        front ? Digi.fADC = adc : Digi.bADC = adc;
-    }
+    //void setADC(double adc, bool front) {
+    //    front ? Digi.fADC = adc : Digi.bADC = adc;
+    //}
 
-    void setTDC(double tdc, bool front) {
-        front ? Digi.fTDC = tdc : Digi.bTDC = tdc;
-    }
+    //void setTDC(double tdc, bool front) {
+    //    front ? Digi.fTDC = tdc : Digi.bTDC = tdc;
+    //}
 
     //the following interfaces for image
-    void setImageSize(int width, int height = 256, int slice = 32) {
-        assert((width < 0 || width > 256));
-        assert((height < 0 || height > 256));
-        assert((slice < 0 || slice > 64));
-        Image.Width = width;
-        Image.Height = height;
-        Image.Depth = slice;
-        size_t capacity = Image.Width * Image.Height * Image.Depth;
-        if (Image.Data.size() != capacity)
-            Image.Data.resize(capacity);
-    }
+    //void setImageSize(int width, int height = 256, int slice = 32) {
+    //    assert((width < 0 || width > 256));
+    //    assert((height < 0 || height > 256));
+    //    assert((slice < 0 || slice > 64));
+    //    Image.Width = width;
+    //    Image.Height = height;
+    //    Image.Depth = slice;
+    //    size_t capacity = Image.Width * Image.Height * Image.Depth;
+    //    if (Image.Data.size() != capacity)
+    //        Image.Data.resize(capacity);
+    //}
 
-    //d slice //w column //h row, //v: pixel value
-    void setImagePixel(int d, int h, int w, unsigned char v) {
-        assert(d >= 0 && d < Image.Depth);
-        assert(w >= 0 && w < Image.Width);
-        assert(h >= 0 && h < Image.Height);
-        int idx = (d * Image.Depth + h) * Image.Width + w;
-        Image.Data[idx] = v;
-    }
+    ////d slice //w column //h row, //v: pixel value
+    //void setImagePixel(int d, int h, int w, unsigned char v) {
+    //    assert(d >= 0 && d < Image.Depth);
+    //    assert(w >= 0 && w < Image.Width);
+    //    assert(h >= 0 && h < Image.Height);
+    //    int idx = (d * Image.Depth + h) * Image.Width + w;
+    //    Image.Data[idx] = v;
+    //}
 
-    int getImageWidth() const { return Image.Width; }
+    //int getImageWidth() const { return Image.Width; }
 
-    int getImageHeight() const { return Image.Height; }
+    //int getImageHeight() const { return Image.Height; }
 
-    int getImageDepth() const { return Image.Depth; }
+    //int getImageDepth() const { return Image.Depth; }
 
 protected:
     int id{0};
@@ -214,9 +215,9 @@ protected:
     DetectorType Detector{nNone};
 
     PCTTruthVec Truth;
-    PCTWaveform Waveform;
-    PCTDigi Digi;
-    PCTImage Image;
+    //PCTWaveform Waveform;
+    //PCTDigi Digi;
+    //PCTImage Image;
 
 ClassDefOverride(PCTXData, 1);
 };

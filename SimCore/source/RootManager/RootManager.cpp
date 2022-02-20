@@ -78,7 +78,7 @@ void RootManager::bookCollection(const G4String &cIn) {  //run level initialize 
     G4cout << "[Root Manager] ==> Booking tree for " << cIn << " ..." << G4endl;
 
     // for raw hit (truth)
-    evt->RegisterCollection(cIn, Phantom_DataType::DetectorHit);
+    evt->RegisterCollection(cIn, Phantom_DataType::DetectorData);
 
     // for digitization
     // evt->RegisterCollection(cIn + "_Digitized", Phantom_DataType::DetectorHit);
@@ -107,8 +107,8 @@ void RootManager::FillGeometry(const G4String &filename) {
 }
 
 void RootManager::FillSimHit(const TString &name, PCTXData *sim_hit) {
-    sim_hit->setId(static_cast<int>(evt->GetData(name, DetectorHit_DataType::COL)->size()));
-    evt->GetData(name, DetectorHit_DataType::COL)->emplace_back(sim_hit);
+    sim_hit->setId(static_cast<int>(evt->GetData(name, DetectorData_DataType::COL)->size()));
+    evt->GetData(name, DetectorData_DataType::COL)->emplace_back(sim_hit);
 }
 
 void RootManager::FillSimTrack(const TString &name, MCParticle *mcp, int ParentID) {

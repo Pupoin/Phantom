@@ -17,14 +17,30 @@
 #include "G4VisAttributes.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4SDManager.hh"
-
+// start, dicom 
+#include "DicomRegularDetectorConstruction.hh"
+#include "DicomNestedParamDetectorConstruction.hh"
+#include "DicomPartialDetectorConstruction.hh"
+#include "DicomDetectorConstruction.hh"
+#include "DicomPhantomParameterisationColour.hh"
+// #include "Dicom2ActionInitialization.hh"
+#include "DicomIntersectVolume.hh"
+#ifdef G4_DCMTK
+#   include "DicomFileMgr.hh"
+#else
+#   include "DicomHandler.hh"
+#endif
+// end of dicom
 #include <iterator>
 #include <filesystem>
+#include "G4MultiFunctionalDetector.hh"
+#include "G4PSDoseDeposit.hh"
+#include "G4PSDoseDeposit3D.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::DetectorConstruction() {
-
+//....oooOO0OOooo./.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+DetectorConstruction::DetectorConstruction() : DicomDetectorConstruction()
+{
     fCheckOverlaps = pControl->check_overlaps;
     fStepLimit = nullptr;
     hm = new HumanModel();
@@ -47,7 +63,72 @@ void DetectorConstruction::DefineParameters() {
 
 }
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// override derived from dicom
+void DetectorConstruction::ConstructPhantom()
+{
+#ifdef G4VERBOSE
+  G4cout << "DicomRegularDetectorConstruction::ConstructPhantom " << G4endl;
+#endif
+
+  //----- Create parameterisation 
+  DicomPhantomParameterisationColour* param = new DicomPhantomParameterisationColour();
+
+  //----- Set voxel dimensions
+  param->SetVoxelDimensions( fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ );
+
+  //----- Set number of voxels 
+  param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
+
+  //----- Set list of materials
+  param->SetMaterials( fMaterials ); 
+
+  //----- Set list of material indices: for each voxel it is a number that
+  // correspond to the index of its material in the vector of materials
+  // defined above
+  param->SetMaterialIndices( fMateIDs );
+
+  //----- Define voxel logical volume
+  G4Box* voxel_solid = new G4Box( "Voxel", fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ);
+  G4LogicalVolume* voxel_logic = new G4LogicalVolume(voxel_solid,fMaterials[0],
+                                                    "VoxelLogical", 0,0,0);
+  // material is not relevant, it will be changed by the
+  // ComputeMaterial method of the parameterisation
+    voxel_logic->SetVisAttributes(
+                     new G4VisAttributes(G4VisAttributes::GetInvisible()));
+    
+  //--- Assign the fContainer volume of the parameterisation
+  param->BuildContainerSolid(fContainer_phys);
+
+  //--- Assure yourself that the voxels are completely filling the 
+  // fContainer volume
+  param->CheckVoxelsFillContainer( fContainer_solid->GetXHalfLength(), 
+                                   fContainer_solid->GetYHalfLength(), 
+                                   fContainer_solid->GetZHalfLength() );
+
+  //----- The G4PVParameterised object that uses the created parameterisation
+  // should be placed in the fContainer logical volume
+  G4PVParameterised * phantom_phys = 
+    new G4PVParameterised("phantom",voxel_logic,fContainer_logic,
+                          kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, param);
+  // if axis is set as kUndefined instead of kXAxis, GEANT4 will 
+  //  do an smart voxel optimisation 
+  // (not needed if G4RegularNavigation is used)
+
+  //----- Set this physical volume as having a regular structure of type 1, 
+  // so that G4RegularNavigation is used
+  phantom_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation
+  //will be used instead 
+
+  SetScorer(voxel_logic);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
@@ -64,21 +145,34 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
     if (pControl->build_human) {
         hm->BuildAll(World_LV);
     } else {
-        if (pControl->build_target) DefineTarget(); // Define Target
+        if (pControl->build_target) 
+        // DefineTarget(); // Define Target
+        {
+            // define organism, such as lobster etc.
+            fConstructed = true;
+            InitialisationOfMaterials();
+            ReadPhantomDataNew();
+            ConstructPhantomContainerNew();
+            ConstructPhantom();
+            std::cout << __LINE__ << " "
+                      << "000000000 ----------------" << std::endl;
+        }
     }
 
-
+    //////////// ready for check.
     // Book RootMng
-    pRootMng->book();
-    G4cout << "[Root Manager] ==> Root Manager initialized ..." << G4endl;
-    G4cout << "[Root Manager] ==> Output File " << pControl->outfile_Name << " created ..." << G4endl;
+    // pRootMng->book();
+    // G4cout << "[Root Manager] ==> Root Manager initialized ..." << G4endl;
+    // G4cout << "[Root Manager] ==> Output File " << pControl->outfile_Name << " created ..." << G4endl;
 
-    // Save Geometry
-    if (pControl->save_geometry) SaveGeometry();
+    // // Save Geometry
+    // if (pControl->save_geometry) SaveGeometry();
+    //         std::cout <<__LINE__<< " " << "000000000 ----------------" << std::endl;
 
-    // Set User Limit
-    G4double maxStep = 10 * mm;
-    fStepLimit = new G4UserLimits(maxStep, DBL_MAX, 200 * s);
+    // // Set User Limit
+    // // G4double maxStep = 1 * mm;
+    // // fStepLimit = new G4UserLimits(maxStep, DBL_MAX, 20 * s);
+    //         std::cout <<__LINE__<< " " << "000000000 ----------------" << std::endl;
 
     return World_PV;
 }
@@ -96,9 +190,21 @@ void DetectorConstruction::DefineWorld() {
     auto World_Box = new G4Box("World_Box", pControl->world_region_size.x() / 2, pControl->world_region_size.y() / 2,
                                pControl->world_region_size.z() / 2); // Solid of World.
     World_LV = new G4LogicalVolume(World_Box, pControl->world_material, "World_LV");
-    World_PV = new G4PVPlacement(nullptr, G4ThreeVector(), World_LV, "World", nullptr, false, 0, fCheckOverlaps);
-}
+    fWorld_logic = World_LV;
+    World_PV = new G4PVPlacement(nullptr, G4ThreeVector(), fWorld_logic, "World", nullptr, false, 0, fCheckOverlaps);
 
+    ////////////     another world  for test ///////////////////////////////
+    //----- Build world
+    // G4double worldXDimension = 1.*m;
+    // G4double worldYDimension = 1.*m;
+    // G4double worldZDimension = 1.*m;
+    // fWorld_solid = new G4Box( "WorldSolid", worldXDimension, worldYDimension, worldZDimension );
+    // fWorld_logic = new G4LogicalVolume( fWorld_solid, fAir, "WorldLogical", 0, 0, 0 );
+    // World_PV = new G4PVPlacement( 0, G4ThreeVector(0,0,0), "World", fWorld_logic,
+    //                                 0, false, 0 );
+    //  fWorld_phys                           
+
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::DefineTarget() {
@@ -201,6 +307,10 @@ void DetectorConstruction::DefineDet(const G4String &det_name, PlaceType type, b
         for (auto cell_dict: pControl->det_dict.at(det_name)) {
             auto position = G4ThreeVector(
                     {std::get<0>(cell_dict.second), std::get<1>(cell_dict.second), std::get<2>(cell_dict.second)});
+            // if(det_name == "FrontTracker")
+            // G4cout << "daadfadfadfapositionaaa " << position.x() << " "
+            //        << position.y() << " "
+            //        << position.z() << " " << G4endl;
 
             new G4PVPlacement(nullptr, position, Target_LV, det_name + "Out", Region_LV, false, cell_dict.first,
                               fCheckOverlaps);
@@ -237,7 +347,30 @@ void DetectorConstruction::ConstructSDandField() {
     if (pControl->build_scintillator) DefineSD(pControl->scintillator_name, PlaceType::ECAL);
 
     if (pControl->build_telescope) DefineSD(pControl->telescope_name, PlaceType::ECAL);
-
+    
+    // set the dicom/raw body to be the Sensitive Detectors
+    // // Sensitive Detector Name
+    // G4String concreteSDname = "phantomSD";
+    // std::vector<G4String> scorer_names;
+    // scorer_names.push_back(concreteSDname);
+    // //------------------------
+    // // MultiFunctionalDetector
+    // //------------------------
+    // //
+    // // Define MultiFunctionalDetector with name.
+    // // declare MFDet as a MultiFunctionalDetector scorer
+    // G4MultiFunctionalDetector* MFDet = 
+    //     new G4MultiFunctionalDetector(concreteSDname);
+    // G4SDManager::GetSDMpointer()->AddNewDetector( MFDet );
+    // //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
+    // G4VPrimitiveScorer* dosedep = 
+    //     new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, fNVoxelZ);
+    // MFDet->RegisterPrimitive(dosedep);
+    
+    // for(std::set<G4LogicalVolume*>::iterator ite = fScorers.begin(); 
+    //     ite != fScorers.end(); ++ite) {
+    //     SetSensitiveDetector(*ite, MFDet);
+    // }
 }
 
 

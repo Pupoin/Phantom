@@ -21,7 +21,7 @@
 using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction() : G4UserEventAction(), fPrintModulo(100) {
+EventAction::EventAction() : G4UserEventAction(), fPrintModulo(10000) {
 }
 
 
@@ -33,14 +33,14 @@ EventAction::~EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event *event) {
-    fPrintModulo = pControl->Total_Event_Number / 100;
+    //fPrintModulo = pControl->Total_Event_Number / 100;
 
     G4int eventID = event->GetEventID();
-    if (eventID < 100 || eventID % fPrintModulo == 0) {
+    if ( eventID % fPrintModulo == 0) {
         G4cout << "\n---> Begin of event: " << eventID << G4endl;
         //CLHEP::HepRandom::showEngineStatus();
     }
-
+    cout << "hahahahhahha" << endl;
     G4RunManager::GetRunManager()->StoreRandomNumberStatusToG4Event(1);
 
 #ifdef MEMCK
@@ -87,7 +87,11 @@ void EventAction::EndOfEventAction(const G4Event *event) {
     // Filling tree, any data manipulations should before this point
     pRootMng->FillTree(eventID, rndm);
 
+    cout << "end of hahahahhahha" << endl;
+
+
 #ifdef MEMCK
     if(pControl->memory_check) PCTEvent::PrintObjectStatistics("End of event");
 #endif
+
 }

@@ -31,9 +31,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* )
+void RunAction::EndOfRunAction(const G4Run* aRun)
 {
     pRootMng->save();
+    G4cout <<__LINE__ << "  my event is " <<  aRun->GetNumberOfEvent() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

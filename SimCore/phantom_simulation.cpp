@@ -24,6 +24,18 @@
 #include "UserAction/PrimaryGeneratorAction.h"
 #include "UserAction/TrackingAction.h"
 #include "UserAction/SteppingAction.h"
+// start, dicom 
+#include "DicomRegularDetectorConstruction.hh"
+#include "DicomNestedParamDetectorConstruction.hh"
+#include "DicomPartialDetectorConstruction.hh"
+// #include "Dicom2ActionInitialization.hh"
+#include "DicomIntersectVolume.hh"
+#ifdef G4_DCMTK
+#   include "DicomFileMgr.hh"
+#else
+#   include "DicomHandler.hh"
+#endif
+// end of dicom
 
 namespace {
     void PrintUsage() {
@@ -89,6 +101,13 @@ int main(int argc, char **argv) {
 
     // Set mandatory initialization classes
     runManager->SetUserInitialization(new DetectorConstruction());
+
+    // initical for dicom 
+    G4String inpfile = "Data.dat";
+    DicomFileMgr* theFileMgr = DicomFileMgr::GetInstance();
+    theFileMgr->Convert(inpfile);
+    // for test the dicom with no detector
+    // runManager->SetUserInitialization(new DicomRegularDetectorConstruction());
 
     G4VModularPhysicsList *physicsList = new FTFP_BERT;
     if (pControl->optical_simulation) {
