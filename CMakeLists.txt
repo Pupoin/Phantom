@@ -1,16 +1,10 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
-SET(CMAKE_INSTALL_PREFIX ./install)
-set(CMAKE_BUILD_TYPE Debug)
-
-
-# set (CMAKE_C_COMPILER "/opt/local/bin/clang-mp-13")
-# set (CMAKE_CXX_COMPILER "/opt/local/bin/clang++-mp-13")
-# set (CMAKE_C_COMPILER "/opt/local/bin/gcc-mp-11")
-# set (CMAKE_CXX_COMPILER "/opt/local/bin/g++-mp-11")
-
 project(PCTSimulation)
+
+# set(CMAKE_BUILD_TYPE Debug)
+SET(CMAKE_INSTALL_PREFIX ./install)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -46,14 +40,7 @@ if (XercesC_FOUND)
     INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
     LINK_LIBRARIES(${XercesC_LIBRARIES})
 endif ()
-#----------------------------------------------------------------------------
-# Find DICOM required packages
-#
-find_package(DICOM REQUIRED)
-if (DICOM_FOUND)
-    INCLUDE_DIRECTORIES(${DICOM_INCLUDE_DIRS})
-    LINK_LIBRARIES(${DICOM_LIBRARIES})
-endif ()
+
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
 #
@@ -101,13 +88,16 @@ add_subdirectory(SimCore)
 # Copy all scripts to the build directory
 #
 set(RUN_SCRIPTS
-        Scripts/default.yaml
-        Scripts/material.yaml
-        Scripts/init_vis.mac
-        Scripts/vis.mac
-        Scripts/gui.mac
+        share/Scripts/default.yaml
+        share/Scripts/material.yaml
+        share/Scripts/init_vis.mac
+        share/Scripts/vis.mac
+        share/Scripts/gui.mac
+        share/organism_dicom/lobster/Data.dat
+        share/organism_dicom/lobster/ColourMap.dat
         )
 
+file(COPY "share/organism_dicom" DESTINATION ${PROJECT_BINARY_DIR}/)
 foreach (_script ${RUN_SCRIPTS})
     configure_file(
             ${PROJECT_SOURCE_DIR}/${_script}

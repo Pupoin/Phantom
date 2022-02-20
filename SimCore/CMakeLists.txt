@@ -12,6 +12,14 @@ if (yaml-cpp_FOUND)
     INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
     LINK_LIBRARIES(${YAML_CPP_LIBRARIES})
 endif ()
+#----------------------------------------------------------------------------
+# Find DICOM required packages
+#
+find_package(DICOM REQUIRED)
+if (DICOM_FOUND)
+    INCLUDE_DIRECTORIES(${DICOM_INCLUDE_DIRS})
+    LINK_LIBRARIES(${DICOM_LIBRARIES})
+endif ()
 
 include_directories(include)
 

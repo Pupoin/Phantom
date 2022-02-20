@@ -5,7 +5,21 @@ The simulation package for proton CT.
 [[_TOC_]]
 
 ## Get Started
+___________
+Update 2022/02/20 by Zhaoyang Yuan  
+Adding organism (such as lobster) as target.
+Firstly, dicom package need to be compiled.
+```bash 
+cd External_Tools/DICOM
+source loadenv.sh
+mkdir -p build
+cd build
+cmake .. 
+make -j 
+make install # installation path is phantom/External_Tools/DICOM/DICOM_install
+```
 
+_____________________________________
 - **PCTSim** is the simulation program based on Geant4 and ROOT, characterized by proton CT.
 - **PCTDump** is a quick print program to read output from **PCTSim**.
 - **PCTAna** is the reconstruction and analysis framework for **PCTEvent** data.

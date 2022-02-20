@@ -1,0 +1,48 @@
+---
+# Begin of File
+# For Phantom
+# Default Materil Configuration by Yulei Zhang
+
+# IMPORTANT: For yaml, indentation matters!
+
+# Material Building
+build_material:
+  - name: "vacuum"
+    composition: [ "N", 0.7, "O", 0.3 ]
+    density: [ 1.2041, "kg", "m3" ]
+    state: "gas"
+  - name: "CarbonFiber"
+    composition: [ "C", 1.0 ]
+    density: [ 1.93, "g", "cm3" ]
+    state: "solid"
+  - name: "Water"
+    composition: [ "H", 0.67, "O", 0.33 ]
+    density: [ 0.1, "g", "cm3" ]
+    state: "liquid"
+
+# Material Finding
+internal_material:
+  - name: "G4_PLASTIC_SC_VINYLTOLUENE"
+  - name: "G4_Al"
+  - name: "G4_Si"
+  - name: "G4_Ca"
+
+optical_property:
+  wrapper:
+    energy: [ 1.0, 7.0 ]
+    reflectivity: [ 1.0, 1.0 ]
+    efficiency: [ 0.1, 0.1 ]
+    transmittance: [ 0.1, 0.1 ]
+  crystal:
+    ScintillationYield: [ 400, "MeV" ] # 200 photons per MeV
+    FastTimeConstant: [ 40, "ns" ]
+    energy: [ 0.1 , 2.21 , 2.58 , 2.82 , 2.95 , 3.10 , 4.00 ]
+    RefractionIdx: [ 1.85, 1.833, 1.821, 1.813, 1.809, 1.804, 1.79 ]
+    AbsorptionLength: [ 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm", 40. , "cm" ]
+    ScintEnergy: [ 0.1 , 2.21 , 2.58 , 2.82 , 2.95 , 3.10 , 4.00 ]
+    ScintFast: [ 0.0, 0.23, 0.85, 1.93, 2.15, 1.08, 0.0 ]
+
+
+# End of File
+---
+

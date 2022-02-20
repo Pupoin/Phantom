@@ -25,11 +25,7 @@
 #include "DicomPhantomParameterisationColour.hh"
 // #include "Dicom2ActionInitialization.hh"
 #include "DicomIntersectVolume.hh"
-#ifdef G4_DCMTK
-#   include "DicomFileMgr.hh"
-#else
-#   include "DicomHandler.hh"
-#endif
+#include "DicomFileMgr.hh"
 // end of dicom
 #include <iterator>
 #include <filesystem>

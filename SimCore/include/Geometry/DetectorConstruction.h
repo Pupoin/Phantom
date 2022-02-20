@@ -27,11 +27,7 @@
 // #include "Dicom2ActionInitialization.hh"
 #include "DicomIntersectVolume.hh"
 #include "DicomDetectorConstruction.hh"
-#ifdef G4_DCMTK
-#   include "DicomFileMgr.hh"
-#else
-#   include "DicomHandler.hh"
-#endif
+#include "DicomFileMgr.hh"
 // end of dicom
 
 #include <vector>

@@ -18,9 +18,10 @@ source /opt/local/libexec/Geant4/Geant4.10.6/geant4.sh
 source /opt/local/libexec/Geant4/Geant4.10.6/geant4data.sh
 export CMAKE_PREFIX_PATH="/opt/local/lib/Geant4/Geant4.10.6/Geant4-10.6.3:$CMAKE_PREFIX_PATH"
 # for dcmtk
+# export DCMTK_DIR="/usr/local/Cellar/dcmtk/3.6.6/"
+# export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/usr/local/Cellar/dcmtk/3.6.6/lib"
 export CMAKE_PREFIX_PATH="/usr/local/Cellar/dcmtk/3.6.6/lib/cmake/dcmtk:$CMAKE_PREFIX_PATH"
 # for dicom
-export CMAKE_PREFIX_PATH="/Users/zhaoyangyuan/phantom/External_Tools/DICOM/install/lib/Geant4-10.6.3:$CMAKE_PREFIX_PATH"
-# export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/Users/zhaoyangyuan/phantom/External_Tools/DICOM/include/"
-export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/Users/zhaoyangyuan/phantom/External_Tools/DICOM/install/lib/"
+export CMAKE_PREFIX_PATH="/Users/zhaoyangyuan/phantom/External_Tools/DICOM/DICOM_install/lib/Geant4-10.6.3:$CMAKE_PREFIX_PATH"
+export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/Users/zhaoyangyuan/phantom/External_Tools/DICOM/DICOM_install/lib/"
 
