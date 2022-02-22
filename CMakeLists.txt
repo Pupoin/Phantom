@@ -107,4 +107,5 @@ foreach (_script ${RUN_SCRIPTS})
 endforeach ()
 
 install(FILES ${RUN_SCRIPTS} DESTINATION scripts)
+install(DIRECTORY "share/organism_dicom" DESTINATION organism_dicom)
 

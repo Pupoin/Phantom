@@ -108,14 +108,14 @@ void DetectorConstruction::ConstructPhantom()
   // should be placed in the fContainer logical volume
   G4PVParameterised * phantom_phys = 
     new G4PVParameterised("phantom",voxel_logic,fContainer_logic,
-                          kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, param);
+                          kUndefined, fNVoxelX*fNVoxelY*fNVoxelZ, param);
   // if axis is set as kUndefined instead of kXAxis, GEANT4 will 
   //  do an smart voxel optimisation 
   // (not needed if G4RegularNavigation is used)
 
   //----- Set this physical volume as having a regular structure of type 1, 
   // so that G4RegularNavigation is used
-  phantom_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation
+//   phantom_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation
   //will be used instead 
 
   SetScorer(voxel_logic);
@@ -157,18 +157,18 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     //////////// ready for check.
     // Book RootMng
-    // pRootMng->book();
-    // G4cout << "[Root Manager] ==> Root Manager initialized ..." << G4endl;
-    // G4cout << "[Root Manager] ==> Output File " << pControl->outfile_Name << " created ..." << G4endl;
+    pRootMng->book();
+    G4cout << "[Root Manager] ==> Root Manager initialized ..." << G4endl;
+    G4cout << "[Root Manager] ==> Output File " << pControl->outfile_Name << " created ..." << G4endl;
 
-    // // Save Geometry
-    // if (pControl->save_geometry) SaveGeometry();
-    //         std::cout <<__LINE__<< " " << "000000000 ----------------" << std::endl;
+    // Save Geometry
+    if (pControl->save_geometry) SaveGeometry();
+            std::cout <<__LINE__<< " " << "000000000 ----------------" << std::endl;
 
-    // // Set User Limit
-    // // G4double maxStep = 1 * mm;
-    // // fStepLimit = new G4UserLimits(maxStep, DBL_MAX, 20 * s);
-    //         std::cout <<__LINE__<< " " << "000000000 ----------------" << std::endl;
+    // Set User Limit
+    // G4double maxStep = 1 * mm;
+    // fStepLimit = new G4UserLimits(maxStep, DBL_MAX, 20 * s);
+            std::cout <<__LINE__<< " " << "000000000 ----------------" << std::endl;
 
     return World_PV;
 }

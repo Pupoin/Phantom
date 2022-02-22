@@ -43,7 +43,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track *aTrack) {
         mcp = fMC;
 
     }
-    G4cout << __LINE__ << "my pre track energy" << aTrack->GetTotalEnergy() << G4endl;
+    // G4cout << __LINE__ << "my pre track energy" << aTrack->GetTotalEnergy() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track *aTrack) {
     }
 
     mcp = nullptr;
-    G4cout << __LINE__ << "my post track energy" << aTrack->GetTotalEnergy() << G4endl;
+    // G4cout << __LINE__ << "my post track energy" << aTrack->GetTotalEnergy() << G4endl;
 
 }
 

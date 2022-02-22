@@ -46,7 +46,7 @@ void SteppingAction::UserSteppingAction(const G4Step *aStep)
 
         pRootMng->FillSimStep(pControl->ParticleStep_Name, aStep);
         all += aStep->GetTotalEnergyDeposit();
-        G4cout << __LINE__ << " every step: " << aStep->GetTotalEnergyDeposit() << " all: " << all<< G4endl;
+        // G4cout << __LINE__ << " every step: " << aStep->GetTotalEnergyDeposit() << " all: " << all<< G4endl;
     }
 }
 

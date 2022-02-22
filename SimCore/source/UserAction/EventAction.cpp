@@ -40,7 +40,6 @@ void EventAction::BeginOfEventAction(const G4Event *event) {
         G4cout << "\n---> Begin of event: " << eventID << G4endl;
         //CLHEP::HepRandom::showEngineStatus();
     }
-    cout << "hahahahhahha" << endl;
     G4RunManager::GetRunManager()->StoreRandomNumberStatusToG4Event(1);
 
 #ifdef MEMCK
@@ -86,8 +85,6 @@ void EventAction::EndOfEventAction(const G4Event *event) {
 
     // Filling tree, any data manipulations should before this point
     pRootMng->FillTree(eventID, rndm);
-
-    cout << "end of hahahahhahha" << endl;
 
 
 #ifdef MEMCK
